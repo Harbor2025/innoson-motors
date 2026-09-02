@@ -48,6 +48,14 @@ const ASSETS = {
     "https://www.figma.com/api/mcp/asset/6fe56db6-f29f-460d-ab74-3e7b0a071156.svg",
   "icons/icon-location.svg":
     "https://www.figma.com/api/mcp/asset/a17d4992-e01a-43e1-b1bc-fcc74f98ec1b.svg",
+
+  // --- /vehicles page (node 510:250) ---
+  "images/vehicle-card-suv.png":
+    "https://www.figma.com/api/mcp/asset/88ab4fe4-3e38-4dfa-bc9b-611899750426.png",
+  "images/vehicle-card-sedan.png":
+    "https://www.figma.com/api/mcp/asset/f70d1ef6-ad89-4bbe-9e0d-ad89b0090785.png",
+  "icons/icon-arrow-right.svg":
+    "https://www.figma.com/api/mcp/asset/91a5c244-647f-47f0-a7a9-d76e7b14d752.svg",
 };
 
 const PUBLIC_DIR = join(process.cwd(), "public");
