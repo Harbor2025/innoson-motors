@@ -4,7 +4,7 @@ import Container from "../layout/Container";
 
 export default function PaymentBanner() {
   return (
-    <section className="font-avenir w-full py-16 lg:py-[100px]">
+    <section className="font-[family-name:var(--font-google-sans)] w-full py-16 lg:py-[100px]">
       <Container className="flex flex-col items-start gap-10 lg:flex-row lg:items-center">
         <div className="relative h-[352px] w-full shrink-0 overflow-hidden bg-[#d5d4d4] lg:h-[484px] lg:w-[785px]">
           <Image
@@ -21,7 +21,7 @@ export default function PaymentBanner() {
             <h2 className="text-[24px] font-bold leading-[normal] text-black lg:text-[32px]">
               ACCESS PAYMENT WITH OUR FLEXIBLE PAYMENT STRUCTURE
             </h2>
-            <p className="text-[14px] leading-[normal] text-[#1e1e1e] lg:text-[24px]">
+            <p className="text-[14px] leading-[normal] text-[#1e1e1e] lg:text-[19px]">
               Our collaboration with Access Bank allows you to access structured payment plans
               and financing solutions that make transitioning to electric mobility simple and
               affordable

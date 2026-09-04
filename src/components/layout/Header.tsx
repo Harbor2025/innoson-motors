@@ -18,7 +18,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="font-avenir relative z-50 w-full border-b border-[#e4e4e4] bg-white">
+    <header className="font-[family-name:var(--font-google-sans)] relative z-50 w-full border-b border-[#e4e4e4] bg-white">
       <Container className="flex h-[72px] items-center justify-between lg:h-[80px]">
         {/* Mobile: hamburger */}
         <button

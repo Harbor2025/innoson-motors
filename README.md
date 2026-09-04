@@ -49,14 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-- **Lato** (used only for the "See All Model" / "Subscribe" button labels) is
-  loaded via `next/font/google` in `lib/fonts.ts` — nothing else to do.
-- **Avenir** (used everywhere else) is not a free/redistributable font.
-  `styles/fonts.css` defines a `.font-avenir` utility class with a close
-  system-font fallback stack, already applied throughout the components, so
-  everything renders correctly today. When you have licensed Avenir webfont
-  files, switch to `next/font/local` — instructions are in the comment at the
-  top of `styles/fonts.css`.
+
 
 ## 4. Tailwind config
 

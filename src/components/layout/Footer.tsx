@@ -21,7 +21,7 @@ function scrollToTop() {
 
 export default function Footer() {
   return (
-    <footer className="font-avenir w-full bg-[#002a52] pt-6 text-white lg:rounded-[6px]">
+    <footer className="font-[family-name:var(--font-google-sans)] w-full bg-[#002a52] pt-6 text-white lg:rounded-[6px]">
       <button
         type="button"
         onClick={scrollToTop}
@@ -123,7 +123,7 @@ export default function Footer() {
             />
             <button
               type="submit"
-              className="font-[family-name:var(--font-lato)] flex h-[48px] w-full items-center justify-center rounded-[6px] bg-white px-[14px] text-[16px] font-bold tracking-[0.192px] text-[#00a0ff] lg:w-[158px]"
+              className="flex h-[48px] w-full items-center justify-center rounded-[6px] bg-white px-[14px] text-[16px] font-bold tracking-[0.192px] text-[#00a0ff] lg:w-[158px]"
             >
               Submit
             </button>
