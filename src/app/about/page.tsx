@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Header />
+      <Header active="about" />
       <main>
         <AboutHero />
         <StatsRow />

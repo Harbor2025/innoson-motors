@@ -6,15 +6,21 @@ import Link from "next/link";
 import Container from "./Container";
 
 const NAV_LINKS = [
-  { label: "Vehicles", href: "/vehicles" },
-  { label: "About Us", href: "/about" },
-  { label: "News", href: "/news" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "Vehicles", href: "/vehicles", id: "vehicles" },
+  { label: "About Us", href: "/about", id: "about" },
+  { label: "News", href: "/news", id: "news" },
+  { label: "Contact Us", href: "/contact", id: "contact" },
 ];
 
 const PHONE_LABEL = "Call : 081xxxxxxxxx or 081xxxxxxxxxxx";
 
-export default function Header() {
+// 1. Define the TypeScript interface for the component props
+interface HeaderProps {
+  active?: "vehicles" | "about" | "news" | "contact" | string;
+}
+
+// 2. Destructure the active prop into the component
+export default function Header({ active }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -54,11 +60,22 @@ export default function Header() {
             />
           </Link>
           <nav className="flex items-center gap-[66px] text-[14px] text-black">
-            {NAV_LINKS.map((link) => (
-              <Link key={link.label} href={link.href} className="whitespace-nowrap leading-[20px]">
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              // Check if this link matches the active prop
+              const isActive = active === link.id;
+              
+              return (
+                <Link 
+                  key={link.label} 
+                  href={link.href} 
+                  className={`whitespace-nowrap leading-[20px] transition-colors ${
+                    isActive ? "font-bold text-[#005eb8] border-b-2 border-[#005eb8]" : "hover:text-[#005eb8]"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
@@ -83,11 +100,20 @@ export default function Header() {
       {menuOpen && (
         <div className="border-t border-[#e4e4e4] bg-white px-5 py-6 lg:hidden">
           <nav className="flex flex-col gap-4 text-[14px] text-black">
-            {NAV_LINKS.map((link) => (
-              <Link key={link.label} href={link.href} onClick={() => setMenuOpen(false)}>
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isActive = active === link.id;
+
+              return (
+                <Link 
+                  key={link.label} 
+                  href={link.href} 
+                  onClick={() => setMenuOpen(false)}
+                  className={isActive ? "font-bold text-[#005eb8]" : ""}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
           <a href="tel:081xxxxxxxxx" className="mt-6 block text-[14px] font-bold text-[#005eb8]">
             {PHONE_LABEL}
