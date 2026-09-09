@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main>
+      <main className="pt-[70px] lg:pt-[80px]">
         <Hero />
         <BoldExperience />
         <EvCollectionBanner />
