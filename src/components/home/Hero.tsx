@@ -117,7 +117,7 @@ export default function Hero() {
             <div className="absolute inset-0 bg-black/30" />
 
             {/* Dynamic Slide Content */}
-            <div className="absolute inset-x-0 top-[64px] flex flex-col items-center gap-3 px-5 text-center uppercase text-white md:top-[100px] lg:top-[142px] lg:gap-6">
+            <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-3 px-5 text-center uppercase text-white md:top-[100px] lg:top-[142px] lg:gap-6">
               <p className="text-[14px] leading-none md:text-[18px] lg:text-[19px] lg:leading-[normal]">
                 {slide.subtitle}
               </p>

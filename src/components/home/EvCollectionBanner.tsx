@@ -25,8 +25,7 @@ export default function EvCollectionBanner() {
         </h2>
         <p className="max-w-[674px] text-[14px] leading-[normal] lg:text-[19px]">
           Discover our newest range of innovative electric vehicles, combining modern design,
-          advanced technology, and zero-emission performance to deliver a smarter, cleaner, and
-          more sustainable driving experience
+          advanced technology.
         </p>
         <Link
           href="/vehicles/electric"

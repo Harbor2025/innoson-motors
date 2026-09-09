@@ -23,13 +23,13 @@ const MODELS: CarModel[] = [
     id: 2,
     name: "INNOSON CAPA",
     watermark: "IVM",
-    image: "/images/image.webp",
+    image: "/images/car-model-side.png",
   },
   {
     id: 3,
     name: "INNOSON G80",
     watermark: "IVM",
-    image: "/images/image1.webp",
+    image: "/images/car-model-side.png",
   },
 ];
 
