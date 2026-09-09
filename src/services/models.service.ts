@@ -2,6 +2,7 @@
 import { getPayloadClient } from '@/lib/getPayloadClient'
 import { toCategoryDTO, toModelDetailDTO, toModelListItemDTO } from '@/lib/mappers'
 import type { CategoryDTO, ModelDetailDTO, ModelListItemDTO } from '@/types/dto'
+import type { Where } from 'payload'
 
 export interface ListModelsParams {
   category?: string // category slug
@@ -50,8 +51,20 @@ export async function listModels(
   const payload = await getPayloadClient()
   const { category, featured, limit = 50, page = 1 } = params
 
-  const where: Record<string, unknown> = { status: { equals: 'published' } }
+// inside listModels:
+  const where: Where = { status: { equals: 'published' } }
 
+  if (category) {
+    const cat = await getCategoryBySlug(category)
+    if (!cat) {
+      return { docs: [], totalDocs: 0, totalPages: 0, page, limit, hasNextPage: false, hasPrevPage: false }
+    }
+    where.category = { equals: cat.id }
+  }
+
+  if (typeof featured === 'boolean') {
+    where.featured = { equals: featured }
+  }
   if (category) {
     const cat = await getCategoryBySlug(category)
     if (!cat) {

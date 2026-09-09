@@ -3,7 +3,7 @@ import { getPayloadClient } from '@/lib/getPayloadClient'
 import { toBlogDetailDTO, toBlogListItemDTO } from '@/lib/mappers'
 import type { BlogDetailDTO, BlogListItemDTO } from '@/types/dto'
 import type { PaginatedResult } from '@/services/models.service'
-
+import type { Where } from 'payload'   // add this import
 export interface ListBlogParams {
   tag?: string
   limit?: number
@@ -17,8 +17,13 @@ export async function listBlogPosts(
   const payload = await getPayloadClient()
   const { tag, limit = 20, page = 1 } = params
 
-  const where: Record<string, unknown> = { status: { equals: 'published' } }
-  if (tag) where['tags.tag'] = { equals: tag }
+
+
+// inside listBlogPosts:
+  const where: Where = { status: { equals: 'published' } }
+  if (tag) {
+    where['tags.tag'] = { equals: tag }
+  }
 
   const result = await payload.find({
     collection: 'blog-posts',

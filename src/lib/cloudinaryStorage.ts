@@ -1,14 +1,13 @@
 // src/lib/cloudinaryStorage.ts
 import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary'
 import type { Adapter, GeneratedAdapter } from '@payloadcms/plugin-cloud-storage/types'
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, FileData, TypeWithID } from 'payload'
 import stream from 'stream'
 
 /**
  * Custom Cloudinary storage adapter for @payloadcms/plugin-cloud-storage.
- * Handles: uploading files (originals + Payload-generated resized image
- * variants) to Cloudinary, deleting them, and generating a `staticHandler`
- * that redirects file reads to the Cloudinary CDN URL.
+ * Handles: uploading files to Cloudinary, deleting them, and generating a
+ * staticHandler that redirects file reads to the Cloudinary CDN URL.
  *
  * Env vars required: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY,
  * CLOUDINARY_API_SECRET, CLOUDINARY_UPLOAD_FOLDER (optional).
@@ -21,6 +20,15 @@ cloudinary.config({
 })
 
 const FOLDER = process.env.CLOUDINARY_UPLOAD_FOLDER || 'innoson-motors'
+
+/** Fields we attach to media docs via the adapter. */
+interface CloudinaryFields {
+  cloudinaryURL?: string
+  cloudinaryPublicId?: string
+}
+
+type CloudinaryDoc = FileData & TypeWithID & CloudinaryFields
+type CloudinaryData = Record<string, unknown> & CloudinaryFields
 
 function publicIdFromFilename(filename: string): string {
   // Strip extension; Cloudinary manages its own extension/format.
@@ -58,35 +66,29 @@ export const cloudinaryAdapter =
 
         // Persist the Cloudinary URL + id on the doc so the API response
         // (and any frontend) can read a stable, CDN-served URL directly.
-        data.cloudinaryURL = result.secure_url
-        data.cloudinaryPublicId = result.public_id
+        const typedData = data as CloudinaryData
+        typedData.cloudinaryURL = result.secure_url
+        typedData.cloudinaryPublicId = result.public_id
 
-        // Also upload each Payload-generated resized variant (thumbnail, card, hero).
-        if (file.sizes) {
-          for (const sizeName of Object.keys(file.sizes)) {
-            const size = file.sizes[sizeName]
-            if (!size?.data) continue
-            const sizePublicId = `${collection.slug}/${publicIdFromFilename(size.filename ?? file.filename)}-${sizeName}`
-            const sizeResult = await uploadBuffer(size.data, sizePublicId)
-            data.sizes = data.sizes || {}
-            data.sizes[sizeName] = {
-              ...(data.sizes?.[sizeName] || {}),
-              cloudinaryURL: sizeResult.secure_url,
-            }
-          }
-        }
+        // Note: Payload imageSizes are processed as separate files by the
+        // plugin (handleUpload is called once per size). Do not expect
+        // file.sizes on the typed File object.
 
         return data
       },
       handleDelete: async ({ doc }) => {
-        const publicId = doc?.cloudinaryPublicId as string | undefined
+        const publicId = (doc as CloudinaryDoc).cloudinaryPublicId
         if (publicId) {
           await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' })
         }
       },
-      generateURL: ({ doc }) => (doc?.cloudinaryURL as string) || '',
-      staticHandler: async (req, { doc }) => {
-        const url = doc?.cloudinaryURL as string | undefined
+      // generateURL signature is { collection, data, filename, prefix? }
+      generateURL: ({ data }) => {
+        // Prefer the stored CDN URL; fall back to empty string
+        return (data as CloudinaryData).cloudinaryURL || ''
+      },
+      staticHandler: async (_req, { doc }) => {
+        const url = (doc as CloudinaryDoc | undefined)?.cloudinaryURL
         if (!url) {
           return new Response('Not found', { status: 404 })
         }
