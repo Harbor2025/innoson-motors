@@ -29,7 +29,7 @@ export async function createQuoteRequest(input: CreateQuoteRequestInput) {
       phone: input.phone,
       email: input.email,
       address: input.address,
-      model: input.modelId,
+      model: Number(input.modelId),
       message: input.message,
       status: 'new',
     },

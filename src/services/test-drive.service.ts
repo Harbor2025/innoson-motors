@@ -17,17 +17,17 @@ export async function createTestDriveBooking(input: CreateTestDriveBookingInput)
   const valid = await modelExistsAndPublished(input.modelId)
   if (!valid) throw new ModelNotFoundError()
 
-  const data: Record<string, unknown> = {
+  const data = {
     name: input.name,
     phone: input.phone,
     email: input.email,
-    model: input.modelId,
+    model: Number(input.modelId),
     message: input.message,
     marketingOptIn: Boolean(input.marketingOptIn),
-    status: 'new',
+    status: 'new' as const,
+    ...(input.preferredDate ? { preferredDate: input.preferredDate } : {}),
+    ...(input.dealershipId ? { dealership: Number(input.dealershipId) } : {}),
   }
-  if (input.preferredDate) data.preferredDate = input.preferredDate
-  if (input.dealershipId) data.dealership = input.dealershipId
 
   const doc = await payload.create({
     collection: 'test-drive-bookings',
