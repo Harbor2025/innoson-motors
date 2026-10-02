@@ -18,11 +18,11 @@ export default function StoryWithImage() {
         </div>
 
         <div className="order-1 flex flex-col gap-4 lg:order-2 lg:max-w-[741px] lg:gap-6">
-          <p className="text-[14px] leading-[normal] text-[#878383] lg:text-[17px]">OUR STORY</p>
-          <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:leading-[62px]">
+          <p className="text-[14px] leading-[normal] text-[#878383] lg:text-[17px] font-[family-name:var(--font-inter)]">OUR STORY</p>
+          <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:leading-[62px] font-[family-name:var(--font-google-sans)]">
             Made in Nigeria
           </h2>
-          <p className="text-[16px] leading-[27px] text-[#1e1e1e] lg:text-[19px]">{BODY}</p>
+          <p className="text-[16px] leading-[27px] text-[#1e1e1e] lg:text-[19px] font-[family-name:var(--font-inter)]">{BODY}</p>
         </div>
       </Container>
     </section>

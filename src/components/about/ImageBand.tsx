@@ -30,14 +30,14 @@ export default function ImageBand({
 
         {(heading || body) && (
           <div className=" absolute inset-0 flex flex-col justify-center gap-3 px-5 text-white lg:justify-start lg:gap-6 lg:px-[50px] lg:pt-[214px]">
-            {eyebrow && <p className="text-[14px] lg:text-[17px]">{eyebrow}</p>}
+            {eyebrow && <p className="text-[14px] lg:text-[17px] font-[family-name:var(--font-inter)]">{eyebrow}</p>}
             {heading && (
-              <h2 className="max-w-[500px] text-[24px] font-extrabold uppercase leading-[1.2] lg:max-w-[700px] lg:text-[55px] lg:leading-[60px]">
+              <h2 className="max-w-[500px] text-[24px] font-extrabold uppercase leading-[1.2] lg:max-w-[700px] lg:text-[55px] lg:leading-[60px] font-[family-name:var(--font-google-sans)]">
                 {heading}
               </h2>
             )}
             {body && (
-              <p className="max-w-[350px] text-[16px] leading-[25px] lg:max-w-[493px] lg:text-[19px] lg:leading-[37px]">
+              <p className="max-w-[350px] text-[16px] leading-[25px] lg:max-w-[493px] lg:text-[19px] lg:leading-[37px] font-[family-name:var(--font-inter)]">
                 {body}
               </p>
             )}
