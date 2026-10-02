@@ -15,15 +15,15 @@ export default function VehicleFilter({ active, onChange, extraCategories = [] }
     <>
       {/* Desktop: vertical sidebar list — matches Figma "Frame 58" exactly */}
       <aside className="hidden w-[182px] shrink-0 lg:block">
-        <h2 className="text-[30px] font-bold leading-[20px] text-[#002a52]">MODELS</h2>
-        <ul className="mt-10 flex flex-col">
+        <h2 className="text-[30px] font-bold leading-[20px] text-[#002a52] font-[family-name:var(--font-google-sans)]">MODELS</h2>
+        <ul className="mt-10 flex flex-col font-[family-name:var(--font-inter)]">
           {mergedCategories.map((category) => (
             <li key={category}>
               <button
                 type="button"
                 onClick={() => onChange(category)}
                 aria-current={active === category}
-                className={`h-[59px] w-full text-left text-[22px] leading-[20px] ${
+                className={`h-[59px] w-full text-left text-[22px] leading-[20px] lowercase first-letter:uppercase ${
                   active === category ? "font-bold text-[#005eb8]" : "font-normal text-[#878383]"
                 }`}
               >

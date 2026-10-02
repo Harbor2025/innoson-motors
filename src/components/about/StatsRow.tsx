@@ -20,23 +20,23 @@ export default function StatsRow({ stats }: { stats?: AboutPageDTO["stats"] }) {
     <section className="white py-8 lg:py-[45px]">
       <Container className="flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-[138px]">
         {items.slice(0, 2).map((s) => (
-          <div key={s.label} className="flex flex-col items-center gap-0 lg:items-start">
-            <p className="text-[24px] leading-[normal] text-[#1e1e1e]">{s.value}</p>
-            <p className="text-[14px] leading-[normal] text-[#1e1e1e]">{s.label}</p>
+          <div key={s.label} className="flex flex-col items-center gap-0 lg:items-start ">
+            <p className="text-[24px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]">{s.value}</p>
+            <p className="text-[14px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]">{s.label}</p>
           </div>
         ))}
 
         <div className="flex flex-col items-center gap-4 text-center lg:flex-row lg:gap-[15px] lg:text-left">
           <Image src="/images/africa.png" alt="" width={42} height={42} />
-          <p className="max-w-[262px] text-[20px] leading-[31px] text-[#1e1e1e]">
+          <p className="max-w-[262px] text-[20px] leading-[31px] text-[#1e1e1e] font-[family-name:var(--font-inter)]">
             1ST Africa&rsquo;s Automobile Brand
           </p>
         </div>
 
         {items[2] && (
           <div className="flex flex-col items-center gap-0 lg:items-start">
-            <p className="text-[24px] leading-[normal] text-[#1e1e1e]">{items[2].value}</p>
-            <p className="text-[14px] leading-[normal] text-[#1e1e1e]">{items[2].label}</p>
+            <p className="text-[24px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]">{items[2].value}</p>
+            <p className="text-[14px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]">{items[2].label}</p>
           </div>
         )}
       </Container>

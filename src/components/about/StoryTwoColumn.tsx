@@ -8,22 +8,22 @@ export default function StoryWithImage() {
     <section className="12 lg:py-16">
       <Container className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-[82px]">
         <div className="order-1 flex flex-col gap-4 lg:order-2 lg:max-w-[741px] lg:gap-6">
-          <p className="text-[14px] leading-[normal] text-[#878383] lg:text-[17px]">OUR STORY</p>
-          <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:leading-[62px]">
+          <p className="text-[14px] leading-[normal] text-[#878383] lg:text-[17px] font-[family-name:var(--font-inter)]">OUR STORY</p>
+          <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:leading-[62px] font-[family-name:var(--font-google-sans)]">
             Made in Nigeria
           </h2>
-          <h3 className="text-[20px]  leading-[normal] text-[#1e1e1e] lg:text-[34px] lg:leading-[62px]">
+          <h3 className="text-[20px]  leading-[normal] text-[#1e1e1e] lg:text-[34px] lg:leading-[62px] font-[family-name:var(--font-google-sans)]">
             Present
           </h3>
-          <p className="text-[16px] leading-[27px] text-[#1e1e1e] lg:text-[19px]">{BODY}</p>
+          <p className="text-[16px] leading-[27px] text-[#1e1e1e] lg:text-[19px] font-[family-name:var(--font-inter)]">{BODY}</p>
         </div>
 
         <div className="order-2 flex flex-col gap-4 lg:order-2 lg:max-w-[741px] lg:gap-6">
-          <p className="text-[14px] leading-[normal] text-[#878383] lg:text-[17px]"></p>
-          <h3 className="text-[20px] leading-[normal] text-[#1e1e1e] lg:text-[34px] lg:leading-[62px] lg:mt-[100px]">
+          <p className="text-[14px] leading-[normal] text-[#878383] lg:text-[17px] font-[family-name:var(--font-inter)]"></p>
+          <h3 className="text-[20px] leading-[normal] text-[#1e1e1e] lg:text-[34px] lg:leading-[62px] lg:mt-[100px] font-[family-name:var(--font-google-sans)]">
             Present
           </h3>
-          <p className="text-[16px] leading-[27px] text-[#1e1e1e] lg:text-[19px]">{BODY}</p>
+          <p className="text-[16px] leading-[27px] text-[#1e1e1e] lg:text-[19px] font-[family-name:var(--font-inter)]">{BODY}</p>
         </div>
       </Container>
     </section>

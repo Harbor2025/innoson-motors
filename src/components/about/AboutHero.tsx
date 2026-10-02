@@ -12,8 +12,8 @@ export default function AboutHero() {
         className="object-cover"
       />
       <div className=" absolute inset-0 flex flex-col justify-center gap-2 px-6 text-white lg:justify-start lg:gap-4 lg:px-[109px] lg:pt-[178px]">
-        <p className="text-[14px] leading-[normal] lg:text-[17px]">THE PRIDE OF AFRICA.</p>
-        <h1 className="text-[40px] font-extrabold leading-[1.15] lg:text-[48px] lg:leading-[110px]">
+        <p className="text-[14px] leading-[normal] lg:text-[17px] font-[family-name:var(--font-inter)]">THE PRIDE OF AFRICA.</p>
+        <h1 className="text-[40px] font-extrabold leading-[1.15] lg:text-[48px] lg:leading-[110px] font-[family-name:var(--font-google-sans)]">
           ABOUT IVM
         </h1>
       </div>

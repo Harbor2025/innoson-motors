@@ -29,20 +29,20 @@ export default function VehicleCard({ vehicle }: { vehicle: VehicleAdapter | imp
         />
       </div>
       <div className="flex flex-col gap-2 px-[10px] pb-3 pt-3">
-        <h3 className="text-[20px] font-black uppercase leading-[20px] text-[#1e1e1e]">
+        <h3 className="text-[20px] font-black uppercase leading-[20px] text-[#1e1e1e] font-[family-name:var(--font-google-sans)]">
           {vehicle.name}
         </h3>
         <div className="flex items-center gap-6">
           <Link
             href={href}
-            className="flex items-center gap-2 text-[16px] leading-[normal] text-[#1e1e1e]"
+            className="flex items-center gap-2 text-[16px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]"
           >
             Discover more
             <Image src="/icons/icon-arrow-right.svg" alt="" width={16} height={16} />
           </Link>
           <Link
             href={orderHref}
-            className="flex items-center gap-2 text-[16px] leading-[normal] text-[#1e1e1e]"
+            className="flex items-center gap-2 text-[16px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]"
           >
             Order Now
             <Image src="/icons/icon-arrow-right.svg" alt="" width={16} height={16} />

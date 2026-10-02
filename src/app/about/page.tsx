@@ -58,7 +58,7 @@ export default async function AboutPage() {
         <StoryWithImage />
 
         <ImageBand
-          src="/images/b1e142294a01d68abac29ed61f48321618579322.jpg"
+          src="/images/hero-caris.png"
           alt="Red IVM hatchback in a showroom"
           heightClassName="h-[335px] lg:h-[800px]"
           containerClassName="px-5 py-8 lg:px-0 lg:py-0"
