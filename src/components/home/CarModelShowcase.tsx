@@ -15,9 +15,9 @@ interface CarModel {
 }
 
 const FALLBACK: CarModel[] = [
-  { id: "fb-1", name: "INNOSON CARIS", watermark: "IVM", image: "/images/car-model-side.png", slug: "caris" },
-  { id: "fb-2", name: "INNOSON CAPA", watermark: "IVM", image: "/images/car-model-side.png" },
-  { id: "fb-3", name: "INNOSON G80", watermark: "IVM", image: "/images/car-model-side.png" },
+  { id: "fb-1", name: "Innoson Caris", watermark: "IVM", image: "/images/car-model-side.png", slug: "caris" },
+  { id: "fb-2", name: "Innoson Capa", watermark: "IVM", image: "/images/car-model-side.png" },
+  { id: "fb-3", name: "Innoson G80", watermark: "IVM", image: "/images/car-model-side.png" },
 ];
 
 function watermarkFromName(name: string): string {
@@ -74,7 +74,7 @@ export default function CarModelShowcase({
       <Container className="flex flex-col gap-10 lg:gap-10">
         <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
           <div className="flex flex-col gap-3 lg:gap-3">
-            <h2 className="text-[24px] font-bold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:leading-[58px]">
+            <h2 className="text-[24px] font-bold  leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:leading-[58px]">
               Explore our Car Model
             </h2>
             <p className="max-w-[781px] text-[14px] leading-[normal] text-black lg:text-[19px]">
@@ -147,7 +147,7 @@ export default function CarModelShowcase({
           <Link
             href={detailHref}
             aria-label="View model details"
-            className="absolute bottom-[6%] left-1/2 z-20 -translate-x-1/2 rounded-[4px] bg-[#005eb8] px-4 py-2 text-[12px] font-bold text-white lg:text-[14px]"
+            className="absolute bottom-[6%] left-1/2 z-20 -translate-x-1/2 rounded-[4px] bg-[#005eb8] px-4 py-2 text-[12px] font-bold text-white lg:text-[14px] md:mt-0 mt-5"
           >
             Discover More
           </Link>

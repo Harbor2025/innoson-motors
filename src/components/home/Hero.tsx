@@ -7,28 +7,22 @@ import Image from "next/image";
 const SLIDES = [
   {
     id: 1,
-    image: "/images/hero-truck.png",
+    image: "/images/pexels-hyundaimotorgroup-12163946.jpg",
     subtitle: "Africa’s largest",
     title: "Automobile Company",
     alt: "IVM pickup truck driving through a tunnel",
   },
   {
     id: 2,
-    image: "/images/image.webp",
+    image: "/images/4041.jpg",
     subtitle: "Built for Africa",
     title: "Unmatched Strength & Durability",
     alt: "Featured IVM vehicle showpiece",
   },
-  {
-    id: 3,
-    image: "/images/image1.webp",
-    subtitle: "Innovation on Wheels",
-    title: "Drive into the Future",
-    alt: "Modern automobile design",
-  },
+
   {
     id: 4,
-    image: "/images/hero-truck.png",
+    image: "/images/interior-hero.jpg",
     subtitle: "Quality & Reliability",
     title: "Engineered for Perfection",
     alt: "IVM vehicle in action",
@@ -88,7 +82,7 @@ export default function Hero() {
 
   return (
     <section
-      className="font-[family-name:var(--font-google-sans)] relative h-[420px] w-full overflow-hidden md:h-[640px] lg:h-[95vh]"
+      className="font-[family-name:var(--font-google-sans)] relative h-[420px] w-full overflow-hidden md:h-[90vh]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
@@ -117,11 +111,11 @@ export default function Hero() {
             <div className="absolute inset-0 bg-black/30" />
 
             {/* Dynamic Slide Content */}
-            <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-3 px-5 text-center uppercase text-white md:top-[100px] lg:top-[142px] lg:gap-6">
+            <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-3 px-5 text-center text-white md:top-[100px] lg:top-[142px] lg:gap-6">
               <p className="text-[14px] leading-none md:text-[18px] lg:text-[19px] lg:leading-[normal]">
                 {slide.subtitle}
               </p>
-              <h1 className="max-w-[1105px] text-[28px] font-bold leading-[1.15] md:text-[48px] lg:text-[60px] lg:leading-[normal]">
+              <h1 className="max-w-[1105px] text-[28px] font-bold leading-[1.15] md:text-[48px] lg:text-[48px] lg:leading-[normal]">
                 {slide.title}
               </h1>
             </div>
@@ -140,10 +134,10 @@ export default function Hero() {
             aria-label={`Go to slide ${index + 1}`}
             aria-current={activeSlide === index}
             onClick={() => setActiveSlide(index)}
-            className="size-4 border-[0.5px] border-[#b1cbe8]"
+            className="size-4 border-[0.5px] border-[#fff] rounded-full"
           >
             {activeSlide === index && (
-              <span className="block size-full scale-75 bg-white transition-all duration-300" />
+              <span className="block size-full scale-75 rounded-full bg-white transition-all duration-300" />
             )}
           </button>
         ))}

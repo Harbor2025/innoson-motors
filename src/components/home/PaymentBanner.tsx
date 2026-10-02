@@ -19,7 +19,7 @@ export default function PaymentBanner() {
         <div className="flex w-full flex-col gap-6 lg:w-[565px] lg:gap-10">
           <div className="flex flex-col items-start gap-4 lg:gap-6">
             <h2 className="text-[24px] font-bold leading-[normal] text-black lg:text-[32px]">
-              ACCESS PAYMENT WITH OUR FLEXIBLE PAYMENT STRUCTURE
+              Access Payment with Our Flexible Payment Structure
             </h2>
             <p className="text-[14px] leading-[normal] text-[#1e1e1e] lg:text-[19px]">
               Our collaboration with Access Bank allows you to access structured payment plans

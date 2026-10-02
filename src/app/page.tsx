@@ -21,7 +21,7 @@ export default async function HomePage() {
   return (
     <>
       <Header />
-      <main className="pt-[70px] lg:pt-[80px]">
+      <main className="pt-[55px] lg:pt-[62px]">
         <Hero />
         <BoldExperience />
         <EvCollectionBanner />

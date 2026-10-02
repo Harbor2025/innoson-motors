@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Google_Sans, Inter } from "next/font/google";
+import { Google_Sans, Inter, Quicksand } from "next/font/google";
 import "./globals.css";
 
 
 
-const googleSans = Google_Sans({
+const googleSans = Quicksand({
   variable: "--font-google-sans",
   subsets: ["latin"],
   fallback: ["sans-serif"],

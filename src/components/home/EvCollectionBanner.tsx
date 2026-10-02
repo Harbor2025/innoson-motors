@@ -5,7 +5,7 @@ export default function EvCollectionBanner() {
   return (
     <section className=" font-[family-name:var(--font-google-sans)] relative h-[342px] w-full overflow-hidden md:h-[540px] lg:h-[807px]">
       <Image
-        src="/images/ev-collection-bg.png"
+        src="/images/pexels-mohit-hambiria-92377455-36863205.jpg"
         alt="Electric vehicle charging in a city"
         fill
         sizes="100vw"
@@ -20,8 +20,8 @@ export default function EvCollectionBanner() {
       />
 
       <div className=" absolute inset-0 flex flex-col justify-center gap-6 px-5 py-10 text-white lg:gap-10 lg:px-[73px]">
-        <h2 className="max-w-[778px] text-[24px] font-bold leading-[normal] lg:text-[60px]">
-          EXPLORE OUR LATEST EV COLLECTION
+        <h2 className="max-w-[778px] text-[24px] font-bold lg:text-[44px]">
+          Explore Our Latest EV Collection
         </h2>
         <p className="max-w-[674px] text-[14px] leading-[normal] lg:text-[19px]">
           Discover our newest range of innovative electric vehicles, combining modern design,

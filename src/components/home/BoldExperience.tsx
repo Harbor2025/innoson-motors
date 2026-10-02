@@ -5,7 +5,7 @@ export default function BoldExperience() {
   return (
     <section className="font-[family-name:var(--font-google-sans)] relative h-[371px] w-full overflow-hidden md:h-[560px] lg:h-[800px]">
       <Image
-        src="/images/bold-experience-bg.png"
+        src="/images/pexels-framesbyambro-14649124.jpg"
         alt="IVM Caris on display in a showroom"
         fill
         sizes="100vw"
@@ -22,8 +22,8 @@ export default function BoldExperience() {
       <div className=" absolute inset-0 flex items-center px-5 lg:px-[50px]">
         <div className="flex max-w-[807px] flex-col gap-6 text-white lg:gap-10">
           <div className="flex flex-col gap-3 lg:gap-6">
-            <h2 className="text-[24px] font-bold leading-[normal] lg:text-[60px] lg:leading-[90px]">
-              THE BOLD EXPERIENCE
+            <h2 className="text-[24px] font-bold leading-[normal] lg:text-[44px] lg:leading-[90px]">
+              The Bold Experience
             </h2>
             <p className="max-w-[531px] text-[14px] leading-[normal] lg:text-[19px]">
               IVM Caris is one of our forays into future car designs. With a captivating
