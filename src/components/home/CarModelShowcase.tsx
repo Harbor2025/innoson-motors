@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "../layout/Container";
@@ -50,6 +50,27 @@ export default function CarModelShowcase({
 
   const [activeIndex, setActiveIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // The first car drives in when the section scrolls into view.
+  // data-visible is set directly on the DOM so React re-renders never reset it.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.dataset.visible = "true";
+          io.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const count = models.length;
   const goPrev = () => setActiveIndex((i) => (i - 1 + count) % count);
@@ -70,7 +91,10 @@ export default function CarModelShowcase({
     active?.slug ? `/vehicles/${active.slug}` : `/vehicles?ref=home-showcase`;
 
   return (
-    <section className="font-[family-name:var(--font-google-sans)] w-full py-16 lg:py-[100px]">
+    <section
+      ref={sectionRef}
+      className="cs-root font-[family-name:var(--font-google-sans)] w-full py-16 lg:py-[100px]"
+    >
       <Container className="flex flex-col gap-10 lg:gap-10">
         <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
           <div className="flex flex-col gap-3 lg:gap-3">
@@ -96,7 +120,7 @@ export default function CarModelShowcase({
                 alt=""
                 width={16}
                 height={16}
-                className="size-[9px] lg:size-4"
+                className="size-[9px] lg:size-4 "
               />
             </span>
           </Link>
@@ -113,10 +137,10 @@ export default function CarModelShowcase({
               <div
                 key={model.id}
                 className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                  isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                  isActive ? "cs-active opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
                 }`}
               >
-                <span className="absolute left-1/2 top-[36%] -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap text-[110px] font-bold leading-none text-white opacity-40 md:text-[220px] lg:text-[375px]">
+                <span className="cs-mark absolute left-1/2 top-[36%] -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap text-[110px] font-bold leading-none text-white opacity-40 md:text-[220px] lg:text-[375px]">
                   {model.watermark}
                 </span>
                 <div className="absolute left-1/2 top-[36%] w-[85%] max-w-[961px] -translate-x-1/2 -translate-y-1/2">
@@ -126,10 +150,10 @@ export default function CarModelShowcase({
                     width={961}
                     height={483}
                     priority={index === 0}
-                    className="h-auto w-full rounded-[10px] object-contain"
+                    className="cs-car h-auto w-full rounded-[10px] object-contain"
                   />
                 </div>
-                <p className="absolute bottom-[15%] left-1/2 -translate-x-1/2 whitespace-nowrap text-[22px] font-bold leading-none text-black md:text-[36px] lg:text-[48px]">
+                <p className="cs-name absolute bottom-[15%] left-1/2 -translate-x-1/2 whitespace-nowrap text-[22px] font-bold leading-none text-black md:text-[36px] lg:text-[48px]">
                   {model.name}
                 </p>
               </div>
@@ -144,13 +168,7 @@ export default function CarModelShowcase({
           >
             <Image src="/icons/icon-chevron.svg" alt="" width={24} height={24} className="size-full" />
           </button>
-          <Link
-            href={detailHref}
-            aria-label="View model details"
-            className="absolute bottom-[6%] left-1/2 z-20 -translate-x-1/2 rounded-[4px] bg-[#005eb8] px-4 py-2 text-[12px] font-bold text-white lg:text-[14px] md:mt-0 mt-5"
-          >
-            Discover More
-          </Link>
+         
           <button
             type="button"
             aria-label="Next model"

@@ -43,7 +43,7 @@ export default function VehiclesPageContent({ initialVehicles, initialCategories
   return (
     <section className="w-full py-10 lg:py-16 mt-10">
       <Container>
-        <h1 className="mb-6 text-[24px] font-black uppercase leading-[normal] text-[#1e1e1e] lg:hidden">
+        <h1 className="mb-6 text-[24px] font-black uppercase leading-[normal] text-[#1e1e1e] lg:hidden font-[family-name:var(--font-google-sans)]">
           {label}
         </h1>
 

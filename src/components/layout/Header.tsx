@@ -6,6 +6,7 @@ import Link from "next/link";
 import Container from "./Container";
 
 const NAV_LINKS = [
+  { label: "Home", href: "/", id: "home" },
   { label: "Vehicles", href: "/vehicles", id: "vehicles" },
   { label: "About Us", href: "/about", id: "about" },
   { label: "News", href: "/news", id: "news" },
@@ -34,7 +35,12 @@ export default function Header({ active }: HeaderProps) {
           onClick={() => setMenuOpen((v) => !v)}
           className="flex size-6 items-center justify-center lg:hidden"
         >
-          <Image src="/icons/icon-hamburger.svg" alt="" width={24} height={24} />
+          <Image
+            src={menuOpen ? "/icons/icon-cancel.svg" : "/icons/icon-hamburger.svg"}
+            alt=""
+            width={24}
+            height={24}
+          />
         </button>
 
         {/* Mobile: logo */}

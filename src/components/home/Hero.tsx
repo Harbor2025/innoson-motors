@@ -118,7 +118,7 @@ export default function Hero() {
               <p className="text-[14px] leading-none md:text-[18px] lg:text-[19px] lg:leading-[normal]">
                 <span className="reveal-subtitle">{slide.subtitle}</span>
               </p>
-              <h1 className="max-w-[1105px] text-[28px] font-bold leading-[1.15] md:text-[48px] lg:text-[48px] lg:leading-[normal]">
+              <h1 className="max-w-[1105px] text-[28px] font-bold leading-[1.15] md:text-[48px] lg:text-[54px] lg:leading-[normal]">
                 <RevealWords text={slide.title} />
               </h1>
             </div>
