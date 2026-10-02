@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function ContactHero() {
   return (
     <section className="font-[family-name:var(--font-google-sans)] w-full">
-      <div className="relative h-[439px] w-full lg:h-[715px]">
+      <div className="relative h-[400px] w-full lg:h-[500px]">
         <Image
           src="/images/contact-hero.webp"
           alt="IVM fleet vehicles in the factory yard"

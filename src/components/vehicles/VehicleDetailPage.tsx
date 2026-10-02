@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -36,6 +36,30 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
   const [open, setOpen] = useState<string | null>("design");
   const [quoteOpen, setQuoteOpen] = useState(false);
 
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Scroll reveal: marks any [data-reveal] element as visible once it enters the viewport.
+  // data-visible is set directly on the DOM so React re-renders never reset it.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).dataset.visible = "true";
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    root.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [model.slug]);
+
   const openQuote = () => setQuoteOpen(true);
   const closeQuote = () => setQuoteOpen(false);
 
@@ -65,7 +89,10 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
   const specBar = buildSpecBar(model);
 
   return (
-    <div className="min-h-screen bg-white font-[family-name:var(--font-google-sans)] text-[#1e1e1e]">
+    <div
+      ref={rootRef}
+      className="min-h-screen bg-white font-[family-name:var(--font-google-sans)] text-[#1e1e1e]"
+    >
       <main className="pt-[72px] lg:pt-[80px]">
         <section className="relative">
           <div className="relative h-[383px] w-full overflow-hidden lg:h-[822px]">
@@ -74,47 +101,60 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
               alt={model.name}
               fill
               priority
-              className="hidden object-cover lg:block"
+              className="hidden object-cover lg:block vd-hero-img"
             />
             <Image
               src={heroMobile}
               alt={model.name}
               fill
               priority
-              className="object-cover lg:hidden"
+              className="object-cover lg:hidden vd-hero-img"
             />
             <div className="absolute inset-0 bg-black/40" />
 
             <div className="absolute inset-0 flex flex-col items-center px-5 pt-8 text-center text-white lg:pt-10 mt-10">
-              <p className="text-[14px] font-bold tracking-wide lg:text-[17px]">
+              <p className="vd-track text-[14px] font-bold tracking-wide lg:text-[17px]">
                 {(model.tagline ?? categoryName).toUpperCase()}
               </p>
               <h1 className="mt-1 text-[32px] font-black leading-none lg:mt-1 lg:text-[70px] lg:leading-[110px]">
-                {model.name.toUpperCase()}
+                <span className="vd-mask">
+                  <span className="vd-mask-inner">{model.name.toUpperCase()}</span>
+                </span>
               </h1>
-              <p className="mt-2 max-w-[523px] text-[14px] leading-5 lg:text-[17px]">
+              <p
+                className="vd-rise mt-2 max-w-[523px] text-[14px] leading-5 lg:text-[17px]"
+                style={{ "--d": "0.9s" } as React.CSSProperties}
+              >
                 {summary}
               </p>
               <button
                 type="button"
                 onClick={openQuote}
-                className="mt-4 flex h-10 w-[138px] items-center justify-center rounded-[4px] bg-[#005eb8] text-[14px] font-bold text-white"
+                className="vd-rise mt-4 flex h-10 w-[138px] items-center justify-center rounded-[4px] bg-[#005eb8] text-[14px] font-bold text-white"
+                style={{ "--d": "1.1s" } as React.CSSProperties}
               >
                 Get Quote
               </button>
             </div>
 
-            <div className="absolute bottom-3 right-5 flex h-[26px] w-[58px] items-center justify-center bg-[#005eb8] text-[12px] font-bold text-white lg:bottom-12 lg:right-[50px] lg:h-11 lg:w-[105px] lg:text-[20px]">
+            <div className="vd-badge absolute bottom-3 right-5 flex h-[26px] w-[58px] items-center justify-center bg-[#005eb8] text-[12px] font-bold text-white lg:bottom-12 lg:right-[50px] lg:h-11 lg:w-[105px] lg:text-[20px]">
               {categoryName.length > 4 ? categoryName.slice(0, 3) : categoryName}
             </div>
           </div>
         </section>
 
         <Container className="py-10 lg:py-14">
-          <h2 className="text-[24px] font-bold uppercase leading-normal lg:text-[40px]">
+          <h2
+            data-reveal
+            className="vd-fade text-[24px] font-bold uppercase leading-normal lg:text-[40px]"
+          >
             {(model.tagline ?? "Sleek, Sporty, Modern").trimEnd().replace(/\.$/, "") + "."}
           </h2>
-          <div className="mt-3 text-[14px] leading-normal text-[#1e1e1e] lg:mt-6 lg:text-[24px]">
+          <div
+            data-reveal
+            className="vd-fade mt-3 text-[14px] leading-normal text-[#1e1e1e] lg:mt-6 lg:text-[24px]"
+            style={{ "--i": 2 } as React.CSSProperties}
+          >
             {model.description != null && Object.keys(model.description as object).length > 0 ? (
               <RichText data={model.description as never} />
             ) : (
@@ -125,10 +165,15 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
 
         <Container className="pb-10">
           <div className="flex flex-col gap-6">
-            {accordion.map((item) => {
+            {accordion.map((item, idx) => {
               const isOpen = open === item.id;
               return (
-                <div key={item.id} className="border-b border-[#888]">
+                <div
+                  key={item.id}
+                  data-reveal
+                  className="vd-line vd-fade"
+                  style={{ "--i": idx } as React.CSSProperties}
+                >
                   <button
                     type="button"
                     className="flex w-full items-center justify-between pb-3 text-left"
@@ -147,7 +192,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
                     />
                   </button>
                   {isOpen && (
-                    <div className="pb-6 text-[14px] leading-relaxed lg:text-[18px]">
+                    <div className="vd-panel pb-6 text-[14px] leading-relaxed lg:text-[18px]">
                       {item.lexical ? (
                         <RichText data={item.lexical as never} />
                       ) : (
@@ -169,8 +214,13 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
           <section className="bg-[#fafafa]">
             <Container className="flex flex-col gap-8 py-6 lg:flex-row lg:items-center lg:justify-between lg:py-8">
               <div className="flex justify-between gap-2 lg:gap-[140px]">
-                {specBar.slice(0, 3).map((s) => (
-                  <div key={s.label} className="min-w-0 text-center lg:text-left">
+                {specBar.slice(0, 3).map((s, i) => (
+                  <div
+                    key={s.label}
+                    data-reveal
+                    className="vd-fade min-w-0 text-center lg:text-left"
+                    style={{ "--i": i } as React.CSSProperties}
+                  >
                     <p className="text-[16px] font-bold lg:text-[22px]">{s.value}</p>
                     <p className="text-[12px] lg:text-[14px]">{s.label}</p>
                   </div>
@@ -211,10 +261,20 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
 
         {model.highlights && model.highlights.length > 0 && (
           <Container className="py-12 lg:py-16">
-            <h2 className="mb-10 text-[24px] font-bold uppercase lg:text-[40px]">Highlights</h2>
+            <h2
+              data-reveal
+              className="vd-fade mb-10 text-[24px] font-bold uppercase lg:text-[40px]"
+            >
+              Highlights
+            </h2>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
               {model.highlights.map((h, i) => (
-                <div key={`${h.title}-${i}`} className="rounded-[12px] border border-[#e6e6e6] p-5">
+                <div
+                  key={`${h.title}-${i}`}
+                  data-reveal
+                  className="vd-fade rounded-[12px] border border-[#e6e6e6] p-5"
+                  style={{ "--i": i % 4 } as React.CSSProperties}
+                >
                   <h3 className="text-[18px] font-bold text-[#1e1e1e]">{h.title}</h3>
                   {h.description && (
                     <p className="mt-2 text-[14px] leading-relaxed text-[#333]">{h.description}</p>
@@ -228,10 +288,20 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         {model.colorOptions && model.colorOptions.length > 0 && (
           <section className="bg-[#fafafa]">
             <Container className="py-12 lg:py-16">
-              <h2 className="mb-8 text-[24px] font-bold uppercase lg:text-[40px]">Available Colors</h2>
+              <h2
+                data-reveal
+                className="vd-fade mb-8 text-[24px] font-bold uppercase lg:text-[40px]"
+              >
+                Available Colors
+              </h2>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
                 {model.colorOptions.map((c, i) => (
-                  <div key={`${c.name}-${i}`} className="flex flex-col items-center gap-2">
+                  <div
+                    key={`${c.name}-${i}`}
+                    data-reveal
+                    className="vd-pop flex flex-col items-center gap-2"
+                    style={{ "--i": i % 6 } as React.CSSProperties}
+                  >
                     <div
                       className="h-16 w-16 rounded-full border border-[#cfcfcf] shadow-sm"
                       style={{ backgroundColor: c.hexCode || "#cccccc" }}
@@ -247,11 +317,26 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
 
         {model.gallery && model.gallery.length > 1 && (
           <Container className="py-12">
-            <h2 className="mb-8 text-[24px] font-bold uppercase lg:text-[40px]">Gallery</h2>
+            <h2
+              data-reveal
+              className="vd-fade mb-8 text-[24px] font-bold uppercase lg:text-[40px]"
+            >
+              Gallery
+            </h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {model.gallery.map((g, i) => (
-                <div key={`${g.image.url}-${i}`} className="relative aspect-[4/3] overflow-hidden rounded-[12px]">
-                  <Image src={g.image.url} alt={g.caption || `${model.name} ${i + 1}`} fill className="object-cover" />
+                <div
+                  key={`${g.image.url}-${i}`}
+                  data-reveal
+                  className="vd-curtain relative aspect-[4/3] overflow-hidden rounded-[12px]"
+                  style={{ "--i": i % 3 } as React.CSSProperties}
+                >
+                  <Image
+                    src={g.image.url}
+                    alt={g.caption || `${model.name} ${i + 1}`}
+                    fill
+                    className="vd-curtain-img object-cover"
+                  />
                 </div>
               ))}
             </div>

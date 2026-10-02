@@ -1,1 +1,393 @@
 @import "tailwindcss";
+:root {
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
+}
+/* Image settles into focus */
+.bx-image {
+  transform: scale(1.08);
+  transition: transform 2.4s var(--ease-expo-out);
+}
+[data-inview="true"] .bx-image {
+  transform: scale(1);
+}
+
+/* Headline: horizontal clip-path wipe (negative top/bottom keeps descenders) */
+.bx-wipe {
+  display: inline-block;
+  clip-path: inset(-0.2em 100% -0.2em 0);
+  transition: clip-path 1.3s var(--ease-silk) 0.2s;
+}
+.bx-wipe > span {
+  display: inline-block;
+  transform: translateX(-28px);
+  transition: transform 1.5s var(--ease-expo-out) 0.2s;
+}
+[data-inview="true"] .bx-wipe {
+  clip-path: inset(-0.2em 0 -0.2em 0);
+}
+[data-inview="true"] .bx-wipe > span {
+  transform: translateX(0);
+}
+
+/* Paragraph: fade up out of blur */
+.bx-fade {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(14px);
+  transition:
+    opacity 1.1s var(--ease-expo-out) 0.7s,
+    filter 1.1s var(--ease-expo-out) 0.7s,
+    transform 1.2s var(--ease-expo-out) 0.7s;
+}
+[data-inview="true"] .bx-fade {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* CTA: text fades in, underline draws left to right */
+.bx-cta {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  padding-bottom: 6px;
+  opacity: 0;
+  transition:
+    opacity 0.8s var(--ease-expo-out) 1s,
+    background-size 1.1s var(--ease-silk) 1.2s;
+}
+[data-inview="true"] .bx-cta {
+  opacity: 1;
+  background-size: 100% 2px;
+}
+/* After the intro, hover retracts and redraws the underline */
+.bx-cta:hover {
+  background-position: 100% 100%;
+  background-size: 0% 2px;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bx-image,
+  .bx-wipe,
+  .bx-wipe > span,
+  .bx-fade,
+  .bx-cta {
+    transition: none;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    opacity: 1;
+    background-size: 100% 2px;
+  }
+}
+/* Mask: clips each word so it appears to rise from a hidden line */
+.reveal-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* room for descenders (g, y, p) so they don't get clipped */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.reveal-word {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+
+/* Subtitle base state */
+.reveal-subtitle {
+  display: block;
+}
+
+/* Animations only run while the slide is active. When it goes inactive the
+   animation is removed, so text stays visible while the slide cross-fades out. */
+.slide-active .reveal-word {
+  animation: word-rise 1.2s var(--ease-expo-out) both;
+  animation-delay: calc(0.35s + var(--i) * 0.09s);
+}
+
+.slide-active .reveal-subtitle {
+  animation: subtitle-track 1.4s var(--ease-expo-out) both;
+  animation-delay: 0.1s;
+}
+
+@keyframes word-rise {
+  from {
+    transform: translateY(110%) rotate(3deg);
+    transform-origin: left bottom;
+    filter: blur(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) rotate(0deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes subtitle-track {
+  from {
+    opacity: 0;
+    letter-spacing: 0.3em;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    letter-spacing: normal;
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-active .reveal-word,
+  .slide-active .reveal-subtitle {
+    animation: none;
+  }
+}
+/* ---------- EV banner ---------- */
+
+/* Image: lights come on while it eases in from a slight drift */
+.ev-image {
+  transform: scale(1.05) translateX(1.5%);
+  filter: brightness(0.55);
+  transition:
+    transform 2.6s var(--ease-expo-out),
+    filter 2s var(--ease-silk);
+}
+[data-inview="true"] .ev-image {
+  transform: scale(1) translateX(0);
+  filter: brightness(1);
+}
+
+/* Charge bar: hairline fills left to right */
+.ev-bar {
+  position: relative;
+  width: 64px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+.ev-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--ease-silk) 0.25s;
+}
+[data-inview="true"] .ev-bar::after {
+  transform: scaleX(1);
+}
+@media (min-width: 1024px) {
+  .ev-bar { width: 96px; }
+}
+
+/* Feathered sweep: soft-edged mask travels across the text */
+.ev-feather {
+  --d: 0s;
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+  -webkit-mask-size: 250% 100%;
+  mask-size: 250% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  filter: blur(5px);
+  transition:
+    -webkit-mask-position 1.8s var(--ease-silk) var(--d),
+    mask-position 1.8s var(--ease-silk) var(--d),
+    filter 1.4s var(--ease-expo-out) var(--d);
+}
+[data-inview="true"] .ev-feather {
+  -webkit-mask-position: 0% 0;
+  mask-position: 0% 0;
+  filter: blur(0);
+}
+
+/* CTA: fades in, arrow glides in from the left */
+.ev-cta {
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-expo-out) 1.5s;
+}
+[data-inview="true"] .ev-cta {
+  opacity: 1;
+}
+.ev-arrow {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition:
+    opacity 0.9s var(--ease-expo-out) 1.7s,
+    transform 1s var(--ease-expo-out) 1.7s;
+}
+[data-inview="true"] .ev-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* Hover nudge (no delay once the intro has played) */
+[data-inview="true"] .ev-cta:hover .ev-arrow {
+  transform: translateX(6px);
+  transition-delay: 0s;
+  transition-duration: 0.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ev-image,
+  .ev-bar::after,
+  .ev-feather,
+  .ev-cta,
+  .ev-arrow {
+    transition: none;
+    transform: none;
+    filter: none;
+    opacity: 1;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* ---------- Vehicle detail ---------- */
+
+/* Hero (plays on load) */
+@keyframes vd-push {
+  from { transform: scale(1.12); filter: brightness(0.6); }
+}
+.vd-hero-img {
+  animation: vd-push 2.6s var(--ease-expo-out) both;
+}
+
+@keyframes vd-track {
+  from { opacity: 0; letter-spacing: 0.35em; }
+}
+.vd-track {
+  animation: vd-track 1.4s var(--ease-expo-out) 0.2s both;
+}
+
+.vd-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+@keyframes vd-mask-up {
+  from { transform: translateY(105%); filter: blur(6px); }
+}
+.vd-mask-inner {
+  display: block;
+  animation: vd-mask-up 1.4s var(--ease-expo-out) 0.35s both;
+}
+
+@keyframes vd-rise {
+  from { opacity: 0; transform: translateY(18px); filter: blur(5px); }
+}
+.vd-rise {
+  animation: vd-rise 1.1s var(--ease-expo-out) both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes vd-slide-in {
+  from { opacity: 0; transform: translateX(24px); }
+}
+.vd-badge {
+  animation: vd-slide-in 1s var(--ease-expo-out) 1.2s both;
+}
+
+/* Accordion panel (plays each time one opens) */
+@keyframes vd-panel {
+  from { opacity: 0; transform: translateY(-8px); }
+}
+.vd-panel {
+  animation: vd-panel 0.6s var(--ease-expo-out) both;
+}
+
+/* Scroll reveals: [data-visible="true"] is set by the observer */
+.vd-fade {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(4px);
+  transition:
+    opacity 1s var(--ease-expo-out),
+    transform 1.2s var(--ease-expo-out),
+    filter 1s var(--ease-expo-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.vd-fade[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Accordion divider draws itself (replaces border-b) */
+.vd-line {
+  position: relative;
+}
+.vd-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: #888;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--ease-silk) 0.15s;
+}
+.vd-line[data-visible="true"]::after {
+  transform: scaleX(1);
+}
+
+/* Color swatches pop in */
+.vd-pop {
+  opacity: 0;
+  transform: scale(0.7);
+  transition:
+    opacity 0.8s var(--ease-expo-out),
+    transform 1s var(--ease-expo-out);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.vd-pop[data-visible="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Gallery curtain */
+.vd-curtain {
+  clip-path: inset(100% 0 0 0 round 12px);
+  transition: clip-path 1.4s var(--ease-silk);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+.vd-curtain[data-visible="true"] {
+  clip-path: inset(0 0 0 0 round 12px);
+}
+.vd-curtain .vd-curtain-img {
+  transform: scale(1.15);
+  transition: transform 2.2s var(--ease-expo-out);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+.vd-curtain[data-visible="true"] .vd-curtain-img {
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vd-hero-img, .vd-track, .vd-mask-inner, .vd-rise, .vd-badge, .vd-panel {
+    animation: none;
+  }
+  .vd-fade, .vd-pop, .vd-curtain, .vd-curtain .vd-curtain-img {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    transition: none;
+  }
+  .vd-line::after {
+    transform: scaleX(1);
+    transition: none;
+  }
+}
+

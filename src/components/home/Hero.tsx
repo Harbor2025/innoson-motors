@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
+import { RevealWords } from "@/components/RevealWord";
+
+
 
 // Define structured content for each slide
 const SLIDES = [
@@ -95,7 +98,7 @@ export default function Hero() {
           <div
             key={slide.id}
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+              isActive ? "opacity-100 z-10 slide-active" : "opacity-0 z-0 pointer-events-none"
             }`}
           >
             <Image
@@ -113,10 +116,10 @@ export default function Hero() {
             {/* Dynamic Slide Content */}
             <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-3 px-5 text-center text-white md:top-[100px] lg:top-[142px] lg:gap-6">
               <p className="text-[14px] leading-none md:text-[18px] lg:text-[19px] lg:leading-[normal]">
-                {slide.subtitle}
+                <span className="reveal-subtitle">{slide.subtitle}</span>
               </p>
               <h1 className="max-w-[1105px] text-[28px] font-bold leading-[1.15] md:text-[48px] lg:text-[48px] lg:leading-[normal]">
-                {slide.title}
+                <RevealWords text={slide.title} />
               </h1>
             </div>
           </div>
