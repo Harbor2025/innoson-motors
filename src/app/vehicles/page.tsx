@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function VehiclesPage() {
-  let vehicles = [];
-  let categories = [];
+  let vehicles: ReturnType<typeof modelsAsVehicleCards> = [];
+  let categories: ReturnType<typeof categoriesAsList> = [];
   try {
     const [modelsRes, cats] = await Promise.all([
       getPublishedModels({ limit: 100 }),
