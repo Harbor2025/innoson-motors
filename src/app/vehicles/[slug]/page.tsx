@@ -34,13 +34,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     };
   } catch {
-    notFound();
+    return {
+      title: "Vehicle | Innoson Vehicle Manufacturing",
+      description: "Innoson vehicle details.",
+    };
   }
 }
 
 export default async function ModelDetailRoute({ params }: PageProps) {
   const { slug } = await params;
-  const model = await getModelBySlugOrNotFound(slug);
+  let model;
+  try {
+    model = await getModelBySlugOrNotFound(slug);
+  } catch {
+    notFound();
+  }
   return (
     <>
       <Header active="vehicles" />

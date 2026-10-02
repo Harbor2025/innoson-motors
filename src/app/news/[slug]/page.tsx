@@ -36,7 +36,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     };
   } catch {
-    notFound();
+    return {
+      title: "News | Innoson Vehicle Manufacturing",
+      description: "IVM news, manufacturing updates, financing news and driving reviews.",
+    };
   }
 }
 

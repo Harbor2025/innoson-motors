@@ -14,12 +14,18 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function VehiclesPage() {
-  const [modelsRes, cats] = await Promise.all([
-    getPublishedModels({ limit: 100 }),
-    getCategories(),
-  ]);
-  const vehicles = modelsAsVehicleCards(modelsRes.docs);
-  const categories = categoriesAsList(cats);
+  let vehicles = [];
+  let categories = [];
+  try {
+    const [modelsRes, cats] = await Promise.all([
+      getPublishedModels({ limit: 100 }),
+      getCategories(),
+    ]);
+    vehicles = modelsAsVehicleCards(modelsRes.docs);
+    categories = categoriesAsList(cats);
+  } catch {
+    // DB unavailable at build time; content will be fetched client-side or on revalidate.
+  }
   return (
     <>
       <Header />
