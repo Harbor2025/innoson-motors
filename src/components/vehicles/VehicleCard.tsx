@@ -41,7 +41,7 @@ export default function VehicleCard({ vehicle }: { vehicle: VehicleAdapter | imp
             <Image src="/icons/icon-arrow-right.svg" alt="" width={16} height={16} />
           </Link>
           <Link
-            href={orderHref}
+            href="/book-a-test-drive"
             className="flex items-center gap-2 text-[13px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]"
           >
             Order Now
