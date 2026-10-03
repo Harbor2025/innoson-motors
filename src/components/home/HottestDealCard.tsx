@@ -166,7 +166,7 @@ export default function HottestDealCard({
       {/* Content */}
       <div className="relative flex min-h-[inherit] flex-col px-4 pb-5 pt-4 md:px-[50px] md:pb-[53px] md:pt-20">
         <div className="flex max-w-[610px] flex-col gap-6 md:gap-[72px]">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 md:mt-3">
             {/* Eyebrow: flashes hot, then cools to its normal lime */}
             <p className="text-base font-extrabold uppercase leading-normal text-[#a4e41a] opacity-0 [text-shadow:0_0_32px_rgba(164,228,26,0.95)] transition-[opacity,text-shadow] delay-[400ms] duration-[1800ms] ease-out motion-reduce:transition-none group-data-[visible=true]:opacity-100 group-data-[visible=true]:[text-shadow:0_0_0_rgba(164,228,26,0)] md:text-2xl font-[family-name:var(--font-inter)]">
               {eyebrow}
