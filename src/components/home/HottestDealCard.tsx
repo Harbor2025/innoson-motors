@@ -54,7 +54,7 @@ export default function HottestDealCard({
   title = "IVM Caris",
   description = "The IVM Caris blends modern design with advanced technology, giving you a smoother, safer and more exciting drive-every time",
   price = "N42,500,000",
-  href = "/cars/caris",
+  href = "/vehicles",
 }: HottestDealCardProps) {
   return (
     <section
