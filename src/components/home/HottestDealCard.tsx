@@ -113,26 +113,26 @@ export default function HottestDealCard({
       <div className="relative flex min-h-[inherit] flex-col px-4 pb-5 pt-4 md:px-[50px] md:pb-[53px] md:pt-20">
         <div className="flex max-w-[610px] flex-col gap-6 md:gap-[72px]">
           <div className="flex flex-col gap-3">
-            <p className="text-base font-extrabold uppercase leading-normal text-[#a4e41a] md:text-2xl">
+            <p className="text-base font-extrabold uppercase leading-normal text-[#a4e41a] md:text-2xl font-[family-name:var(--font-inter)]">
               {eyebrow}
             </p>
-            <h2 className="text-[32px] font-extrabold uppercase leading-normal md:text-5xl md:leading-[58px]">
+            <h2 className="text-[32px] font-extrabold uppercase leading-normal md:text-5xl md:leading-[58px] font-[family-name:var(--font-google-sans)]">
               {title}
             </h2>
-            <p className="text-base font-normal leading-normal md:text-2xl">
+            <p className="text-base font-normal leading-normal md:text-2xl font-[family-name:var(--font-inter)]">
               {description}
             </p>
           </div>
 
           <div className="flex flex-col gap-3 leading-normal">
-            <p className="text-base font-normal md:text-2xl">Starting from</p>
-            <p className="text-2xl font-black md:text-4xl">{price}</p>
+            <p className="text-base font-normal md:text-2xl font-[family-name:var(--font-inter)]">Starting from</p>
+            <p className="text-2xl font-black md:text-4xl font-[family-name:var(--font-google-sans)]">{price}</p>
           </div>
         </div>
 
         <Link
           href={href}
-          className="mt-[21px] w-fit text-xl font-extrabold leading-normal underline underline-offset-[from-font] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a4e41a] md:mt-9 md:text-2xl"
+          className="mt-[21px] w-fit text-xl font-extrabold leading-normal underline underline-offset-[from-font] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a4e41a] md:mt-9 md:text-2xl font-[family-name:var(--font-inter)]"
         >
           Discover More
         </Link>
@@ -142,11 +142,11 @@ export default function HottestDealCard({
           {features.map((f) => (
             <li
               key={f.label}
-              className="flex-none border-white/40 px-[13.641px] first:pl-0 last:pr-0 md:flex-1 md:px-6 lg:flex-none lg:px-10 [&:not(:first-child)]:border-l"
+              className="flex-none border-white/40 px-[13.641px] first:pl-0 last:pr-0 md:flex-1 md:px-6 lg:flex-none lg:px-10 [&:not(:first-child)]:border-l font-[family-name:var(--font-inter)]"
             >
               <div className="flex w-[49.789px] flex-col gap-[5.456px] md:w-auto md:gap-4 lg:w-[146px]">
                 <FeatureIcon src={f.icon} nested={f.nested} />
-                <p className="text-[6.82px] font-normal leading-normal md:text-xl">
+                <p className="text-[6.82px] font-normal leading-normal md:text-xl font-[family-name:var(--font-inter)]">
                   {f.label}
                 </p>
               </div>
