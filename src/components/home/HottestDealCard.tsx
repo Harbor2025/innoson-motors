@@ -109,7 +109,7 @@ export default function HottestDealCard({
   return (
     <section
       ref={ref}
-      className="group relative isolate min-h-[558px] w-[90%] overflow-hidden bg-white text-white md:min-h-[755px] mx-3 my-3"
+      className="group relative isolate min-h-[558px] w-[90%] overflow-hidden bg-white text-white md:min-h-[755px] mx-3 mt-5 mb-3"
       style={{ fontFamily: "Avenir, 'Avenir Next', 'Nunito Sans', sans-serif" }}
     >
       {/* Background photo — different crop per breakpoint. Slow push-in while it "warms up". */}
