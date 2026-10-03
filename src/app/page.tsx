@@ -7,6 +7,7 @@ import CarModelShowcase from "@/components/home/CarModelShowcase";
 import PaymentBanner from "@/components/home/PaymentBanner";
 import { getFeaturedModels } from "@/server/models";
 import { modelsAsVehicleCards } from "@/lib/adapters";
+import HottestDealCard from "@/components/home/HottestDealCard";
 
 export const revalidate = 60;
 
@@ -25,6 +26,7 @@ export default async function HomePage() {
         <Hero />
         <BoldExperience />
         <EvCollectionBanner />
+        <HottestDealCard />
         <CarModelShowcase initialVehicles={featured} />
         <PaymentBanner />
       </main>
