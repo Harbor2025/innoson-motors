@@ -58,7 +58,7 @@ export default function HottestDealCard({
 }: HottestDealCardProps) {
   return (
     <section
-      className="relative isolate min-h-[558px] w-full overflow-hidden bg-white text-white md:min-h-[755px] m-3"
+      className="relative isolate min-h-[558px] w-[90%] overflow-hidden bg-white text-white md:min-h-[755px] mx-3 my-3"
       style={{ fontFamily: "Avenir, 'Avenir Next', 'Nunito Sans', sans-serif" }}
     >
       {/* Background photo — different crop per breakpoint */}
