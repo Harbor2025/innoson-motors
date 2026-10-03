@@ -68,7 +68,7 @@ export default function EvCollectionBanner() {
         </p>
 
         <Link
-          href="/vehicles/electric"
+          href="/vehicles"
           className="ev-cta flex w-fit items-center gap-3 text-[16px] font-bold leading-[normal] lg:text-[26px]"
         >
           <span className="underline underline-offset-4">Discover More</span>
