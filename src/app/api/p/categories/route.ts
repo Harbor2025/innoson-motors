@@ -1,9 +1,9 @@
-// src/app/api/categories/route.ts
+// src/app/api/p/categories/route.ts
 import { fail, ok } from '@/lib/response'
 import { listCategories } from '@/services/models.service'
 
 /**
- * GET /api/categories
+ * GET /api/p/categories
  * Public list of vehicle categories (Cars, MPV, PickUp, SUVs, Buses) for
  * building the site nav / category filter.
  * Response: ApiSuccess<CategoryDTO[]>
@@ -13,7 +13,7 @@ export async function GET() {
     const categories = await listCategories()
     return ok(categories)
   } catch (err) {
-    console.error('GET /api/categories failed:', err)
+    console.error('GET /api/p/categories failed:', err)
     return fail('Could not load categories.', 500)
   }
 }

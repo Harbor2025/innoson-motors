@@ -1,9 +1,9 @@
-// src/app/api/about/route.ts
+// src/app/api/p/about/route.ts
 import { fail, ok } from '@/lib/response'
 import { getAboutPage } from '@/services/contact.service'
 
 /**
- * GET /api/about
+ * GET /api/p/about
  * Public content for the About page (company intro, quality policy, stats).
  * Response: ApiSuccess<AboutPageDTO>
  */
@@ -12,7 +12,7 @@ export async function GET() {
     const about = await getAboutPage()
     return ok(about)
   } catch (err) {
-    console.error('GET /api/about failed:', err)
+    console.error('GET /api/p/about failed:', err)
     return fail('Could not load about page.', 500)
   }
 }

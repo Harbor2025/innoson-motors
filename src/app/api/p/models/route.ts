@@ -1,11 +1,11 @@
-// src/app/api/models/route.ts
+// src/app/api/p/models/route.ts
 import type { NextRequest } from 'next/server'
 import { fail, ok, zodFieldErrors } from '@/lib/response'
 import { listModelsQuerySchema } from '@/lib/validation'
 import { listModels } from '@/services/models.service'
 
 /**
- * GET /api/models?category=&featured=&limit=&page=
+ * GET /api/p/models?category=&featured=&limit=&page=
  * Public, paginated list of published models. `category` filters by
  * category slug (e.g. "suvs"); `featured=true` restricts to homepage picks.
  * Response: ApiSuccess<PaginatedResult<ModelListItemDTO>>
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const result = await listModels(parsed.data)
     return ok(result)
   } catch (err) {
-    console.error('GET /api/models failed:', err)
+    console.error('GET /api/p/models failed:', err)
     return fail('Could not load models.', 500)
   }
 }

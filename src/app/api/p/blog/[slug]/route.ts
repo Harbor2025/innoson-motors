@@ -1,9 +1,9 @@
-// src/app/api/blog/[slug]/route.ts
+// src/app/api/p/blog/[slug]/route.ts
 import { fail, ok } from '@/lib/response'
 import { getBlogPostBySlug } from '@/services/blog.service'
 
 /**
- * GET /api/blog/:slug
+ * GET /api/p/blog/:slug
  * Public single blog post detail, including full rich text content.
  * Response: ApiSuccess<BlogDetailDTO> | ApiError (404 if not found/unpublished)
  */
@@ -14,7 +14,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     if (!post) return fail('Blog post not found.', 404)
     return ok(post)
   } catch (err) {
-    console.error(`GET /api/blog/${slug} failed:`, err)
+    console.error(`GET /api/p/blog/${slug} failed:`, err)
     return fail('Could not load blog post.', 500)
   }
 }

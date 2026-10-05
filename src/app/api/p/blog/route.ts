@@ -1,11 +1,11 @@
-// src/app/api/blog/route.ts
+// src/app/api/p/blog/route.ts
 import type { NextRequest } from 'next/server'
 import { fail, ok, zodFieldErrors } from '@/lib/response'
 import { listBlogQuerySchema } from '@/lib/validation'
 import { listBlogPosts } from '@/services/blog.service'
 
 /**
- * GET /api/blog?tag=&limit=&page=
+ * GET /api/p/blog?tag=&limit=&page=
  * Public, paginated list of published blog posts (newest first), each with
  * title, excerpt, cover image, writer, date, and computed read time.
  * Response: ApiSuccess<PaginatedResult<BlogListItemDTO>>
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const result = await listBlogPosts(parsed.data)
     return ok(result)
   } catch (err) {
-    console.error('GET /api/blog failed:', err)
+    console.error('GET /api/p/blog failed:', err)
     return fail('Could not load blog posts.', 500)
   }
 }
