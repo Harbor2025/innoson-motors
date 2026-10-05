@@ -13,7 +13,7 @@
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
     "migrate": "payload migrate",
-    "seed": "tsx scripts/seed.mts"
+    "seed": "tsx scripts/seed-cars-only.mts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",
