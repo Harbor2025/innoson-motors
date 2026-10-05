@@ -62,7 +62,7 @@ export default function PaymentBanner() {
             </p>
           </div>
           <Link
-            href="/financing"
+            href="/book-a-test-drive"
             className="pay-slide pay-ink w-fit text-[20px] font-normal leading-[normal] text-[#005eb8] underline underline-offset-4 lg:text-[32px]"
             style={{ "--i": 2 } as React.CSSProperties}
           >
