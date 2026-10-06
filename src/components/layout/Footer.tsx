@@ -3,6 +3,15 @@
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  FaFacebookF,
+  FaLinkedinIn,
+  FaWhatsapp,
+  FaXTwitter,
+  FaInstagram,
+  FaYoutube,
+} from "react-icons/fa6";
+import type { IconType } from "react-icons";
 import Container from "./Container";
 import type { ContactInfoDTO } from "@/types/dto";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
@@ -169,18 +178,50 @@ export default function Footer({
                 </div>
                 {contactInfo && contactInfo.socialLinks.length > 0 ? (
                   <div className="flex flex-wrap gap-3 pt-2">
-                    {contactInfo.socialLinks.map((s) => (
-                      <a
-                        key={s.platform}
-                        href={s.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={s.platform}
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[11px] uppercase tracking-wide"
-                      >
-                        {s.platform.slice(0, 2)}
-                      </a>
-                    ))}
+                    {contactInfo.socialLinks.map((s) => {
+                      let Icon: IconType | null = null;
+                      switch (s.platform.toLowerCase()) {
+                        case "facebook":
+                          Icon = FaFacebookF;
+                          break;
+                        case "linkedin":
+                          Icon = FaLinkedinIn;
+                          break;
+                        case "whatsapp":
+                          Icon = FaWhatsapp;
+                          break;
+                        case "twitter":
+                        case "x":
+                          Icon = FaXTwitter;
+                          break;
+                        case "instagram":
+                          Icon = FaInstagram;
+                          break;
+                        case "youtube":
+                          Icon = FaYoutube;
+                          break;
+                        default:
+                          Icon = null;
+                      }
+                      return (
+                        <a
+                          key={s.platform}
+                          href={s.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={s.platform}
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+                        >
+                          {Icon ? (
+                            <Icon style={{ width: "45%", height: "45%" }} />
+                          ) : (
+                            <span className="text-[11px] uppercase tracking-wide">
+                              {s.platform.slice(0, 2)}
+                            </span>
+                          )}
+                        </a>
+                      );
+                    })}
                   </div>
                 ) : null}
               </div>
