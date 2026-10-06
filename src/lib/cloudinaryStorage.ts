@@ -3,23 +3,17 @@ import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary'
 import type { Adapter, GeneratedAdapter } from '@payloadcms/plugin-cloud-storage/types'
 import type { CollectionConfig, FileData, TypeWithID } from 'payload'
 import fs from 'node:fs'
-import stream from 'node:stream'
-import { promisify } from 'node:util'
-
-const pipeline = promisify(stream.pipeline)
 
 /**
  * Custom Cloudinary storage adapter for @payloadcms/plugin-cloud-storage.
  *
- * Handles:
- *   - uploading files (buffer OR tempFilePath, both supported) to Cloudinary
- *   - storing per-file Cloudinary URL + publicId on the doc itself
- *   - deleting Cloudinary objects when the Payload doc is deleted
- *   - generateURL: direct CDN lookup from stored url on the doc / size object
- *   - staticHandler: 302 redirect to the CDN URL when the file is requested
+ * - Uploads original + imageSizes to Cloudinary
+ * - Only writes cloudinaryURL / cloudinaryPublicId on the PARENT doc for the original file
+ * - generateURL builds CDN URLs for original and each size from filename
+ * - staticHandler redirects to the CDN
  *
- * Env vars required: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY,
- * CLOUDINARY_API_SECRET, CLOUDINARY_UPLOAD_FOLDER (optional).
+ * Env: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+ * Optional: CLOUDINARY_UPLOAD_FOLDER (default: innoson-motors)
  */
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -30,7 +24,6 @@ cloudinary.config({
 
 const FOLDER = process.env.CLOUDINARY_UPLOAD_FOLDER || 'innoson-motors'
 
-/** Per-file Cloudinary identifiers we persist on the doc / size object. */
 interface CloudinaryFields {
   cloudinaryURL?: string
   cloudinaryPublicId?: string
@@ -39,65 +32,62 @@ interface CloudinaryFields {
 type CloudinaryDoc = FileData & TypeWithID & CloudinaryFields
 type CloudinaryData = Record<string, unknown> & CloudinaryFields
 
+/** Strip extension → used as Cloudinary public_id basename */
 function publicIdFromFilename(filename: string): string {
   return filename.replace(/\.[^/.]+$/, '')
 }
 
-function uploadStreamToCloudinary(
-  publicId: string,
-): { stream: stream.Writable; promise: Promise<UploadApiResponse> } {
-  let resolve: (r: UploadApiResponse) => void
-  let reject: (e: unknown) => void
-  const promise = new Promise<UploadApiResponse>((res, rej) => {
-    resolve = res
-    reject = rej
-  })
-  const writeStream = cloudinary.uploader.upload_stream(
-    {
-      folder: FOLDER,
-      public_id: publicId,
-      resource_type: 'auto',
-      overwrite: true,
-    },
-    (error, result) => {
-      if (error || !result) return reject(error ?? new Error('Cloudinary upload failed'))
-      resolve(result)
-    },
-  )
-  return { stream: writeStream, promise }
+/** Payload size filenames look like: name-400x300.jpg */
+function isResizedVersion(filename: string): boolean {
+  return /-\d+x\d+\.[^.]+$/i.test(filename)
+}
+
+function buildCdnUrl(collectionSlug: string, filename: string, prefix?: string): string {
+  const cloud = process.env.CLOUDINARY_CLOUD_NAME
+  if (!cloud || !filename) return ''
+  const base = prefix ? `${prefix}/` : ''
+  return `https://res.cloudinary.com/${cloud}/image/upload/${FOLDER}/${collectionSlug}/${base}${filename}`
 }
 
 async function uploadAnyFile(
   file: { buffer?: Buffer; tempFilePath?: string; filename: string },
   publicId: string,
 ): Promise<UploadApiResponse> {
-  const { stream: writeStream, promise } = uploadStreamToCloudinary(publicId)
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: FOLDER,
+        public_id: publicId,
+        resource_type: 'auto',
+        overwrite: true,
+      },
+      (error, result) => {
+        if (error || !result) {
+          reject(error ?? new Error('Cloudinary upload failed'))
+          return
+        }
+        resolve(result)
+      },
+    )
 
-  if (file.buffer && file.buffer.length > 0) {
-    const readable = new stream.PassThrough()
-    readable.end(file.buffer)
-    await pipeline(readable, writeStream).catch(async (err) => {
-      // Swallow the ERR_STREAM_PREMATURELY_CLOSED on successful upload since
-      // cloudinary's upload_stream may end the stream on completion before
-      // our readable fully flushes.
-      const result = await Promise.resolve(promise).catch(() => null as unknown as UploadApiResponse)
-      if (!result) throw err
-    })
-    return promise
-  }
+    if (file.buffer && file.buffer.length > 0) {
+      uploadStream.end(file.buffer)
+      return
+    }
 
-  if (file.tempFilePath) {
-    const readStream = fs.createReadStream(file.tempFilePath)
-    await pipeline(readStream, writeStream).catch(async (err) => {
-      const result = await Promise.resolve(promise).catch(() => null as unknown as UploadApiResponse)
-      if (!result) throw err
-    })
-    return promise
-  }
+    if (file.tempFilePath) {
+      fs.createReadStream(file.tempFilePath)
+        .on('error', reject)
+        .pipe(uploadStream)
+      return
+    }
 
-  throw new Error(
-    `Cloudinary adapter: file ${file.filename} has neither buffer nor tempFilePath to upload.`,
-  )
+    reject(
+      new Error(
+        `Cloudinary adapter: file "${file.filename}" has neither buffer nor tempFilePath.`,
+      ),
+    )
+  })
 }
 
 export const cloudinaryAdapter =
@@ -105,53 +95,88 @@ export const cloudinaryAdapter =
   ({ collection }: { collection: CollectionConfig }): GeneratedAdapter => {
     return {
       name: 'cloudinary',
+
       handleUpload: async ({ data, file }) => {
-        const publicId = `${collection.slug}/${publicIdFromFilename(file.filename)}`
+        const filename = file.filename
+        const isSize = isResizedVersion(filename)
+
+        // public_id relative to folder, e.g. "media/my-image" or "media/my-image-400x300"
+        const publicId = `${collection.slug}/${publicIdFromFilename(filename)}`
+
         const result = await uploadAnyFile(
-          { buffer: file.buffer, tempFilePath: file.tempFilePath, filename: file.filename },
+          {
+            buffer: file.buffer,
+            tempFilePath: file.tempFilePath,
+            filename,
+          },
           publicId,
         )
 
-        const typedData = data as CloudinaryData
-        typedData.cloudinaryURL = result.secure_url
-        typedData.cloudinaryPublicId = result.public_id
+        // Only attach Cloudinary fields on the parent document for the ORIGINAL file.
+        // Size uploads must not overwrite parent cloudinaryURL / cloudinaryPublicId.
+        if (!isSize) {
+          const typedData = data as CloudinaryData
+          typedData.cloudinaryURL = result.secure_url
+          typedData.cloudinaryPublicId = result.public_id
+        }
 
         return data
       },
+
       handleDelete: async ({ doc }) => {
         const publicId = (doc as CloudinaryDoc).cloudinaryPublicId
-        if (publicId) {
+        if (!publicId) return
+
+        try {
+          // Delete original
           await cloudinary.uploader.destroy(publicId, { resource_type: 'auto' })
+
+          // Best-effort: delete known size variants if they exist
+          // (filenames were uploaded as separate public_ids)
+          const sizes = (doc as FileData).sizes
+          if (sizes && typeof sizes === 'object') {
+            for (const size of Object.values(sizes)) {
+              const sizeFilename = (size as { filename?: string } | null)?.filename
+              if (!sizeFilename) continue
+              const sizePublicId = `${FOLDER}/${collection.slug}/${publicIdFromFilename(sizeFilename)}`
+              // result.public_id from upload already includes folder; destroy needs that form
+              // Prefer constructing from what we stored pattern:
+              const altId = `${collection.slug}/${publicIdFromFilename(sizeFilename)}`
+              await cloudinary.uploader
+                .destroy(`${FOLDER}/${altId}`, { resource_type: 'auto' })
+                .catch(() => undefined)
+              await cloudinary.uploader
+                .destroy(altId, { resource_type: 'auto' })
+                .catch(() => undefined)
+            }
+          }
+        } catch (err) {
+          console.error('[cloudinary] handleDelete error:', err)
         }
       },
-      // Signature per plugin types: { collection, data, filename, prefix? }
-      // Called once per upload (original + each size). `data` is always the
-      // PARENT doc, so we cannot distinguish sizes via it directly — instead
-      // derive the CDN URL deterministically from the filename in the folder
-      // we upload to. This avoids every size pointing at the same URL.
+
       generateURL: ({ filename, prefix }) => {
-        if (!filename) return ''
-        const base = (prefix ? `${prefix}/` : '')
-        // Note: this matches how cloud-storage plugin resolves storageFilePath
-        // for our adapter: compositional folder `${collection}/<filename>` and
-        // we also store the definitive URL on data.cloudinaryURL.
-        // Since `data.cloudinaryURL` is shared (parent doc only), we prefer
-        // it when filename matches the parent doc; otherwise rebuild via
-        // public id + folder structure.
-        return (
-          `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${FOLDER}/${collection.slug}/${base}${filename}`
-        )
+        return buildCdnUrl(collection.slug, filename, prefix)
       },
+
       staticHandler: async (_req, { doc, params }) => {
         const docUrl = (doc as CloudinaryDoc | undefined)?.cloudinaryURL
-        if (docUrl) return Response.redirect(docUrl, 302)
+        const requestedFilename = params?.filename
 
-        // Fallback: derive CDN url from params (covers size requests too)
-        const filename = params?.filename
-        if (!filename) return new Response('Not found', { status: 404 })
-        const prefix = params?.prefix ? `${params.prefix}/` : ''
+        // If no specific filename requested, or we only have the original URL, use it
+        if (docUrl && !requestedFilename) {
+          return Response.redirect(docUrl, 302)
+        }
+
+        if (!requestedFilename) {
+          return new Response('Not found', { status: 404 })
+        }
+
+        // Size (or original) requests: build CDN URL from filename
+        const prefix = params?.prefix
         const coll = params?.collection || collection.slug
-        const redirect = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${FOLDER}/${coll}/${prefix}${filename}`
+        const redirect = buildCdnUrl(coll, requestedFilename, prefix)
+        if (!redirect) return new Response('Not found', { status: 404 })
         return Response.redirect(redirect, 302)
       },
     }
