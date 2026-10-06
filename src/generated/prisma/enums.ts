@@ -76,7 +76,7 @@ export const SocialPlatform = {
   INSTAGRAM: 'INSTAGRAM',
   YOUTUBE: 'YOUTUBE',
   LINKEDIN: 'LINKEDIN',
-  TIKTOK: 'TIKTOK'
+
 } as const
 
 export type SocialPlatform = (typeof SocialPlatform)[keyof typeof SocialPlatform]

@@ -181,7 +181,7 @@ const EMAIL_CONTACTS = [
   { email: 'Support@innosonmotors.com', order: 3 },
 ]
 
-type SocialPlatform = 'facebook' | 'twitter' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok'
+type SocialPlatform = 'facebook' | 'twitter' | 'instagram' | 'youtube' | 'linkedin' 
 
 const SOCIAL_LINKS: { platform: SocialPlatform; url: string; order: number }[] = [
   { platform: 'facebook', url: 'https://facebook.com/innosonmotors', order: 1 },
@@ -189,7 +189,6 @@ const SOCIAL_LINKS: { platform: SocialPlatform; url: string; order: number }[] =
   { platform: 'instagram', url: 'https://instagram.com/innosonmotors', order: 3 },
   { platform: 'youtube', url: 'https://youtube.com/@innosonmotors', order: 4 },
   { platform: 'linkedin', url: 'https://linkedin.com/company/innoson-motors', order: 5 },
-  { platform: 'tiktok', url: 'https://tiktok.com/@innosonmotors', order: 6 },
 ]
 
 const STATS = [

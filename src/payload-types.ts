@@ -1066,7 +1066,7 @@ export interface ContactInfo {
   mapLng?: number | null;
   socialLinks?:
     | {
-        platform: 'facebook' | 'twitter' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok';
+        platform: 'facebook' | 'twitter' | 'instagram' | 'youtube' | 'linkedin' ;
         url: string;
         order?: number | null;
         id?: string | null;

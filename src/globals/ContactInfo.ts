@@ -61,7 +61,7 @@ export const ContactInfo: GlobalConfig = {
             'instagram',
             'youtube',
             'linkedin',
-            'tiktok',
+  
           ],
           required: true,
         },
