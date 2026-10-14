@@ -30,7 +30,7 @@ export default function EvCollectionBanner() {
     <section
       ref={ref}
       data-inview={inView}
-      className="font-[family-name:var(--font-google-sans)] relative h-[342px] w-full overflow-hidden md:h-[540px] lg:h-[807px]"
+      className="font-[family-name:var(--font-inter)] relative h-[342px] w-full overflow-hidden md:h-[540px] lg:h-[807px]"
     >
       <div className="ev-image absolute inset-0">
         <Image

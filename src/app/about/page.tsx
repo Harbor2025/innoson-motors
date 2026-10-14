@@ -3,10 +3,14 @@ import Header from "@/components/layout/Header";
 import FooterServer from "@/components/layout/FooterServer";
 import AboutHero from "@/components/about/AboutHero";
 import StatsRow from "@/components/about/StatsRow";
+import ChairmanMessage from "@/components/about/ChairmanMessage";
+import MadeInNigeria from "@/components/about/MadeInNigeria";
+import FactoryVideo from "@/components/about/FactoryVideo";
+import ImpactSection from "@/components/about/ImpactSection";
+import LifeAtIvm from "@/components/about/LifeAtIvm";
 import ImageBand from "@/components/about/ImageBand";
-import StoryTwoColumn from "@/components/about/StoryTwoColumn";
-import StoryWithImage from "@/components/about/StoryWithImage";
-import { getAboutPage } from "@/server/globals";
+import WhatsAppWidget from "@/components/about/WhatsAppWidget";
+import { getAboutPage, getContactInfo } from "@/server/globals";
 
 export const metadata: Metadata = {
   title: "About Us | Innoson Vehicle Manufacturing",
@@ -23,50 +27,39 @@ export default async function AboutPage() {
   } catch {
     about = undefined;
   }
+
+  // WhatsApp link for the floating widget comes from the CMS social links
+  let whatsapp: string | undefined;
+  try {
+    const info = await getContactInfo();
+    whatsapp = info.socialLinks.find((s) => s.platform.toLowerCase() === "whatsapp")?.url;
+  } catch {
+    whatsapp = undefined;
+  }
+
   return (
     <>
-      <Header active="about" />
+      {/* Header floats over the hero (transparent on mobile until you scroll) */}
+      <Header active="about" overlay />
       <main>
         <AboutHero />
         <StatsRow stats={about?.stats} />
-
-        <ImageBand
-          src="/images/about-car-rear.png"
-          alt="IVM Caris rear view"
-          heightClassName="h-[254px] lg:h-[519px]"
-          containerClassName="px-0 py-8 lg:px-[50px] lg:py-10"
-        />
-
-        <StoryTwoColumn />
-
-        <ImageBand
-          src="/images/image.webp"
-          alt="IVM Caris driving through a forest road"
-          heightClassName="h-[407px] lg:h-[800px]"
-          heading="Why do we exist?"
-          body={'To eradicate "tokunbo" (foreign used) automobiles from Africa by promoting MADE IS NIGERIA'}
-        />
-
-        <ImageBand
-          src="/images/image1.webp"
-          alt="IVM pickup truck on a scenic road"
-          heightClassName="h-[326px] lg:h-[642px]"
-          containerClassName="px-5 py-8 lg:px-5 lg:py-10"
-          rounded
-        />
-
-        <StoryWithImage />
-
-        <ImageBand
-          src="/images/hero-caris.png"
-          alt="Red IVM hatchback in a showroom"
-          heightClassName="h-[335px] lg:h-[800px]"
-          containerClassName="px-5 py-8 lg:px-0 lg:py-0"
-          eyebrow="DRIVING VIDEO"
-          heading="Thoughtful details decorating the space"
-        />
+        <ChairmanMessage />
+        <MadeInNigeria />
+        <FactoryVideo />
+        <ImpactSection />
+        <LifeAtIvm />
+        <div className="mt-10 lg:mt-20">
+          <ImageBand
+            src="/images/about/life-banner.png"
+            alt="IVM vehicles lined up at the factory"
+            heightClassName="h-[260px] md:h-[450px] lg:h-[675px]"
+          />
+        </div>
       </main>
+      {/* Footer sits flush against the last image in the design */}
       <FooterServer />
+      {whatsapp && <WhatsAppWidget href={whatsapp} />}
     </>
   );
 }

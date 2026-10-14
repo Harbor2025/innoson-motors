@@ -30,7 +30,7 @@ export default function BoldExperience() {
     <section
       ref={ref}
       data-inview={inView}
-      className="font-[family-name:var(--font-google-sans)] relative h-[371px] w-full overflow-hidden md:h-[560px] lg:h-[800px]"
+      className="font-[family-name:var(--font-inter)] relative h-[371px] w-full overflow-hidden md:h-[560px] lg:h-[800px]"
     >
       <div className="bx-image absolute inset-0">
         <Image

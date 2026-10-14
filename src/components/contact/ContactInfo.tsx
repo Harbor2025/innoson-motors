@@ -61,18 +61,18 @@ export default function ContactInfo({ className = "", contactInfo, dealerships }
         <h2 className="text-[20px] font-extrabold text-[#333333] lg:text-[40px] lg:leading-[62px]">
           Get In Touch with us
         </h2>
-        <p className="text-[14px] leading-[22px] tracking-[0.02em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px]">
+        <p className="text-[14px] leading-[22px] tracking-[0.02em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px] font-[family-name:var(--font-inter)] ">
           Reach out to our sales, service and finance teams — we respond within one business day.
         </p>
       </div>
 
       <div className="flex flex-col gap-6 lg:gap-10">
         <InfoRow icon={<MailIcon className="size-full" />} label="E-Mail">
-          <a href={`mailto:${email}`}>{email}</a>
+          <a className="font-[family-name:var(--font-inter)]" href={`mailto:${email}`}>{email}</a>
         </InfoRow>
 
         <InfoRow icon={<PhoneIcon className="size-full" />} label="Phone Numbers">
-          <div className="flex flex-col">
+          <div className="flex flex-col font-[family-name:var(--font-inter)]">
             {phones.map((number) => (
               <a key={number} href={`tel:${number.replace(/\s/g, "")}`}>
                 {number}
@@ -82,7 +82,7 @@ export default function ContactInfo({ className = "", contactInfo, dealerships }
         </InfoRow>
 
         <InfoRow icon={<LocationIcon className="size-full" />} label="Factory Address">
-          <p>{address}</p>
+          <p className="font-[family-name:var(--font-inter)]">{address}</p>
         </InfoRow>
       </div>
 
@@ -92,14 +92,14 @@ export default function ContactInfo({ className = "", contactInfo, dealerships }
         <div className="flex flex-col gap-6 lg:gap-8">
           {showrooms.map((showroom) => (
             <div key={showroom.city} className="flex flex-col gap-3">
-              <p className="text-[14px] font-extrabold uppercase tracking-[0.005em] text-[#1e1e1e] lg:text-[20px]">
+              <p className="text-[14px] font-extrabold uppercase tracking-[0.005em] text-[#1e1e1e] lg:text-[20px] font-[family-name:var(--font-inter)]">
                 {showroom.city}
               </p>
-              <p className="text-[14px] leading-[22px] tracking-[0.005em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px] whitespace-pre-line">
+              <p className="text-[14px] leading-[22px] tracking-[0.005em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px] whitespace-pre-line font-[family-name:var(--font-inter)]">
                 {showroom.address}
               </p>
               {"phone" in showroom && showroom.phone ? (
-                <p className="text-[14px] font-semibold tracking-[0.005em] text-[#1e1e1e] lg:text-[16px]">
+                <p className="text-[14px] font-semibold tracking-[0.005em] text-[#1e1e1e] lg:text-[16px] font-[family-name:var(--font-inter)]">
                   {showroom.phone}
                 </p>
               ) : null}

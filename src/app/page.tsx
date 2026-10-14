@@ -1,13 +1,14 @@
 import Header from "@/components/layout/Header";
 import FooterServer from "@/components/layout/FooterServer";
 import Hero from "@/components/home/Hero";
-import BoldExperience from "@/components/home/BoldExperience";
-import EvCollectionBanner from "@/components/home/EvCollectionBanner";
+import VideoBanner from "@/components/home/VideoBanner";
+import HottestDealCard from "@/components/home/HottestDealCard";
+import SpecialOfferCard from "@/components/home/SpecialOfferCard";
 import CarModelShowcase from "@/components/home/CarModelShowcase";
+import NewestModels from "@/components/home/NewestModels";
 import PaymentBanner from "@/components/home/PaymentBanner";
 import { getFeaturedModels } from "@/server/models";
 import { modelsAsVehicleCards } from "@/lib/adapters";
-import HottestDealCard from "@/components/home/HottestDealCard";
 
 export const revalidate = 60;
 
@@ -21,16 +22,21 @@ export default async function HomePage() {
   }
   return (
     <>
-      <Header />
-      <main className="pt-[55px] lg:pt-[62px]">
+      {/* Header floats over the hero (mobile: transparent until you scroll; desktop: white bar over the hero) */}
+      <Header overlay />
+      <main>
         <Hero />
-        <BoldExperience />
-        <EvCollectionBanner />
+        <VideoBanner />
+        {/* Mobile/tablet show Hottest Deal; desktop (lg+) shows the Special Offer banner */}
         <HottestDealCard />
+        <SpecialOfferCard />
         <CarModelShowcase initialVehicles={featured} />
+        <NewestModels />
         <PaymentBanner />
       </main>
-      <FooterServer />
+      <div className="mt-20">
+        <FooterServer />
+      </div>
     </>
   );
 }

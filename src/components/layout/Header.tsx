@@ -1,138 +1,185 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
+import Logo from "./Logo";
 
 const NAV_LINKS = [
-  { label: "Home", href: "/", id: "home" },
   { label: "Vehicles", href: "/vehicles", id: "vehicles" },
   { label: "About Us", href: "/about", id: "about" },
   { label: "News", href: "/news", id: "news" },
   { label: "Contact Us", href: "/contact", id: "contact" },
 ];
 
-const PHONE_LABEL = "Call : 081xxxxxxxxx";
+// Mobile menu rows (Figma node 773:1932)
+const MENU_LINKS = [
+  { label: "Vehicles", href: "/vehicles" },
+  { label: "About Us", href: "/about" },
+  { label: "News", href: "/news" },
+  { label: "Contact us", href: "/contact" },
+  { label: "Book a Test drive", href: "/book-a-test-drive" },
+];
 
-// 1. Define the TypeScript interface for the component props
+// TODO: point this at the real region / showroom finder when it exists
+const REGION_HREF = "/contact#showrooms";
+
 interface HeaderProps {
   active?: "vehicles" | "about" | "news" | "contact" | string;
+  /**
+   * Home page only. On mobile the header floats transparently over the hero
+   * (logo + MENU pill) and turns into a solid white bar once you scroll.
+   * Without it the header is a solid white bar on every breakpoint.
+   */
+  overlay?: boolean;
 }
 
-// 2. Destructure the active prop into the component
-export default function Header({ active }: HeaderProps) {
+export default function Header({ active, overlay = false }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!overlay) return;
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [overlay]);
+
+  // Lock page scroll + close on Escape while the menu is open
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  const transparent = overlay && !scrolled;
 
   return (
-    <header className="font-[family-name:var(--font-google-sans)] fixed top-0 left-0 right-0 z-50 w-full border-b border-[#e4e4e4] bg-white">
-      <Container className="flex h-[60px] items-center justify-between lg:h-[60px]">
-        {/* Mobile: hamburger */}
-        <button
-          type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-          className="flex size-6 items-center justify-center lg:hidden"
+    <>
+      <header
+        className={`font-[family-name:var(--font-inter)] fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300 lg:border-b lg:border-[#e4e4e4] lg:bg-white ${
+          transparent ? "bg-transparent" : "border-b border-[#e4e4e4] bg-white"
+        }`}
+      >
+        <Container
+          className={`flex justify-between lg:h-[80px] lg:items-center lg:pt-0 ${
+            overlay ? "h-[75px] items-start pt-5" : "h-[60px] items-center"
+          }`}
         >
-          <Image
-            src={menuOpen ? "/icons/icon-cancel.svg" : "/icons/icon-hamburger.svg"}
-            alt=""
-            width={24}
-            height={24}
-          />
-        </button>
+          {/* Left group: logo + primary nav (880px wide on desktop) */}
+          <div className="flex items-center lg:flex-1 lg:justify-between xl:w-[880px] xl:flex-none">
+            <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="shrink-0">
+              <Logo className="h-[35px] w-[59px] lg:h-[66px] lg:w-[111px]" />
+            </Link>
 
-        {/* Mobile: logo */}
-        <Link href="/" className="lg:hidden">
-          <Image
-            src="/images/logo-header-mobile.png"
-            alt="Innoson Vehicle Manufacturing"
-            width={60}
-            height={45}
-            className="h-[45px] w-[60px] object-contain"
-          />
-        </Link>
+            <nav className="hidden items-center gap-8 text-[14px] font-semibold text-black lg:ml-10 lg:flex xl:ml-0 xl:gap-[66px]">
+              {NAV_LINKS.map((link) => {
+                const isActive = active === link.id;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`whitespace-nowrap leading-[20px] transition-colors ${
+                      isActive ? "text-[#005eb8]" : "hover:text-[#005eb8]"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
 
-        {/* Desktop: logo + primary nav */}
-        <div className="hidden items-center gap-[60px] lg:flex">
-          <Link href="/" className="shrink-0">
-            <Image
-              src="/images/logo-header.png"
-              alt="Innoson Vehicle Manufacturing"
-              width={149}
-              height={31}
-              className="h-[31px] w-[149px] object-contain"
-            />
-          </Link>
-          <nav className="flex items-center gap-[66px] text-[14px] text-black">
-            {NAV_LINKS.map((link) => {
-              // Check if this link matches the active prop
-              const isActive = active === link.id;
-              
-              return (
-                <Link 
-                  key={link.label} 
-                  href={link.href} 
-                  className={`whitespace-nowrap leading-[20px] transition-colors ${
-                    isActive ? "font-bold text-[#005eb8] border-b-2 border-[#005eb8]" : "hover:text-[#005eb8]"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+          {/* Desktop: region + CTA */}
+          <div className="hidden items-center gap-4 lg:ml-10 lg:flex xl:ml-0">
+            <Link
+              href={REGION_HREF}
+              className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black font-[family-name:var(--font-roboto)]"
+            >
+              <span className="whitespace-nowrap">Search Region</span>
+              <Image src="/icons/globe.svg" alt="" width={20} height={20} />
+            </Link>
+            <Link
+              href="/book-a-test-drive"
+              className="flex h-[38px] w-[143px] items-center justify-center rounded-[4px] bg-[#005eb8] px-1.5 py-1 text-center text-[12px] font-extrabold leading-[20px] text-white font-[family-name:var(--font-inter)]"
+            >
+              Book a Test Drive
+            </Link>
+          </div>
 
-        {/* Desktop: phone + CTA */}
-        <div className="hidden items-center gap-6 lg:flex">
-          <a
-            href="tel:081xxxxxxxxx"
-            className="whitespace-nowrap text-[16px] font-bold leading-[20px] text-[#005eb8]"
+          {/* Mobile: MENU pill */}
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen(true)}
+            className={`flex items-center justify-center rounded-[45px] p-[10px] text-[14px] font-semibold uppercase leading-[normal] transition-colors lg:hidden font-[family-name:var(--font-roboto)] ${
+              transparent ? "bg-white/[0.26] text-white" : "bg-[#ebebeb] text-black"
+            }`}
           >
-            {PHONE_LABEL}
-          </a>
-          <Link
-            href="/book-a-test-drive"
-            className="flex h-[38px] w-[143px] items-center justify-center rounded-[4px] bg-[#005eb8] px-1.5 py-1 text-center text-[14px] font-bold text-white"
-          >
-            Book a Test Drive
-          </Link>
-        </div>
-      </Container>
+            Menu
+          </button>
+        </Container>
+      </header>
 
-      {/* Mobile drawer */}
+      {/* Mobile menu: full-screen sheet */}
       {menuOpen && (
-        <div className="border-t border-[#e4e4e4] bg-white px-5 py-6 lg:hidden">
-          <nav className="flex flex-col gap-4 text-[14px] text-black">
-            {NAV_LINKS.map((link) => {
-              const isActive = active === link.id;
-
-              return (
-                <Link 
-                  key={link.label} 
-                  href={link.href} 
-                  onClick={() => setMenuOpen(false)}
-                  className={isActive ? "font-bold text-[#005eb8]" : ""}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-          <a href="tel:081xxxxxxxxx" className="mt-6 block text-[14px] font-bold text-[#005eb8]">
-            {PHONE_LABEL}
-          </a>
-          <Link
-            href="/book-a-test-drive"
-            className="mt-4 flex h-[38px] w-full items-center justify-center rounded-[4px] bg-[#005eb8] text-[14px] font-bold text-white"
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className="fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-white lg:hidden"
+        >
+          <button
+            type="button"
+            aria-label="Close menu"
             onClick={() => setMenuOpen(false)}
+            className="absolute right-5 top-5 size-6"
           >
-            Book a Test Drive
-          </Link>
+            <Image src="/icons/icon-cancel.svg" alt="" width={24} height={24} />
+          </button>
+
+          <nav className="mt-[104px] flex flex-col gap-5 font-[family-name:var(--font-roboto)]">
+            {MENU_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-between px-5 py-3 text-[20px] font-medium leading-[20px] text-black"
+              >
+                {link.label}
+                <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
+              </Link>
+            ))}
+
+            <Link
+              href={REGION_HREF}
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center justify-between px-5 py-3 text-black"
+            >
+              <span className="flex flex-col gap-3">
+                <span className="text-[20px] font-medium leading-[20px]">Search by Region</span>
+                <span className="text-[14px] font-light leading-[20px]">NG</span>
+              </span>
+              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
+            </Link>
+          </nav>
+
+          <p className="mx-auto mt-auto w-[308px] pb-[42px] pt-10 text-center text-[14px] leading-[20px] text-[#272727] font-[family-name:var(--font-roboto)]">
+            ©Copyright 2025. All rights reserved (Innoson Manufacturing Vehicles, LTD)
+          </p>
         </div>
       )}
-    </header>
+    </>
   );
 }

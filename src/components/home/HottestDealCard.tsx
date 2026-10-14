@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * "Hottest Deal" hero — IVM Caris (responsive)
- * Figma: IVM-website — mobile node 745:329 (353x558), desktop node 745:246 (755 tall)
+ * "Hottest Deal" — IVM Caris.
+ * Figma: mobile node 773:1780 (353x582). From lg up the new desktop design shows the
+ * Special Offer banner instead (see SpecialOfferCard), so this card is lg:hidden.
  *
  * The section fills 100% of its parent (no max-width), so any padding/container
  * around it controls the margin. Height: 558px on mobile, 755px from md up.
@@ -109,7 +110,7 @@ export default function HottestDealCard({
   return (
     <section
       ref={ref}
-      className="group relative isolate min-h-[558px] w-[90%] overflow-hidden bg-white text-white md:min-h-[755px] mx-3 mt-5 mb-3"
+      className="group relative isolate mx-5 mt-10 min-h-[582px] overflow-hidden bg-white text-white md:min-h-[755px] lg:hidden"
       style={{ fontFamily: "Avenir, 'Avenir Next', 'Nunito Sans', sans-serif" }}
     >
       {/* Background photo — different crop per breakpoint. Slow push-in while it "warms up". */}
@@ -168,16 +169,16 @@ export default function HottestDealCard({
         <div className="flex max-w-[610px] flex-col gap-6 md:gap-[72px]">
           <div className="flex flex-col gap-3 md:mt-3">
             {/* Eyebrow: flashes hot, then cools to its normal lime */}
-            <p className="text-base font-extrabold uppercase leading-normal text-[#a4e41a] opacity-0 [text-shadow:0_0_32px_rgba(164,228,26,0.95)] transition-[opacity,text-shadow] delay-[400ms] duration-[1800ms] ease-out motion-reduce:transition-none group-data-[visible=true]:opacity-100 group-data-[visible=true]:[text-shadow:0_0_0_rgba(164,228,26,0)] md:text-2xl font-[family-name:var(--font-inter)]">
+            <p className="text-base font-extrabold uppercase leading-normal text-[#a4e41a] opacity-0 [text-shadow:0_0_32px_rgba(164,228,26,0.95)] transition-[opacity,text-shadow] delay-[400ms] duration-[1800ms] ease-out motion-reduce:transition-none group-data-[visible=true]:opacity-100 group-data-[visible=true]:[text-shadow:0_0_0_rgba(164,228,26,0)] md:text-2xl md:font-[family-name:var(--font-inter)]">
               {eyebrow}
             </p>
             <h2
-              className={`text-[32px] font-extrabold uppercase leading-normal delay-[650ms] md:text-5xl md:leading-[58px] font-[family-name:var(--font-google-sans)] ${SLIDE}`}
+              className={`text-[32px] font-extrabold uppercase leading-normal delay-[650ms] md:text-5xl md:leading-[58px] md:font-[family-name:var(--font-google-sans)] ${SLIDE}`}
             >
               {title}
             </h2>
             <p
-              className={`text-base font-normal leading-normal delay-[950ms] md:text-2xl font-[family-name:var(--font-inter)] ${RISE}`}
+              className={`text-base font-normal leading-normal delay-[950ms] md:text-2xl md:font-[family-name:var(--font-inter)] ${RISE}`}
             >
               {description}
             </p>
@@ -185,11 +186,11 @@ export default function HottestDealCard({
 
           <div className="flex flex-col gap-3 leading-normal">
             <p
-              className={`text-base font-normal delay-[1150ms] md:text-2xl font-[family-name:var(--font-inter)] ${RISE}`}
+              className={`text-base font-normal delay-[1150ms] md:text-2xl md:font-[family-name:var(--font-inter)] ${RISE}`}
             >
               Starting from
             </p>
-            <p className="origin-left scale-95 text-2xl font-black opacity-0 transition-[opacity,scale] delay-[1300ms] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-data-[visible=true]:scale-100 group-data-[visible=true]:opacity-100 md:text-4xl font-[family-name:var(--font-google-sans)]">
+            <p className="origin-left scale-95 text-2xl font-black opacity-0 transition-[opacity,scale] delay-[1300ms] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-data-[visible=true]:scale-100 group-data-[visible=true]:opacity-100 md:text-4xl md:font-[family-name:var(--font-google-sans)]">
               {price}
             </p>
           </div>
@@ -199,7 +200,7 @@ export default function HottestDealCard({
         <div className={`mt-[21px] w-fit delay-[1450ms] md:mt-9 ${RISE}`}>
           <Link
             href={href}
-            className="block w-fit text-xl font-extrabold leading-normal underline underline-offset-[from-font] transition-colors duration-300 hover:text-[#a4e41a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a4e41a] md:text-2xl font-[family-name:var(--font-inter)]"
+            className="block w-fit text-xl font-extrabold leading-normal underline underline-offset-[from-font] transition-colors duration-300 hover:text-[#a4e41a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a4e41a] md:text-2xl md:font-[family-name:var(--font-inter)]"
           >
             Discover More
           </Link>
@@ -210,11 +211,11 @@ export default function HottestDealCard({
           {features.map((f, i) => (
             <li
               key={f.label}
-              className={`flex-none border-white/40 px-[13.641px] first:pl-0 last:pr-0 md:flex-1 md:px-6 lg:flex-none lg:px-10 [&:not(:first-child)]:border-l font-[family-name:var(--font-inter)] ${FEATURE_DELAYS[i] ?? ""} ${RISE}`}
+              className={`flex-none border-white/40 px-[13.641px] first:pl-0 last:pr-0 md:flex-1 md:px-6 lg:flex-none lg:px-10 [&:not(:first-child)]:border-l md:font-[family-name:var(--font-inter)] ${FEATURE_DELAYS[i] ?? ""} ${RISE}`}
             >
               <div className="flex w-[49.789px] flex-col gap-[5.456px] md:w-auto md:gap-4 lg:w-[146px]">
                 <FeatureIcon src={f.icon} nested={f.nested} />
-                <p className="text-[6.82px] font-normal leading-normal md:text-xl font-[family-name:var(--font-inter)]">
+                <p className="text-[6.82px] font-normal leading-normal md:text-xl md:font-[family-name:var(--font-inter)]">
                   {f.label}
                 </p>
               </div>

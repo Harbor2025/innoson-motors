@@ -1,19 +1,26 @@
 import type { Metadata } from "next";
-import { Google_Sans, Inter, Quicksand } from "next/font/google";
+import { Lato, Roboto, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 
 
-const googleSans = Quicksand({
+const googleSans = Playfair_Display({
   variable: "--font-google-sans",
   subsets: ["latin"],
   fallback: ["sans-serif"],
 });
 
-const inter = Inter({
+const inter = Roboto({
   variable: "--font-inter",
   subsets: ["latin"],
   fallback: ["sans-serif"],
+});
+
+const lato = Lato({
+  variable: "--font-lato",
+  subsets: ["latin"],
+  fallback: ["sans-serif"],
+  weight: ["400", "700"],
 });
 
 
@@ -27,7 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={` ${googleSans.variable} ${inter.variable} h-full antialiased`}
+      className={` ${googleSans.variable} ${inter.variable} ${lato.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col ">{children}</body>
     </html>
