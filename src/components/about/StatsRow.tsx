@@ -12,7 +12,7 @@ const FALLBACK = [
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex flex-col items-center lg:items-start font-[family-name:var(--font-roboto)] text-[#1e1e1e]">
+    <div className="flex flex-col items-center lg:items-start font-[family-name:var(--font-inter)] text-[#1e1e1e]">
       <p className="text-[24px] leading-[31px]">{value}</p>
       <p className="text-[14px] leading-[20px]">{label}</p>
     </div>
@@ -36,7 +36,7 @@ export default function StatsRow({ stats }: { stats?: AboutPageDTO["stats"] }) {
 
         <div className="flex flex-col items-center gap-4 text-center lg:flex-row lg:gap-[15px] lg:text-left">
           <Image src="/images/africa.png" alt="" width={42} height={42} className="size-[42px] object-cover" />
-          <p className="max-w-[262px] text-[20px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-roboto)]">
+          <p className="max-w-[262px] text-[20px] leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-inter)]">
             1ST Africa&rsquo;s Automobile Brand
           </p>
         </div>

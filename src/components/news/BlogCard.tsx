@@ -18,10 +18,10 @@ export default function BlogCard({ article, priority = false }: { article: Artic
       </div>
 
       <div className="flex flex-col gap-4">
-        <h2 className="text-[20px] font-semibold leading-[normal] tracking-[0.4px] text-black font-[family-name:var(--font-playfair)]">
+        <h2 className="text-[20px] font-semibold leading-[normal] tracking-[0.4px] text-black font-[family-name:var(--font-google-sans)]">
           {article.title}
         </h2>
-        <p className="text-[16px] leading-[normal] tracking-[0.32px] text-[#888] font-[family-name:var(--font-roboto)]">
+        <p className="text-[16px] leading-[normal] tracking-[0.32px] text-[#888] font-[family-name:var(--font-inter)]">
           {article.date}
         </p>
       </div>

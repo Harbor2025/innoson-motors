@@ -18,7 +18,7 @@ const TODAY = [
 const QUOTE = "we’ve done it before for motorcycles; we are doing it again for automobiles!";
 
 const BODY =
-  "sw-ink-y text-[14px] leading-[27px] text-[#1e1e1e] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[20px] lg:font-[family-name:var(--font-roboto)]";
+  "sw-ink-y text-[14px] leading-[27px] text-[#1e1e1e] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[20px] lg:font-[family-name:var(--font-inter)]";
 
 export default function MadeInNigeria() {
   const ref = useRef<HTMLElement>(null);
@@ -45,7 +45,7 @@ export default function MadeInNigeria() {
       <Container className="grid gap-8 lg:grid-cols-[642px_643px] lg:justify-between lg:gap-0">
         <div>
           <p
-            className="sw-fade text-[14px] capitalize leading-[31px] text-[#878383] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[20px] lg:font-[family-name:var(--font-roboto)]"
+            className="sw-fade text-[14px] capitalize leading-[31px] text-[#878383] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[20px] lg:font-[family-name:var(--font-inter)]"
             style={{ "--d": "0.1s" } as React.CSSProperties}
           >
             our story

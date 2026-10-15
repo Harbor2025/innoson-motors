@@ -16,16 +16,16 @@ export default function ArticleContent({ article }: { article: Article }) {
       <div className="mx-auto w-full max-w-[1040px] px-5 lg:px-0">
         <Link
           href="/news"
-          className="flex w-fit items-center gap-[7px] text-[20px] font-semibold leading-[normal] tracking-[0.4px] text-[#524e4e] font-[family-name:var(--font-playfair)]"
+          className="flex w-fit items-center gap-[7px] text-[20px] font-semibold leading-[normal] tracking-[0.4px] text-[#524e4e] font-[family-name:var(--font-google-sans)]"
         >
           <Image src="/icons/arrow-left-bold.svg" alt="" width={16} height={16} />
           Back
         </Link>
 
-        <h1 className="mt-6 text-[20px] font-bold leading-[normal] tracking-[0.4px] text-black font-[family-name:var(--font-playfair)]">
+        <h1 className="mt-6 text-[20px] font-bold leading-[normal] tracking-[0.4px] text-black font-[family-name:var(--font-google-sans)]">
           {article.title}
         </h1>
-        <p className="mt-5 text-[14px] leading-[normal] tracking-[0.28px] text-[#888] font-[family-name:var(--font-roboto)]">
+        <p className="mt-5 text-[14px] leading-[normal] tracking-[0.28px] text-[#888] font-[family-name:var(--font-inter)]">
           {article.date}
         </p>
 
@@ -40,7 +40,7 @@ export default function ArticleContent({ article }: { article: Article }) {
           />
         </div>
 
-        <div className="mt-10 flex flex-col gap-6 text-justify text-[14px] leading-[normal] tracking-[0.28px] text-[#888] font-[family-name:var(--font-roboto)] lg:text-[16px] lg:tracking-[0.32px]">
+        <div className="mt-10 flex flex-col gap-6 text-justify text-[14px] leading-[normal] tracking-[0.28px] text-[#888] font-[family-name:var(--font-inter)] lg:text-[16px] lg:tracking-[0.32px]">
           {paragraphs.map((p, i) => (
             <p key={i}>{p}</p>
           ))}

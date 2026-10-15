@@ -38,7 +38,7 @@ export default function NewsPageContent({ initialArticles }: { initialArticles?:
             ))}
           </div>
         ) : (
-          <p className="mt-16 text-[16px] text-[#888] font-[family-name:var(--font-roboto)]">
+          <p className="mt-16 text-[16px] text-[#888] font-[family-name:var(--font-inter)]">
             No articles yet.
           </p>
         )}

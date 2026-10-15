@@ -59,7 +59,7 @@ export default function ImpactSection({ intro = DEFAULT_INTRO }: { intro?: strin
       <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[40px] lg:font-semibold lg:capitalize lg:font-[family-name:var(--font-inter)]">
         Our Sustainable Impact
       </h2>
-      <p className="mt-3 text-[14px] leading-[normal] tracking-[0.28px] text-[#888] lg:mt-[18px] lg:max-w-[932px] lg:text-[20px] lg:tracking-[0.4px] font-[family-name:var(--font-roboto)]">
+      <p className="mt-3 text-[14px] leading-[normal] tracking-[0.28px] text-[#888] lg:mt-[18px] lg:max-w-[932px] lg:text-[20px] lg:tracking-[0.4px] font-[family-name:var(--font-inter)]">
         {intro}
       </p>
 
@@ -74,7 +74,7 @@ export default function ImpactSection({ intro = DEFAULT_INTRO }: { intro?: strin
               <h3 className="text-[24px] font-semibold leading-[normal] text-[#1e1e1e] font-[family-name:var(--font-sofia,var(--font-inter))]">
                 {title}
               </h3>
-              <p className="text-[16px] leading-[normal] tracking-[0.32px] text-[#888] font-[family-name:var(--font-roboto)]">
+              <p className="text-[16px] leading-[normal] tracking-[0.32px] text-[#888] font-[family-name:var(--font-inter)]">
                 {text}
               </p>
             </div>

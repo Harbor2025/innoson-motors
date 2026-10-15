@@ -14,7 +14,7 @@ export default function ChairmanMessage({
           <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-black font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[40px] lg:font-semibold lg:capitalize lg:font-[family-name:var(--font-inter)]">
             A Message from Our Chairman
           </h2>
-          <p className="text-[14px] leading-[normal] text-[#878383] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[20px] lg:font-[family-name:var(--font-roboto)]">
+          <p className="text-[14px] leading-[normal] text-[#878383] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[20px] lg:font-[family-name:var(--font-inter)]">
             Discover IVM’s journey, key achievements and commitment to delivering lasting value.
           </p>
         </div>

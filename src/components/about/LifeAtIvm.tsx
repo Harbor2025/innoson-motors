@@ -16,7 +16,7 @@ export default function LifeAtIvm({ intro = DEFAULT_INTRO }: { intro?: string })
         <h2 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[40px] lg:font-semibold lg:capitalize lg:font-[family-name:var(--font-inter)]">
           Life at IVM
         </h2>
-        <p className="text-[14px] leading-[normal] tracking-[0.28px] text-[#888] lg:max-w-[936px] lg:text-[16px] lg:tracking-[0.32px] font-[family-name:var(--font-roboto)]">
+        <p className="text-[14px] leading-[normal] tracking-[0.28px] text-[#888] lg:max-w-[936px] lg:text-[16px] lg:tracking-[0.32px] font-[family-name:var(--font-inter)]">
           {intro}
         </p>
       </div>

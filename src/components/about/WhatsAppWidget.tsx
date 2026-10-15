@@ -22,7 +22,7 @@ export default function WhatsAppWidget({
       <div className="relative size-[60px] lg:h-[168px] lg:w-[210px]">
         {bubbleOpen && (
           <div className="absolute left-0 top-[17px] hidden h-[49px] w-[210px] items-center justify-center rounded-[16px] bg-[#d9d9d9] lg:flex">
-            <span className="text-[20px] leading-[normal] text-black font-[family-name:var(--font-roboto)]">
+            <span className="text-[20px] leading-[normal] text-black font-[family-name:var(--font-inter)]">
               {message}
             </span>
           </div>
@@ -63,7 +63,7 @@ export default function WhatsAppWidget({
           />
           <span className="absolute right-0 top-0 flex size-[26px] items-center justify-center lg:size-[26px]">
             <Image src="/images/about/widget-badge.svg" alt="" fill unoptimized />
-            <span className="relative text-[14px] leading-none text-[#faf2f2] font-[family-name:var(--font-roboto)]">
+            <span className="relative text-[14px] leading-none text-[#faf2f2] font-[family-name:var(--font-inter)]">
               1
             </span>
           </span>

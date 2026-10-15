@@ -102,7 +102,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
           <div className="hidden items-center gap-4 lg:ml-10 lg:flex xl:ml-0">
             <Link
               href={REGION_HREF}
-              className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black font-[family-name:var(--font-roboto)]"
+              className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black font-[family-name:var(--font-inter)]"
             >
               <span className="whitespace-nowrap">Search Region</span>
               <Image src="/icons/globe.svg" alt="" width={20} height={20} />
@@ -122,7 +122,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen(true)}
-            className={`flex items-center justify-center rounded-[45px] p-[10px] text-[14px] font-semibold uppercase leading-[normal] transition-colors lg:hidden font-[family-name:var(--font-roboto)] ${
+            className={`flex items-center justify-center rounded-[45px] p-[10px] text-[14px] font-semibold uppercase leading-[normal] transition-colors lg:hidden font-[family-name:var(--font-inter)] ${
               transparent ? "bg-white/[0.26] text-white" : "bg-[#ebebeb] text-black"
             }`}
           >
@@ -149,7 +149,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
             <Image src="/icons/icon-cancel.svg" alt="" width={24} height={24} />
           </button>
 
-          <nav className="mt-[104px] flex flex-col gap-5 font-[family-name:var(--font-roboto)]">
+          <nav className="mt-[104px] flex flex-col gap-5 font-[family-name:var(--font-inter)]">
             {MENU_LINKS.map((link) => (
               <Link
                 key={link.label}
@@ -175,7 +175,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
             </Link>
           </nav>
 
-          <p className="mx-auto mt-auto w-[308px] pb-[42px] pt-10 text-center text-[14px] leading-[20px] text-[#272727] font-[family-name:var(--font-roboto)]">
+          <p className="mx-auto mt-auto w-[308px] pb-[42px] pt-10 text-center text-[14px] leading-[20px] text-[#272727] font-[family-name:var(--font-inter)]">
             ©Copyright 2025. All rights reserved (Innoson Manufacturing Vehicles, LTD)
           </p>
         </div>
