@@ -1,74 +1,71 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import Container from "@/components/layout/Container";
 import BlogCard from "./BlogCard";
 import { ARTICLES } from "./news-data";
 import type { Article } from "./news-data";
 
+// Figma: node 772:1127 — "News Blog" title, 3-column grid of cards, prev/next arrows (772:1128).
+// The design has no search, featured card or excerpts, so those are gone.
+// This section carries its own top padding (fixed header height + 40px); remove any
+// padding-top your route page adds to <main>.
+const PAGE_SIZE = 9;
+
 export default function NewsPageContent({ initialArticles }: { initialArticles?: Article[] }) {
-  const [query, setQuery] = useState("");
-
   const articles = initialArticles?.length ? initialArticles : ARTICLES;
-  const featured = articles[0];
-  const rest = articles.slice(1);
+  const [page, setPage] = useState(0);
 
-  const filteredRest = useMemo(() => {
-    if (!query.trim()) return rest;
-    const q = query.toLowerCase();
-    return rest.filter((article) => article.title.toLowerCase().includes(q));
-  }, [query, rest]);
+  const pageCount = Math.max(1, Math.ceil(articles.length / PAGE_SIZE));
+  const visible = articles.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
-  const showFeatured = !query.trim() || (featured && featured.title.toLowerCase().includes(query.toLowerCase()));
+  const go = (next: number) => {
+    setPage(Math.min(Math.max(next, 0), pageCount - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <section className="font-[family-name:var(--font-google-sans)] w-full py-10 lg:py-16 mt-10">
-      <Container>
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-[28px] font-black leading-[normal] text-black lg:text-[48px] lg:leading-[58px]">
-              Our News Blog
-            </h1>
-            <p className="text-[16px] leading-[normal] text-[#524e4e] lg:text-[20px]">
-              A center for all our news &amp; Resources
-            </p>
-          </div>
+    <section className="w-full pb-10 pt-[84px] lg:pb-20 lg:pt-[120px]">
+      <div className="mx-auto w-full max-w-[1040px] px-5 lg:px-0">
+        <h1 className="text-[24px] font-extrabold uppercase leading-[normal] text-[#000001] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[40px] lg:font-semibold lg:capitalize lg:font-[family-name:var(--font-inter)]">
+          News Blog
+        </h1>
 
-          <div className="relative w-full lg:w-[484px]">
-            <div className="flex h-[48px] items-center gap-2 rounded-[4px] border-[0.5px] border-[#cfcfcf] bg-[#f0f0f0] px-3">
-              <Image src="/icons/icon-search.svg" alt="" width={24} height={24} />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search for anything"
-                className="h-full w-full bg-transparent text-[16px] text-[#524e4e] outline-none placeholder:text-[#524e4e]"
-              />
-            </div>
-          </div>
-        </div>
-
-        {featured && showFeatured && (
-          <div className="mt-10 lg:mt-16">
-            <BlogCard article={featured} featured />
-          </div>
-        )}
-
-        {filteredRest.length > 0 ? (
-          <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-            {filteredRest.map((article) => (
-              <BlogCard key={article.slug} article={article} />
+        {visible.length > 0 ? (
+          <div className="mt-8 grid grid-cols-1 gap-x-[17.5px] gap-y-10 sm:grid-cols-2 lg:mt-[45px] lg:grid-cols-3">
+            {visible.map((article, i) => (
+              <BlogCard key={article.slug} article={article} priority={page === 0 && i < 3} />
             ))}
           </div>
         ) : (
-          !showFeatured && (
-            <p className="mt-16 text-center text-[16px] text-[#878383]">
-              No articles match &ldquo;{query}&rdquo;.
-            </p>
-          )
+          <p className="mt-16 text-[16px] text-[#888] font-[family-name:var(--font-roboto)]">
+            No articles yet.
+          </p>
         )}
-      </Container>
+
+        {pageCount > 1 && (
+          <nav aria-label="Pagination" className="mt-10 flex items-center justify-end gap-4 lg:mt-14">
+            <button
+              type="button"
+              aria-label="Previous page"
+              disabled={page === 0}
+              onClick={() => go(page - 1)}
+              className="relative size-10 transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Image src="/icons/news-nav-prev.svg" alt="" fill unoptimized />
+            </button>
+            <button
+              type="button"
+              aria-label="Next page"
+              disabled={page === pageCount - 1}
+              onClick={() => go(page + 1)}
+              className="relative size-10 -scale-x-100 transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Image src="/icons/news-nav-next.svg" alt="" fill unoptimized />
+            </button>
+          </nav>
+        )}
+      </div>
     </section>
   );
 }

@@ -1,123 +1,51 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Article } from "./news-data";
-import { getRelatedArticles } from "./news-data";
-import Container from "../layout/Container";
-import BlogCard from "./BlogCard";
-import { ArrowLeft } from "lucide-react";
-import { FacebookIcon, LinkedInIcon, WhatsAppIcon } from "./ShareIcons";
 
-const PARAGRAPH =
-  "Lorem ipsum dolor sit amet consectetur. Enim maecenas mauris vel porta feugiat diam sollicitudin lacus. Neque adipiscing maecenas pellentesque vulputate morbi viverra. Viverra pellentesque faucibus scelerisque nulla id leo sit sit tortor. Nisl in convallis a ornare sed diam fermentum. Sit id aenean pellentesque sed vitae sit at ridiculus vel. Sed semper sit eu luctus scelerisque massa sed curabitur. Nec purus amet amet odio diam ac. Erat elit turpis dui id. Viverra diam sed sit id lorem massa ornare velit.";
-
-const AUTHOR_BIO = "Automotive content writer at IVM, covering local manufacturing and new model launches.";
+// Figma: node 772:954 — Back link, title, date, 1040x586 image, one long body of text.
+// The design drops author, share icons, sub-headings and "other stories", so they're gone.
+// Pass real copy through `article.body` (one string per paragraph).
+const PLACEHOLDER =
+  "Lorem ipsum dolor sit amet consectetur. Nullam dui purus semper aliquam lorem. Hendrerit lorem donec et bibendum feugiat. Enim viverra enim duis aliquam diam fringilla amet libero pretium. Duis amet quam fringilla quam pharetra imperdiet velit facilisis magna. Egestas amet a magna convallis. In adipiscing rhoncus cursus ac ultrices dictumst felis. Arcu leo ut lectus maecenas morbi nibh. Commodo aliquet gravida montes nunc justo feugiat enim quis porttitor.";
 
 export default function ArticleContent({ article }: { article: Article }) {
-  const related = getRelatedArticles(article.slug, 3);
+  const paragraphs = article.body?.length ? article.body : [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER];
 
   return (
-    <article className="font-[family-name:var(--font-google-sans)] w-full">
-      <div className="w-full border-b border-[#e4e4e4] py-4">
-        <Container>
-          <Link href="/news" className="flex w-fit items-center gap-2 text-[16px] text-[#1e1e1e]">
-            <ArrowLeft className="size-6" />
-            Go Back
-          </Link>
-        </Container>
-      </div>
+    <article className="w-full pb-10 pt-[84px] lg:pb-20 lg:pt-[120px]">
+      <div className="mx-auto w-full max-w-[1040px] px-5 lg:px-0">
+        <Link
+          href="/news"
+          className="flex w-fit items-center gap-[7px] text-[20px] font-semibold leading-[normal] tracking-[0.4px] text-[#524e4e] font-[family-name:var(--font-playfair)]"
+        >
+          <Image src="/icons/arrow-left-bold.svg" alt="" width={16} height={16} />
+          Back
+        </Link>
 
-      <Container className="py-10 lg:py-16">
-        <div className="flex flex-col gap-6 lg:items-center lg:text-center">
-          <p className="text-[16px] font-black tracking-[0.02em] text-[#005eb8] lg:text-[20px]">
-            {article.readTime}
-          </p>
-          <h1 className="max-w-[865px] text-[28px] font-black leading-[normal] text-black lg:text-[48px] lg:leading-[58px]">
-            {article.title}
-          </h1>
-
-          <div className="flex items-center gap-3 lg:gap-5">
-            <div className="flex items-center gap-2 lg:gap-4">
-              <span className="inline-block size-[32px] shrink-0 overflow-hidden rounded-full bg-[#d9d9d9] lg:size-[48px]">
-                <Image
-                  src="/images/avatar-nneka.png"
-                  alt=""
-                  width={48}
-                  height={48}
-                  className="size-full object-cover"
-                />
-              </span>
-              <span className="whitespace-nowrap text-[14px] text-black lg:text-[20px]">{article.author}</span>
-            </div>
-            <div className="flex items-center gap-2 lg:gap-4">
-              <span className="size-[6px] shrink-0 rounded-full bg-[#524e4e]" />
-              <span className="whitespace-nowrap text-[14px] text-black lg:text-[20px]">{article.date}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative mt-10 h-[309px] w-full overflow-hidden rounded-[4px] bg-[#ebebeb] lg:mt-16 lg:h-[718px]">
-          <Image src={article.image} alt={article.title} fill sizes="100vw" className="object-cover" />
-        </div>
-
-        <div className="mt-10 flex flex-col gap-6 text-[16px] leading-[27px] text-[#1e1e1e] lg:mt-16 lg:gap-8 lg:text-[20px]">
-          <p>{PARAGRAPH}</p>
-          <p>{PARAGRAPH}</p>
-
-          <h2 className="text-[20px] font-black leading-[normal] text-black lg:text-[40px] lg:leading-[62px]">
-            Meet the IVM Electric Family
-          </h2>
-
-          <p>{PARAGRAPH}</p>
-
-          <div className="relative h-[220px] w-full overflow-hidden rounded-[4px] bg-[#ebebeb] lg:h-[640px]">
-            <Image src={article.image} alt="" fill sizes="100vw" className="object-cover" />
-          </div>
-
-          <p>{PARAGRAPH}</p>
-
-          <div className="relative h-[220px] w-full overflow-hidden rounded-[4px] bg-[#ebebeb] lg:h-[640px]">
-            <Image src={article.image} alt="" fill sizes="100vw" className="object-cover" />
-          </div>
-
-          <p>{PARAGRAPH}</p>
-        </div>
-
-        <div className="mt-10 flex flex-col gap-6 lg:mt-16 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-col gap-1">
-            <p className="text-[16px] font-black text-black lg:text-[18px]">{article.author}</p>
-            <p className="text-[14px] text-[#524e4e] lg:text-[16px]">{AUTHOR_BIO}</p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <p className="text-[16px] text-black">Share this News :</p>
-            <div className="flex items-center gap-3">
-              <FacebookIcon className="size-6" />
-              <LinkedInIcon className="size-6" />
-              <WhatsAppIcon className="size-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 h-px w-full bg-[#767676] lg:mt-16" />
-
-        <p className="mt-10 max-w-[1340px] text-[16px] leading-[normal] text-[#1e1e1e] lg:mt-16 lg:text-[20px]">
-          For more information on our electric vehicles contact our sales team. The future is
-          electric—choose Innoson and drive with the power of innovation.
+        <h1 className="mt-6 text-[20px] font-bold leading-[normal] tracking-[0.4px] text-black font-[family-name:var(--font-playfair)]">
+          {article.title}
+        </h1>
+        <p className="mt-5 text-[14px] leading-[normal] tracking-[0.28px] text-[#888] font-[family-name:var(--font-roboto)]">
+          {article.date}
         </p>
 
-        {related.length > 0 && (
-          <div className="mt-16 lg:mt-24">
-            <h2 className="text-[24px] font-black leading-[normal] text-black lg:text-[40px]">
-              Check out other stories
-            </h2>
-            <div className="mt-8 grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3">
-              {related.map((item) => (
-                <BlogCard key={item.slug} article={item} />
-              ))}
-            </div>
-          </div>
-        )}
-      </Container>
+        <div className="relative mt-10 h-[220px] w-full overflow-hidden bg-[#ebebeb] md:h-[400px] lg:h-[586px]">
+          <Image
+            src={article.image}
+            alt={article.title}
+            fill
+            priority
+            sizes="(min-width: 1040px) 1040px, 100vw"
+            className="object-cover"
+          />
+        </div>
+
+        <div className="mt-10 flex flex-col gap-6 text-justify text-[14px] leading-[normal] tracking-[0.28px] text-[#888] font-[family-name:var(--font-roboto)] lg:text-[16px] lg:tracking-[0.32px]">
+          {paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+      </div>
     </article>
   );
 }

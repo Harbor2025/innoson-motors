@@ -6,6 +6,8 @@ export interface Article {
   author: string;
   date: string;
   image: string;
+  /** Article body, one string per paragraph. Optional: the detail page shows placeholder copy without it. */
+  body?: string[];
 }
 
 const LOREM_SHORT =
