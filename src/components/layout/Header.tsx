@@ -15,6 +15,7 @@ const NAV_LINKS = [
 
 // Mobile menu rows (Figma node 773:1932)
 const MENU_LINKS = [
+  { label: "Home", href: "/" },
   { label: "Vehicles", href: "/vehicles" },
   { label: "About Us", href: "/about" },
   { label: "News", href: "/news" },

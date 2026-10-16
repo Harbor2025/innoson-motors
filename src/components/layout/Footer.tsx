@@ -104,7 +104,7 @@ export default function Footer({
                       className="flex size-8 items-center justify-center text-white transition-opacity hover:opacity-80"
                     >
                       {Icon ? (
-                        <Icon className="size-full" />
+                        <Icon className="size-[20px] lg:size-full" />
                       ) : (
                         <span className="text-[12px] uppercase">{s.platform.slice(0, 2)}</span>
                       )}
