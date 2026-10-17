@@ -1,41 +1,52 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 
-type RevealWordsProps = {
+type RevealTextProps = {
   text: string;
-  /** Delay before the first word starts, in ms */
+  /** Delay before the first letter starts, in ms */
   delay?: number;
-  /** Gap between each word, in ms */
+  /** Gap between each letter, in ms */
   stagger?: number;
 };
 
-function RevealWords({ text, delay = 0, stagger = 90 }: RevealWordsProps) {
+function RevealText({ text, delay = 0, stagger = 45 }: RevealTextProps) {
   const words = text.split(" ");
+  let charIndex = 0;
 
   return (
-    <span
-      aria-label={text}
-      style={
-        {
-          "--base": `${delay}ms`,
-          "--stagger": `${stagger}ms`,
-        } as CSSProperties
-      }
-    >
-      {words.map((word, i) => (
-        <span key={i} aria-hidden="true">
-          <span className="reveal-mask">
-            <span
-              className="reveal-word"
-              style={{ "--i": i } as CSSProperties}
-            >
-              {word}
+    <>
+      <span className="sr-only">{text}</span>
+      <span
+        aria-hidden="true"
+        style={
+          {
+            "--base": `${delay}ms`,
+            "--stagger": `${stagger}ms`,
+          } as CSSProperties
+        }
+      >
+        {words.map((word, w) => (
+          <span key={w}>
+            <span className="inline-block whitespace-nowrap">
+              {word.split("").map((char) => {
+                const i = charIndex++;
+                return (
+                  <span key={i} className="reveal-mask">
+                    <span
+                      className="reveal-char"
+                      style={{ "--i": i } as CSSProperties}
+                    >
+                      {char}
+                    </span>
+                  </span>
+                );
+              })}
             </span>
+            {w < words.length - 1 ? " " : null}
           </span>
-          {i < words.length - 1 ? " " : null}
-        </span>
-      ))}
-    </span>
+        ))}
+      </span>
+    </>
   );
 }
 
@@ -51,15 +62,25 @@ export default function AboutHero() {
         sizes="100vw"
         className="hero-image object-cover object-[50%_75%]"
       />
-      <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-3 px-5 text-center text-white md:top-[200px] lg:top-[227px]">
-        <h1 className="text-[32px] font-bold capitalize leading-[normal] md:text-[44px] lg:text-[56px] font-[family-name:var(--font-inter)]">
-          <RevealWords text="About IVM" delay={250} />
+
+      {/* Gradient that fades in so the text stays readable */}
+      <div
+        aria-hidden="true"
+        className="hero-overlay pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent"
+      />
+
+      <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-4 px-5 text-center text-white md:top-[200px] lg:top-[227px]">
+        <h1 className="text-[40px] font-bold capitalize leading-[normal] md:text-[56px] lg:text-[72px] font-[family-name:var(--font-inter)]">
+          <RevealText text="About IVM" delay={300} />
         </h1>
 
-        <span className="hero-line h-px w-12 bg-white/70" aria-hidden="true" />
+        <span
+          aria-hidden="true"
+          className="hero-line h-[2px] w-20 bg-white md:w-28 lg:w-36"
+        />
 
-        <p className="text-[14px] leading-[normal] md:text-[17px] lg:text-[20px] font-[family-name:var(--font-inter)]">
-          <RevealWords text="The pride of Africa" delay={750} stagger={70} />
+        <p className="hero-tagline text-[14px] leading-[normal] md:text-[17px] lg:text-[20px] font-[family-name:var(--font-inter)]">
+          The pride of Africa
         </p>
       </div>
     </section>
