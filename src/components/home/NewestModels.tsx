@@ -95,7 +95,7 @@ export default function NewestModels({ items = FALLBACK }: { items?: NewestModel
                   <Link
                     href={item.href}
                     tabIndex={i === index ? 0 : -1}
-                    className="flex h-[31px] w-[73px] items-center justify-center rounded-[1.268px] bg-[#005eb8] p-[3.169px] text-[12px] font-medium text-white font-[family-name:var(--font-inter)] lg:h-auto lg:w-[173px] lg:rounded-[4px] lg:p-[10px] lg:text-[20px]"
+                    className="flex h-[31px] w-[107px] items-center justify-center rounded-[1.268px] bg-[#005eb8] p-[3.169px] text-[12px] font-medium text-white font-[family-name:var(--font-inter)] lg:h-12 lg:w-[173px] lg:rounded-[4px] lg:p-[10px] lg:text-[20px]"
                   >
                     Read More
                   </Link>

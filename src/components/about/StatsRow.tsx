@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Container from "../layout/Container";
+import CountUp from "./CountUp"; // adjust path
 import type { AboutPageDTO } from "@/types/dto";
 
 // Figma: node 773:1436. The design shows two stats either side of the "1st Africa's" badge,
@@ -13,7 +14,9 @@ const FALLBACK = [
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center lg:items-start font-[family-name:var(--font-inter)] text-[#1e1e1e]">
-      <p className="text-[24px] leading-[31px]">{value}</p>
+      <p className="text-[24px] leading-[31px] tabular-nums">
+        <CountUp value={value} duration={3000} />
+      </p>
       <p className="text-[14px] leading-[20px]">{label}</p>
     </div>
   );
