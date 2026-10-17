@@ -88,10 +88,7 @@ export default function AboutHero() {
           <RevealText text="About IVM" delay={400} stagger={80} />
         </h1>
 
-        <span
-          aria-hidden="true"
-          className="hero-line h-[3px] w-24 bg-white md:w-32 lg:w-44"
-        />
+   
 
         <p className="text-[15px] font-medium leading-[normal] md:text-[18px] lg:text-[22px] font-[family-name:var(--font-inter)]">
           <RevealText text="The pride of Africa" delay={1900} stagger={30} />
