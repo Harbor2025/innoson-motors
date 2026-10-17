@@ -96,7 +96,7 @@ export default function CarModelShowcase({
             <h2
               className={`text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:font-semibold lg:capitalize lg:leading-[58px] ${AVENIR} lg:font-[family-name:var(--font-inter)]`}
             >
-              Explore our Car Model
+              Explore our Car Models
             </h2>
             <p
               className={`text-[14px] leading-[normal] text-black lg:text-[20px] lg:font-light ${AVENIR} lg:font-[family-name:var(--font-inter)]`}
@@ -111,7 +111,7 @@ export default function CarModelShowcase({
             className="flex w-fit shrink-0 items-center gap-[9px] rounded-[4px] bg-[#005eb8] px-[9px] py-[7px] text-white transition-transform hover:scale-105 lg:gap-4 lg:px-4 lg:py-3"
           >
             <span className="whitespace-nowrap text-[13.714px] font-semibold leading-normal font-[family-name:var(--font-lato)] lg:text-[24px]">
-              See All Model
+              See All Models
             </span>
             <span className="flex size-[18.286px] items-center justify-center rounded-full bg-white lg:size-8">
               <Image
