@@ -6,7 +6,7 @@
  */
 export default function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`relative  shrink-0 overflow-hidden ${className}`}>
+    <span className={`relative block  shrink-0 overflow-hidden ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/images/home/logo.png"
