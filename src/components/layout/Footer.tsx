@@ -80,7 +80,7 @@ export default function Footer({
         <div className="flex flex-col gap-10 lg:flex-row-reverse lg:items-start lg:justify-between lg:gap-6 ">
           {/* Brand */}
           <div className="flex flex-col items-start gap-[18px] lg:w-[499px] lg:items-end">
-            <Logo className="h-[47px] w-[79px] lg:h-[66px] lg:w-[111px]" />
+            <Logo className="h-[47px] w-[79px] lg:h-[66px] lg:w-[111px] hidden md:block" />
             <div className={`flex w-full flex-col lg:text-right ${AVENIR}`}>
               <h2 className="text-[24px] font-extrabold capitalize leading-[42px] lg:text-[33px] font-[family-name:var(--font-inter)]">
                 The Future of Mobility.
