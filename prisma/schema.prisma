@@ -65,6 +65,7 @@ enum SocialPlatform {
   INSTAGRAM
   YOUTUBE
   LINKEDIN
+  WHATSAPP
 }
 
 // ── Admin / auth ────────────────────────────────────────────────────────
