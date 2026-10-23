@@ -1,105 +1,95 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import Image from "next/image";
-import { RevealWords } from "@/components/RevealWord";
+import { Btn, ROUTES } from "./ui";
 
-// Figma: desktop 766:401 (1440x1024) / mobile 773:1738 (393x530)
-// `mobileImage` is optional: the mobile design uses a different crop/photo for slide 1.
+/**
+ * Hero carousel.
+ * Figma: desktop 943:443 (1440x860) / tablet 958:500 (768x900) / mobile 957:464 (393x720).
+ *
+ * Only slide 1 exists in the design. Slides 2 and 3 keep your existing photos/copy,
+ * re-laid out in the new typography. Edit SLIDES to change them.
+ */
 const SLIDES = [
   {
     id: 1,
-    image: "/images/home/hero-1.png",
-    mobileImage: "/images/home/hero-1-mobile.png",
-    subtitle: "Africa’s largest",
-    title: "Automobile Company",
-    alt: "IVM pickup truck at sunset",
+    image: "/images/home/v2/hero.png",
+    eyebrow: "Nigeria’s first indigenous automaker",
+    title: "Pride of African Roads",
+    alt: "IVM sedan on an open road at sunset",
   },
   {
     id: 2,
-    image: "/images/4041.jpg",
-    subtitle: "Built for Africa",
+    image: "/images/home/v2/hero.png",
+    eyebrow: "Built for Africa",
     title: "Unmatched Strength & Durability",
     alt: "Featured IVM vehicle showpiece",
   },
   {
     id: 4,
-    image: "/images/interior-hero.jpg",
-    subtitle: "Quality & Reliability",
+    image: "/images/home/v2/hero.png",
+    eyebrow: "Quality & Reliability",
     title: "Engineered for Perfection",
-    alt: "IVM vehicle in action",
+    alt: "IVM vehicle interior",
   },
 ];
 
-const AUTOPLAY_DELAY = 10000;
+// The Figma motion timeline is 12 s long; one slide = one full loop.
+const AUTOPLAY_DELAY = 12000;
 
 export default function Hero() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
-  const nextSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev + 1) % SLIDES.length);
-  }, []);
-
-  const prevSlide = useCallback(() => {
-    setActiveSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
-  }, []);
+  const nextSlide = useCallback(() => setActiveSlide((p) => (p + 1) % SLIDES.length), []);
+  const prevSlide = useCallback(
+    () => setActiveSlide((p) => (p - 1 + SLIDES.length) % SLIDES.length),
+    [],
+  );
 
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(nextSlide, AUTOPLAY_DELAY);
     return () => clearInterval(timer);
-  }, [nextSlide, isPaused]);
+  }, [nextSlide, isPaused, activeSlide]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const onTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
-    const diffX = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diffX) > 50) (diffX > 0 ? nextSlide : prevSlide)();
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) (diff > 0 ? nextSlide : prevSlide)();
     touchStartX.current = null;
   };
 
   return (
     <section
-      className="relative h-[710px] w-full overflow-hidden md:h-[720px] lg:h-[720px]"
+      id="home-hero"
+      className="relative h-[720px] w-full overflow-hidden bg-[#0a0d12] md:h-[900px] lg:h-[860px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      aria-roledescription="carousel"
+      aria-label="Featured"
     >
       {SLIDES.map((slide, index) => {
         const isActive = activeSlide === index;
+        const Title = index === 0 ? "h1" : "h2";
+        const words = slide.title.split(" ");
         return (
           <div
             key={slide.id}
+            aria-hidden={!isActive}
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               isActive ? "slide-active z-10 opacity-100" : "pointer-events-none z-0 opacity-0"
             }`}
           >
-            {slide.mobileImage ? (
-              <>
-                <Image
-                  src={slide.mobileImage}
-                  alt={slide.alt}
-                  fill
-                  priority={index === 0}
-                  sizes="100vw"
-                  className="object-cover md:hidden"
-                />
-                <Image
-                  src={slide.image}
-                  alt=""
-                  fill
-                  priority={index === 0}
-                  sizes="100vw"
-                  className="hidden object-cover md:block"
-                />
-              </>
-            ) : (
+            <div className="hero-media absolute inset-0">
               <Image
                 src={slide.image}
                 alt={slide.alt}
@@ -108,41 +98,68 @@ export default function Hero() {
                 sizes="100vw"
                 className="object-cover"
               />
-            )}
+            </div>
 
-            <div className="absolute inset-0 bg-black/30" />
+            {/* Overlay + nav scrim (Figma "Overlay" / "Nav scrim") */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.1) 65%, rgba(0,0,0,0.7) 100%)",
+              }}
+            />
+            <div className="absolute inset-x-0 top-0 h-[160px] bg-[linear-gradient(180deg,rgba(0,0,0,0.5),rgba(0,0,0,0))]" />
 
-            {/*
-              Mobile: small eyebrow (Roboto 14, caps) over big Playfair title (24, caps).
-              Desktop: the two lines swap roles — first line is the 56px Inter headline,
-              second line is the 20px regular sub-line (as in the Figma).
-            */}
-            <div className="absolute inset-x-0 top-[116px] flex flex-col items-center gap-4 px-5 text-center text-white md:top-[160px] lg:top-[227px] lg:gap-6">
-              <p className="text-[14px] uppercase leading-[normal] font-[family-name:var(--font-inter)] md:text-[16px] lg:text-[56px] lg:font-bold lg:capitalize lg:font-[family-name:var(--font-inter)]">
-                <span className="reveal-subtitle">{slide.subtitle}</span>
-              </p>
-              <h1 className="max-w-[1105px] text-[24px] font-bold uppercase leading-[normal] font-[family-name:var(--font-google-sans)] md:text-[40px] lg:text-[20px] lg:font-normal lg:capitalize lg:font-[family-name:var(--font-inter)]">
-                <RevealWords text={slide.title} />
-              </h1>
+            {/* Heading */}
+            <div className="absolute inset-x-0 top-[72px] flex flex-col items-center gap-[10px] px-6 text-center text-white md:top-24 md:gap-3 lg:top-[120px]">
+              <p className="hero-eyebrow text-[14px] font-semibold leading-[1.4]">{slide.eyebrow}</p>
+              <Title className="max-w-[342px] text-[28px] font-semibold leading-[1.2] md:max-w-none md:text-[40px] lg:text-[56px] lg:leading-[1.1]">
+                {words.map((w, i) => (
+                  <Fragment key={i}>
+                    {i > 0 && " "}
+                    <span className="hero-word inline-block" style={{ "--i": i } as CSSProperties}>
+                      {w}
+                    </span>
+                  </Fragment>
+                ))}
+              </Title>
             </div>
           </div>
         );
       })}
 
-      {/* Pagination: 16px solid dots, active = white, inactive = #6c6c6c */}
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 lg:bottom-10">
-        {SLIDES.map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            aria-label={`Go to slide ${index + 1}`}
-            aria-current={activeSlide === index}
-            onClick={() => setActiveSlide(index)}
-            className={`size-4 rounded-full transition-colors duration-300 ${
-              activeSlide === index ? "bg-white" : "bg-[#6c6c6c]"
-            }`}
-          />
-        ))}
+      {/* CTAs + dots (static across slides) */}
+      <div className="absolute inset-x-0 bottom-8 z-20 flex flex-col items-center gap-3 px-6 md:bottom-12 md:gap-7 md:px-0 lg:bottom-14 lg:gap-8">
+        <div
+          className="hero-rise-24 flex w-full flex-col gap-3 md:w-auto md:flex-row md:gap-4 lg:gap-6"
+          style={{ "--d": "1.18s" } as CSSProperties}
+        >
+          <Btn href={ROUTES.vehicles} className="w-full md:w-[300px] lg:w-[264px]">
+            Explore Vehicles
+          </Btn>
+          <Btn href={ROUTES.testDrive} variant="secondary" className="w-full md:w-[300px] lg:w-[264px]">
+            Book a Test Drive
+          </Btn>
+        </div>
+
+        {/* Dots: active = 24px pill, others 8px (all white in the design) */}
+        <div
+          className="hero-rise-24 flex items-center gap-2 pt-3 md:pt-0"
+          style={{ "--d": "1.36s" } as CSSProperties}
+        >
+          {SLIDES.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              aria-label={`Go to slide ${index + 1}`}
+              aria-current={activeSlide === index}
+              onClick={() => setActiveSlide(index)}
+              className={`relative h-2 rounded-full bg-white transition-[width] duration-300 before:absolute before:-inset-2 before:content-[''] ${
+                activeSlide === index ? "w-6" : "w-2"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

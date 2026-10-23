@@ -8,6 +8,7 @@ import Logo from "./Logo";
 
 const NAV_LINKS = [
   { label: "Vehicles", href: "/vehicles", id: "vehicles" },
+  { label: "Financing", href: "/financing", id: "financing" },
   { label: "About Us", href: "/about", id: "about" },
   { label: "News", href: "/news", id: "news" },
   { label: "Contact Us", href: "/contact", id: "contact" },
@@ -42,7 +43,10 @@ export default function Header({ active, overlay = false }: HeaderProps) {
 
   useEffect(() => {
     if (!overlay) return;
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      const hero = document.getElementById("home-hero");
+      setScrolled(hero ? hero.getBoundingClientRect().bottom <= 0 : false);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -66,7 +70,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
   return (
     <>
       <header
-        className={`font-[family-name:var(--font-inter)] fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300 lg:border-b lg:border-[#e4e4e4] lg:bg-white ${
+        className={`font-[family-name:var(--font-inter)] fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300  ${
           transparent ? "bg-transparent" : "border-b border-[#e4e4e4] bg-white"
         }`}
       >
@@ -78,7 +82,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
           {/* Left group: logo + primary nav (880px wide on desktop) */}
           <div className="flex items-center lg:flex-1 lg:justify-between xl:w-[880px] xl:flex-none">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="shrink-0">
-              <Logo className="h-[35px] w-[59px] lg:h-[66px] lg:w-[111px]" />
+              <Logo className="h-[35px] w-[59px] lg:h-[54px] lg:w-[90px]" />
             </Link>
 
             <nav className="hidden items-center gap-8 text-[14px] font-semibold text-black lg:ml-10 lg:flex xl:ml-0 xl:gap-[66px]">
@@ -90,6 +94,10 @@ export default function Header({ active, overlay = false }: HeaderProps) {
                     href={link.href}
                     className={`whitespace-nowrap leading-[20px] transition-colors ${
                       isActive ? "text-[#005eb8]" : "hover:text-[#005eb8]"
+                    } ${
+                      transparent
+                        ? " text-white"
+                        : " text-black"
                     }`}
                   >
                     {link.label}
@@ -105,8 +113,9 @@ export default function Header({ active, overlay = false }: HeaderProps) {
               href={REGION_HREF}
               className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black font-[family-name:var(--font-inter)]"
             >
-              <span className="whitespace-nowrap">Search Region</span>
               <Image src="/icons/globe.svg" alt="" width={20} height={20} />
+              <span className="whitespace-nowrap">Nigeria</span>
+              
             </Link>
             <Link
               href="/book-a-test-drive"

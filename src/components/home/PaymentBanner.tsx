@@ -1,69 +1,64 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import type { CSSProperties } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import Container from "../layout/Container";
+import { Btn, EYEBROW, ROUTES } from "./ui";
+import { useInView } from "./useInView";
 
-// Figma: desktop 766:425 (785x484 image, 515 text column) / mobile 773:1883 (353x352 image)
-export default function PaymentBanner() {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.dataset.visible = "true";
-          io.disconnect();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+/**
+ * "Drive now. Pay in flexible instalments."
+ * Figma: desktop 943:665 (photo 680x520 beside copy) / tablet 958:768 (photo 340x420 beside copy,
+ * buttons full width) / mobile 957:723 (stacked).
+ */
+export default function PaymentBanner({ image = "/images/home/v2/payment.png" }: { image?: string }) {
+  const { ref, visible } = useInView<HTMLElement>(0.25);
+  const i = (n: number) => ({ "--i": n }) as CSSProperties;
 
   return (
-    <section ref={ref} className="mt-10 w-full lg:mt-[120px]">
-      <Container className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-10">
-        <div className="pay-frame relative h-[352px] w-full shrink-0 overflow-hidden bg-[#d5d4d4] lg:h-[484px] lg:w-[785px] lg:rounded-[4px]">
+    <section
+      ref={ref}
+      data-visible={visible}
+      className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-4 py-[72px] md:flex-row md:items-center md:gap-6 md:px-6 md:py-24 lg:gap-20 lg:px-8 lg:py-28"
+    >
+      <div className="relative h-[260px] w-full shrink-0 overflow-hidden md:h-[420px] md:w-[340px] lg:h-[520px] lg:w-[49.4%]">
+        <div className="hv-settle absolute inset-0">
           <Image
-            src="/images/home/payment.png"
-            alt="Handing over car keys after a purchase"
+            src={image}
+            alt="Handing over the keys to a new IVM"
             fill
-            sizes="(min-width: 1024px) 785px, 100vw"
-            className="pay-img object-cover"
+            sizes="(min-width: 1024px) 680px, (min-width: 768px) 340px, 100vw"
+            className="object-cover"
           />
         </div>
+      </div>
 
-        <div className="flex w-full flex-col gap-6 lg:w-[515px] lg:gap-10">
-          <div className="flex flex-col items-start gap-4 lg:gap-6">
-            <h2
-              className="pay-slide text-[24px] font-extrabold uppercase leading-[normal] text-black font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[40px] lg:font-semibold lg:capitalize lg:font-[family-name:var(--font-inter)]"
-              style={{ "--i": 0 } as React.CSSProperties}
-            >
-              Access Payment with our flexible payment structure
-            </h2>
-            <p
-              className="pay-slide text-[14px] leading-[normal] text-[#1e1e1e] font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif] lg:text-[24px] lg:text-[#878383] lg:font-[family-name:var(--font-inter)]"
-              style={{ "--i": 1 } as React.CSSProperties}
-            >
-              Our collaboration with Access Bank allows you to access structured payment plans
-              and financing solutions that make transitioning to electric mobility simple and
-              affordable
-            </p>
-          </div>
-          <Link
-            href="/book-a-test-drive"
-            className="pay-slide flex h-[31px] w-[107px] items-center justify-center rounded-[1.268px] bg-[#005eb8] p-[3.169px] text-[12px] font-medium text-white font-[family-name:var(--font-inter)] lg:h-12 lg:w-[173px] lg:rounded-[4px] lg:p-[10px] lg:text-[16px]"
-            style={{ "--i": 2 } as React.CSSProperties}
-          >
-            Learn More
-          </Link>
+      <div className="flex min-w-0 flex-col items-start gap-4 md:flex-1 lg:max-w-[520px] lg:gap-5">
+        <p className={`hv-rise text-ivm-blue ${EYEBROW}`}>Financing</p>
+        <h2
+          className="hv-rise text-[24px] font-semibold leading-[1.2] text-ivm-ink md:text-[32px] lg:text-[48px]"
+          style={i(1)}
+        >
+          Drive now. Pay in flexible instalments.
+        </h2>
+        <p
+          className="hv-rise text-[14px] leading-[1.4] text-ivm-muted md:text-[16px] lg:text-[20px]"
+          style={i(2)}
+        >
+          Own a brand-new IVM vehicle with the Access Bank Auto Finance Plan, and spread your repayments over
+          up to 36 months.
+        </p>
+        <div
+          className="hv-rise flex w-full flex-col gap-[10px] md:gap-4 lg:w-auto lg:flex-row"
+          style={i(3)}
+        >
+          <Btn href={ROUTES.financing} className="w-full lg:w-[200px]">
+            See Payment Plans
+          </Btn>
+          <Btn href={ROUTES.quote} variant="outline" className="w-full lg:w-[160px]">
+            Get a Quote
+          </Btn>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

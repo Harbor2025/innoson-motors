@@ -38,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={` ${googleSans.variable} ${inter.variable} ${lato.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col ">
-        <Preloader />
+        {/* <Preloader /> */}
         {children}
       </body>
     </html>

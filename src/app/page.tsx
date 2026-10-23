@@ -1,12 +1,13 @@
 import Header from "@/components/layout/Header";
-import FooterServer from "@/components/layout/FooterServer";
+import SimpleFooter from "@/components/layout/SimpleFooter";
 import Hero from "@/components/home/Hero";
-import VideoBanner from "@/components/home/VideoBanner";
-import HottestDealCard from "@/components/home/HottestDealCard";
 import SpecialOfferCard from "@/components/home/SpecialOfferCard";
 import CarModelShowcase from "@/components/home/CarModelShowcase";
+import VideoBanner from "@/components/home/VideoBanner";
+import MadeInNigeria from "@/components/home/MadeInNigeria";
 import NewestModels from "@/components/home/NewestModels";
 import PaymentBanner from "@/components/home/PaymentBanner";
+import IvmApp from "@/components/home/IvmApp";
 import { getFeaturedModels } from "@/server/models";
 import { modelsAsVehicleCards } from "@/lib/adapters";
 
@@ -22,21 +23,19 @@ export default async function HomePage() {
   }
   return (
     <>
-      {/* Header floats over the hero (mobile: transparent until you scroll; desktop: white bar over the hero) */}
+      {/* Header floats over the hero (transparent until you scroll) */}
       <Header overlay />
-      <main>
+      <main className="font-[family-name:var(--font-inter)]">
         <Hero />
-        <VideoBanner />
-        {/* Mobile/tablet show Hottest Deal; desktop (lg+) shows the Special Offer banner */}
-        <HottestDealCard />
         <SpecialOfferCard />
         <CarModelShowcase initialVehicles={featured} />
+        <VideoBanner />
+        <MadeInNigeria />
         <NewestModels />
         <PaymentBanner />
+        <IvmApp />
       </main>
-      <div className="mt-20">
-        <FooterServer />
-      </div>
+      <SimpleFooter />
     </>
   );
 }

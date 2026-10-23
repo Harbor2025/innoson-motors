@@ -1,223 +1,235 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Container from "../layout/Container";
 import type { Vehicle } from "@/components/vehicles/vehicles-data";
+import { Btn, Chevron, ROUTES } from "./ui";
+import { useInView } from "./useInView";
 
-// Figma: desktop 766:467 (1340 wide, 752 tall stage) / mobile 773:1815 (353 wide, 308 stage)
+/**
+ * "Explore Our Car Models".
+ * Figma: desktop 943:472 / tablet 958:529 / mobile 957:492.
+ *
+ * Category tabs: the design shows Sedans / SUVs / Pickups / Buses / Electric. If your vehicles carry a
+ * category-like field (`category`, `bodyType`, `type` or `segment`) the tabs filter by it. If none of
+ * them do, the tabs still render but the list isn't filtered.
+ */
+
+const TABS = ["Sedans", "SUVs", "Pickups", "Buses", "Electric"] as const;
+type Tab = (typeof TABS)[number];
 
 interface CarModel {
   id: string;
   name: string;
-  watermark: string;
   image: string;
   slug?: string;
+  tab?: Tab;
 }
 
 const FALLBACK: CarModel[] = [
-  { id: "fb-1", name: "Innoson Caris", watermark: "IVM", image: "/images/car-model-side.png", slug: "caris" },
-  { id: "fb-2", name: "Innoson Capa", watermark: "IVM", image: "/images/car-model-side.png" },
-  { id: "fb-3", name: "Innoson G80", watermark: "IVM", image: "/images/car-model-side.png" },
+  { id: "fb-1", name: "IVM Caris", image: "/images/home/v2/model.png", slug: "caris" },
+  { id: "fb-2", name: "IVM Capa", image: "/images/home/v2/model.png" },
+  { id: "fb-3", name: "IVM G80", image: "/images/home/v2/model.png" },
 ];
 
-function watermarkFromName(name: string): string {
-  const t = name.trim().toUpperCase();
-  const tokens = t.split(/\s+/).filter(Boolean);
-  if (tokens[0] === "INNOSON") tokens.shift();
-  if (tokens.length === 0) return "IVM";
-  if (tokens.length === 1) {
-    const w = tokens[0];
-    return w.length > 3 ? w.slice(0, 3) : w;
-  }
-  return (tokens[0]?.[0] ?? "") + (tokens[1]?.[0] ?? "") + (tokens[2]?.[0] ?? "M");
+function tabFor(v: unknown): Tab | undefined {
+  const o = v as Record<string, unknown>;
+  const raw = [o.category, o.bodyType, o.type, o.segment].find((x) => typeof x === "string") as
+    | string
+    | undefined;
+  if (!raw) return undefined;
+  const s = raw.toLowerCase();
+  if (s.includes("sedan")) return "Sedans";
+  if (s.includes("suv")) return "SUVs";
+  if (s.includes("pick")) return "Pickups";
+  if (s.includes("bus")) return "Buses";
+  if (s.includes("electric") || s === "ev") return "Electric";
+  return undefined;
 }
 
-const AVENIR = "font-[Avenir,'Avenir_Next','Nunito_Sans',sans-serif]";
+export default function CarModelShowcase({ initialVehicles }: { initialVehicles?: Vehicle[] }) {
+  const all: CarModel[] = useMemo(
+    () =>
+      initialVehicles && initialVehicles.length > 0
+        ? initialVehicles.slice(0, 12).map((v) => ({
+            id: v.id,
+            name: v.name,
+            image: v.image,
+            slug: "slug" in v ? String((v as { slug?: string }).slug) : undefined,
+            tab: tabFor(v),
+          }))
+        : FALLBACK,
+    [initialVehicles],
+  );
 
-export default function CarModelShowcase({
-  initialVehicles,
-}: {
-  initialVehicles?: Vehicle[];
-}) {
-  const models: CarModel[] =
-    initialVehicles && initialVehicles.length > 0
-      ? initialVehicles.slice(0, 12).map((v) => ({
-          id: v.id,
-          name: v.name,
-          watermark: watermarkFromName(v.name) || "IVM",
-          image: v.image,
-          slug: "slug" in v ? String((v as { slug?: string }).slug) : undefined,
-        }))
-      : FALLBACK;
+  const hasCategories = all.some((m) => m.tab);
+  const available = (t: Tab) => !hasCategories || all.some((m) => m.tab === t);
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [tab, setTab] = useState<Tab>(() => TABS.find((t) => !hasCategories || all.some((m) => m.tab === t)) ?? "Sedans");
+  const [index, setIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
+  const { ref, visible } = useInView<HTMLElement>(0.3);
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.dataset.visible = "true";
-          io.disconnect();
-        }
-      },
-      { threshold: 0.3 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  const models = hasCategories ? all.filter((m) => m.tab === tab) : all;
+  const count = Math.max(models.length, 1);
+  const model = models[Math.min(index, models.length - 1)] ?? all[0];
+  const progress = `${((Math.min(index, count - 1) + 1) / count) * 100}%`;
 
-  const count = models.length;
-  const goPrev = () => setActiveIndex((i) => (i - 1 + count) % count);
-  const goNext = () => setActiveIndex((i) => (i + 1) % count);
-  const progress = `${((activeIndex + 1) / count) * 100}%`;
+  const goPrev = () => setIndex((i) => (i - 1 + count) % count);
+  const goNext = () => setIndex((i) => (i + 1) % count);
+  const pickTab = (t: Tab) => {
+    setTab(t);
+    setIndex(0);
+  };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const onTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) (diff > 0 ? goNext : goPrev)();
     touchStartX.current = null;
   };
 
+  const detailHref = model.slug && model.slug !== "undefined" ? `/vehicles/${model.slug}` : ROUTES.vehicles;
+  const arrow =
+    "absolute top-1/2 z-10 hidden size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-ivm-ink transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-ivm-blue md:flex lg:size-12";
+
   return (
-    <section ref={sectionRef} className="cs-root mt-10 w-full lg:mt-20">
-      <Container className="flex flex-col gap-6 lg:gap-10">
-        {/* Heading row */}
-        <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
-          <div className="flex flex-col gap-3 lg:w-[781px]">
-            <h2
-              className={`text-[24px] font-extrabold uppercase leading-[normal] text-[#1e1e1e] lg:text-[40px] lg:font-semibold lg:capitalize lg:leading-[58px] ${AVENIR} lg:font-[family-name:var(--font-inter)]`}
+    <section
+      ref={ref}
+      data-visible={visible}
+      className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 px-4 pt-[72px] md:gap-6 md:px-6 md:pt-24 lg:gap-8 lg:px-8 lg:pb-8 lg:pt-28"
+    >
+      {/* Header */}
+      <div className="flex items-end justify-between">
+        <div className="hv-rise flex flex-col gap-[6px] lg:gap-2">
+          <h2 className="text-[24px] font-semibold leading-[1.2] text-ivm-ink md:text-[32px] lg:text-[48px]">
+            Explore Our Car Models
+          </h2>
+          <p className="text-[14px] leading-[1.4] text-ivm-muted md:text-[16px] lg:text-[20px]">
+            Brand-new vehicles built in Nnewi for African roads.
+          </p>
+        </div>
+        <div className="hidden shrink-0 md:block md:w-40 lg:w-[180px]">
+          <Btn href={ROUTES.vehicles} className="w-full">
+            See All Models
+          </Btn>
+        </div>
+      </div>
+
+      {/* Category tabs */}
+      <div
+        className="hv-rise hv-noscrollbar -mx-4 flex gap-2 overflow-x-auto px-4 md:mx-0 md:px-0"
+        style={{ "--i": 1 } as React.CSSProperties}
+        role="tablist"
+        aria-label="Vehicle categories"
+      >
+        {TABS.map((t) => {
+          const active = t === tab;
+          const enabled = available(t);
+          return (
+            <button
+              key={t}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              disabled={!enabled}
+              onClick={() => pickTab(t)}
+              className={`shrink-0 rounded-full px-4 py-2 text-[14px] font-semibold leading-[1.4] transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-40 md:px-[18px] md:py-[9px] lg:px-5 lg:py-[10px] ${
+                active ? "bg-ivm-ink text-white" : "bg-ivm-wash text-ivm-ink hover:bg-ivm-line"
+              }`}
             >
-              Explore our Car Models
-            </h2>
-            <p
-              className={`text-[14px] leading-[normal] text-black lg:text-[20px] lg:font-light ${AVENIR} lg:font-[family-name:var(--font-inter)]`}
-            >
-              Find the perfect electric vehicle designed for performance, efficiency, and
-              sustainability
-            </p>
+              {t}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Model card */}
+      <div
+        className="relative flex flex-col items-center gap-3 overflow-hidden bg-ivm-wash px-5 pb-6 pt-7 md:gap-[14px] md:px-8 md:pb-8 md:pt-10 lg:gap-4 lg:px-12 lg:pb-10 lg:pt-12"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className="relative flex w-full justify-center">
+          {/* key re-mounts on change so the slide-in plays for every model */}
+          <div
+            key={model.id}
+            className={`relative h-[170px] w-full max-w-[318px] md:h-[280px] md:max-w-[540px] lg:aspect-[2/1] lg:h-auto lg:max-w-[860px] ${
+              visible ? "hv-model-in" : "hv-model-wait"
+            }`}
+          >
+            <Image
+              src={model.image}
+              alt={model.name}
+              fill
+              sizes="(min-width: 1024px) 860px, (min-width: 768px) 540px, 318px"
+              className="object-contain"
+            />
           </div>
 
-          <Link
-            href="/vehicles"
-            className="flex w-fit shrink-0 items-center gap-[9px] rounded-[4px] bg-[#005eb8] px-[9px] py-[7px] text-white transition-transform hover:scale-105 lg:gap-4 lg:px-4 lg:py-3"
-          >
-            <span className="whitespace-nowrap text-[13.714px] font-semibold leading-normal font-[family-name:var(--font-lato)] lg:text-[24px]">
-              See All Models
-            </span>
-            <span className="flex size-[18.286px] items-center justify-center rounded-full bg-white lg:size-8">
-              <Image
-                src="/icons/icon-arrow-up-right.svg"
-                alt=""
-                width={16}
-                height={16}
-                className="size-[8.777px] lg:size-[15.36px]"
-              />
-            </span>
+          <button type="button" aria-label="Previous model" onClick={goPrev} className={`${arrow} -left-3 lg:-left-4`}>
+            <Chevron dir="left" className="size-[18px] lg:size-5" />
+          </button>
+          <button type="button" aria-label="Next model" onClick={goNext} className={`${arrow} -right-3 lg:-right-4`}>
+            <Chevron dir="right" className="size-[18px] lg:size-5" />
+          </button>
+        </div>
+
+        <h3
+          key={`${model.id}-name`}
+          className="text-[24px] font-semibold leading-[1.2] text-ivm-ink lg:text-[32px]"
+        >
+          {model.name}
+        </h3>
+
+        <div className="flex gap-5 text-[14px] font-semibold leading-[1.4] text-ivm-blue md:text-[16px] md:font-medium lg:gap-6">
+          <Link href={detailHref} className="hover:underline">
+            Discover More →
+          </Link>
+          <Link href={ROUTES.quote} className="hover:underline">
+            Get a Quote →
           </Link>
         </div>
 
-        {/* Stage */}
-        <div
-          className="relative h-[308px] w-full overflow-hidden rounded-[2px] bg-[#e4e4e4] md:h-[520px] lg:h-[752px] lg:rounded-[4px]"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {models.map((model, index) => {
-            const isActive = activeIndex === index;
-            return (
-              <div
-                key={model.id}
-                className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                  isActive ? "cs-active z-10 opacity-100" : "pointer-events-none z-0 opacity-0"
-                }`}
-              >
-                {/* Watermark exists on mobile only in the design */}
-                <span
-                  className={`cs-mark absolute left-1/2 top-[34%] -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap text-[97px] font-extrabold leading-none text-white opacity-40 md:text-[220px] lg:hidden ${AVENIR}`}
-                >
-                  {model.watermark}
-                </span>
-
-                <div className="absolute left-1/2 top-[44%] w-[98.5%] max-w-[961px] -translate-x-1/2 -translate-y-1/2 lg:top-[47.4%] lg:w-[71.7%]">
-                  <Image
-                    src={model.image}
-                    alt={model.name}
-                    width={961}
-                    height={483}
-                    priority={index === 0}
-                    className="cs-car h-auto w-full rounded-[4px] object-contain lg:rounded-[10px]"
-                  />
-                </div>
-
-                <p
-                  className={`cs-name absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-[24px] font-extrabold uppercase leading-none text-[#1e1e1e] md:bottom-[10%] lg:bottom-[68px] lg:text-[40px] lg:font-semibold lg:normal-case lg:text-black ${AVENIR} lg:font-[family-name:var(--font-inter)]`}
-                >
-                  {model.name}
-                </p>
-              </div>
-            );
-          })}
-
-          {/* Desktop: arrows + progress live inside the stage */}
-          <button
-            type="button"
-            aria-label="Previous model"
-            onClick={goPrev}
-            className="absolute left-10 top-1/2 z-20 hidden size-16 -translate-y-1/2 items-center justify-center transition-transform hover:scale-110 lg:flex"
-          >
-            <Image src="/icons/icon-chevron.svg" alt="" width={24} height={24} className="size-full" />
-          </button>
-          <button
-            type="button"
-            aria-label="Next model"
-            onClick={goNext}
-            className="absolute right-10 top-1/2 z-20 hidden size-16 -translate-y-1/2 rotate-180 items-center justify-center transition-transform hover:scale-110 lg:flex"
-          >
-            <Image src="/icons/icon-chevron.svg" alt="" width={24} height={24} className="size-full" />
-          </button>
-          <div className="absolute inset-x-10 bottom-[37px] z-20 hidden h-2 bg-white lg:block">
-            <div
-              className="h-full bg-[#1e1e1e] transition-[width] duration-500 ease-out"
-              style={{ width: progress }}
-            />
-          </div>
+        {/* Tablet / desktop: full-width progress */}
+        <div className="hidden h-[3px] w-full bg-ivm-line md:block">
+          <div className="h-full bg-ivm-ink transition-[width] duration-500 ease-out" style={{ width: progress }} />
         </div>
 
-        {/* Mobile / tablet: controls sit under the stage */}
-        <div className="flex items-center justify-between gap-[10px] lg:hidden">
+        {/* Mobile: pager with arrows either side of the progress */}
+        <div className="flex w-full items-center gap-3 pt-2 md:hidden">
           <button
             type="button"
             aria-label="Previous model"
             onClick={goPrev}
-            className="size-8 shrink-0"
+            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white text-ivm-ink"
           >
-            <Image src="/icons/icon-chevron.svg" alt="" width={32} height={32} className="size-full" />
+            <Chevron dir="left" className="size-4" />
           </button>
-          <div className="h-1 flex-1 bg-[#e9e9e9]">
-            <div
-              className="h-full bg-[#1e1e1e] transition-[width] duration-500 ease-out"
-              style={{ width: progress }}
-            />
+          <div className="h-[3px] min-w-px flex-1 bg-ivm-line">
+            <div className="h-full bg-ivm-ink transition-[width] duration-500 ease-out" style={{ width: progress }} />
           </div>
           <button
             type="button"
             aria-label="Next model"
             onClick={goNext}
-            className="size-8 shrink-0 rotate-180"
+            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white text-ivm-ink"
           >
-            <Image src="/icons/icon-chevron.svg" alt="" width={32} height={32} className="size-full" />
+            <Chevron dir="right" className="size-4" />
           </button>
         </div>
-      </Container>
+      </div>
+
+      {/* Mobile: See All Models sits below the card */}
+      <div className="md:hidden">
+        <Btn href={ROUTES.vehicles} className="w-full">
+          See All Models
+        </Btn>
+      </div>
     </section>
   );
 }

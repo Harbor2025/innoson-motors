@@ -716,3 +716,162 @@
     letter-spacing: normal;
   }
 }
+
+/* ============================================================
+   HOME v2: Figma "IVM website" redesign (desktop / tablet / mobile)
+   Appended to the existing file; nothing above was changed.
+   ============================================================ */
+
+/* Design tokens from the Figma file. Prefixed `ivm-` so they don't
+   collide with Tailwind's built-in neutral-* palette. */
+@theme {
+  --color-ivm-blue: #005eb8;
+  --color-ivm-ink: #171a20;
+  --color-ivm-muted: #6c6c6c;
+  --color-ivm-line: #d9d9d9;
+  --color-ivm-wash: #f1f1f1;
+  --color-ivm-hairline: #ebebeb;
+  --color-ivm-lime: #a4e41a;
+}
+
+:root {
+  /* Figma's "easeOut" */
+  --ease-fig: cubic-bezier(0, 0, 0.58, 1);
+}
+
+.hv-noscrollbar {
+  scrollbar-width: none;
+}
+.hv-noscrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Hero (Figma timeline: 12 s loop) ---------- */
+
+/* Photo: slow push-out + drift, fades in over the first second */
+.slide-active .hero-media {
+  animation:
+    hero-media-fade 1s linear both,
+    hero-media-scale 12s var(--ease-fig) both,
+    hero-media-shift 12s ease-in-out both;
+}
+@keyframes hero-media-fade {
+  from { opacity: 0; }
+}
+@keyframes hero-media-scale {
+  from { scale: 1.14; }
+}
+@keyframes hero-media-shift {
+  from { translate: -30px 0; }
+}
+
+/* Eyebrow line rises in at 0.45 s */
+.slide-active .hero-eyebrow {
+  animation: hero-rise-16 0.7s var(--ease-fig) 0.45s both;
+}
+@keyframes hero-rise-16 {
+  from { opacity: 0; translate: 0 16px; }
+}
+
+/* Title: word-by-word, left to right (383 ms per word, 172 ms stagger) */
+.slide-active .hero-word {
+  animation: hero-word 0.383s var(--ease-fig) calc(var(--i, 0) * 0.1723s) both;
+}
+@keyframes hero-word {
+  from { opacity: 0; translate: 0 28px; filter: blur(10px); }
+}
+
+/* CTAs (1.18 s) and dots (1.36 s) rise in once on load */
+.hero-rise-24 {
+  animation: hero-rise-24 0.7s var(--ease-fig) var(--d, 0s) both;
+}
+@keyframes hero-rise-24 {
+  from { opacity: 0; translate: 0 24px; }
+}
+
+/* ---------- Scroll reveals (same vocabulary as the rest of the site) ---------- */
+.hv-rise {
+  opacity: 0;
+  translate: 0 20px;
+  filter: blur(4px);
+  transition:
+    opacity 1s var(--ease-expo-out),
+    translate 1.2s var(--ease-expo-out),
+    filter 1s var(--ease-expo-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+[data-visible="true"] .hv-rise {
+  opacity: 1;
+  translate: 0 0;
+  filter: none;
+}
+
+.hv-settle {
+  scale: 1.08;
+  transition: scale 2.4s var(--ease-expo-out);
+}
+[data-visible="true"] .hv-settle {
+  scale: 1;
+}
+
+/* ---------- Model card: new car slides in from the right (Figma: x 120 -> 0) ---------- */
+.hv-model-in {
+  animation: hv-model-in 1s var(--ease-fig) both;
+}
+.hv-model-wait {
+  opacity: 0;
+}
+@keyframes hv-model-in {
+  from { opacity: 0; translate: 120px 0; }
+  60%  { opacity: 1; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* ---------- Odometer counters (Figma: digit strips roll up on enter) ---------- */
+.hv-strip {
+  transform: translateY(0);
+  transition: transform var(--du, 1.6s) var(--ease-fig) var(--dl, 0.4s);
+}
+[data-visible="true"] .hv-strip {
+  transform: translateY(calc(var(--t, 0) * -1.2em));
+}
+.hv-plus {
+  opacity: 0;
+  translate: 0 12px;
+  transition:
+    opacity 0.5s var(--ease-fig) 1.82s,
+    translate 0.5s var(--ease-fig) 1.82s;
+}
+[data-visible="true"] .hv-plus {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---------- Video: idle content fades out once the film starts ---------- */
+.hv-fade-out {
+  transition: opacity 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-active .hero-media,
+  .slide-active .hero-eyebrow,
+  .slide-active .hero-word,
+  .hero-rise-24,
+  .hv-model-in {
+    animation: none;
+  }
+  .hv-rise,
+  .hv-settle,
+  .hv-strip,
+  .hv-plus,
+  .hv-model-wait {
+    opacity: 1;
+    translate: none;
+    scale: none;
+    filter: none;
+    transition: none;
+  }
+  .hv-strip {
+    transform: translateY(calc(var(--t, 0) * -1.2em));
+  }
+}
