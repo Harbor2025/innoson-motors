@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import Header from "@/components/layout/Header";
-import FooterServer from "@/components/layout/FooterServer";
+import RevampNav from "@/components/revamp/RevampNav";
+import RevampFooter from "@/components/revamp/RevampFooter";
+import RevampWhatsAppFloat from "@/components/revamp/RevampWhatsAppFloat";
 import VehiclesPageContent from "@/components/vehicles/VehiclesPageContent";
-import { getCategories, getPublishedModels } from "@/server/models";
-import { categoriesAsList, modelsAsVehicleCards } from "@/lib/adapters";
+import { getPublishedModels } from "@/server/models";
+import { getContactInfo } from "@/server/globals";
+import { modelsAsVehicleCards } from "@/lib/adapters";
 
 export const metadata: Metadata = {
   title: "Vehicles | Innoson Vehicle Manufacturing",
@@ -15,24 +17,30 @@ export const revalidate = 60;
 
 export default async function VehiclesPage() {
   let vehicles: ReturnType<typeof modelsAsVehicleCards> = [];
-  let categories: ReturnType<typeof categoriesAsList> = [];
   try {
-    const [modelsRes, cats] = await Promise.all([
-      getPublishedModels({ limit: 100 }),
-      getCategories(),
-    ]);
+    const modelsRes = await getPublishedModels({ limit: 100 });
     vehicles = modelsAsVehicleCards(modelsRes.docs);
-    categories = categoriesAsList(cats);
   } catch {
-    // DB unavailable at build time; content will be fetched client-side or on revalidate.
+    // DB unavailable at build time; the Figma catalogue fallback is rendered instead.
   }
+
+  // WhatsApp link for the floating widget comes from the CMS social links
+  let whatsapp: string | undefined;
+  try {
+    const info = await getContactInfo();
+    whatsapp = info.socialLinks.find((s) => s.platform.toLowerCase() === "whatsapp")?.url;
+  } catch {
+    whatsapp = undefined;
+  }
+
   return (
-    <>
-      <Header />
-      <main>
-        <VehiclesPageContent initialVehicles={vehicles} initialCategories={categories} />
+    <div className="flex min-h-screen flex-col bg-white font-[family-name:var(--font-ivm-inter)]">
+      <RevampNav active="vehicles" />
+      <main className="flex-1">
+        <VehiclesPageContent initialVehicles={vehicles} />
       </main>
-      <FooterServer />
-    </>
+      <RevampFooter />
+      {whatsapp && <RevampWhatsAppFloat href={whatsapp} />}
+    </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { FaArrowRight } from 'react-icons/fa6'
 
 type CountResult = { totalDocs: number }
 type PostDoc = {
@@ -133,8 +134,8 @@ export default function AdminDashboard() {
                 <p className="mt-2 text-4xl font-black tabular-nums">
                   {c.count}
                 </p>
-                <p className="mt-3 text-xs font-bold uppercase tracking-wide opacity-80 group-hover:opacity-100">
-                  View list →
+                <p className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide opacity-80 group-hover:opacity-100">
+                  View list <FaArrowRight aria-hidden="true" className="size-3" />
                 </p>
               </Link>
             ))}

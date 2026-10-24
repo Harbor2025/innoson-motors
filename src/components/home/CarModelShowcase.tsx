@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa6";
 import type { Vehicle } from "@/components/vehicles/vehicles-data";
 import { Btn, Chevron, ROUTES } from "./ui";
 import { useInView } from "./useInView";
@@ -187,11 +188,11 @@ export default function CarModelShowcase({ initialVehicles }: { initialVehicles?
         </h3>
 
         <div className="flex gap-5 text-[14px] font-semibold leading-[1.4] text-ivm-blue md:text-[16px] md:font-medium lg:gap-6">
-          <Link href={detailHref} className="hover:underline">
-            Discover More →
+          <Link href={detailHref} className="inline-flex items-center gap-1 hover:underline">
+            Discover More <FaArrowRight aria-hidden="true" className="size-3.5" />
           </Link>
-          <Link href={ROUTES.quote} className="hover:underline">
-            Get a Quote →
+          <Link href={ROUTES.quote} className="inline-flex items-center gap-1 hover:underline">
+            Get a Quote <FaArrowRight aria-hidden="true" className="size-3.5" />
           </Link>
         </div>
 

@@ -1,37 +1,78 @@
-export type Category = "ALL" | "CARS" | "MPV" | "PICKUP" | "SUVS" | "BUSES" | "ELECTRIC";
+export type Category = "ALL" | "CARS" | "SUVS" | "MPV" | "PICKUP" | "BUSES" | "ELECTRIC";
 
 export interface Vehicle {
   id: string;
   name: string;
+  /** URL segment for /vehicles/[slug]. Falls back to `id` when absent. */
+  slug?: string;
   category: Exclude<Category, "ALL">;
+  /** Eyebrow shown above the name (e.g. SEDAN, OFF-ROAD SUV). Falls back to the category. */
+  bodyType?: string;
+  /** Cut-out photo. Empty string renders the "Add cut-out photo" placeholder. */
   image: string;
 }
 
-export const CATEGORIES: Category[] = ["ALL", "CARS", "MPV", "PICKUP", "SUVS", "BUSES", "ELECTRIC"];
+/** Order matches the Figma sidebar / chips: All, Cars, SUVs, MPV, Pickups, Buses, Electric. */
+export const CATEGORIES: Category[] = ["ALL", "CARS", "SUVS", "MPV", "PICKUP", "BUSES", "ELECTRIC"];
 
+/** Label shown in the sidebar, chips and (for non-All) the page heading. */
 export const CATEGORY_LABEL: Record<Category, string> = {
-  ALL: "Models",
+  ALL: "All",
   CARS: "Cars",
-  MPV: "MPV",
-  PICKUP: "Pickup",
   SUVS: "SUVs",
+  MPV: "MPV",
+  PICKUP: "Pickups",
   BUSES: "Buses",
   ELECTRIC: "Electric",
 };
 
+/** Singular eyebrow used when a model has no explicit `bodyType`. */
+export const CATEGORY_EYEBROW: Record<Exclude<Category, "ALL">, string> = {
+  CARS: "CAR",
+  SUVS: "SUV",
+  MPV: "MPV",
+  PICKUP: "PICKUP",
+  BUSES: "BUS",
+  ELECTRIC: "ELECTRIC",
+};
+
 /**
- * Seed data mirrors the Figma mockup as closely as a placeholder grid can:
- * all 15 desktop cards (and all 5 mobile cards) use the identical copy
- * "Innoson Caris" / "Suvs", and of the two card instances inspected in
- * detail, both reuse the same two car photos — a strong signal this screen
- * was built by duplicating one placeholder card rather than designing 15
- * unique vehicles. The grid/filter below is fully data-driven, so swap this
- * array for real models (mixed categories, names, images) and everything —
- * filtering included — keeps working unchanged.
+ * Fallback catalogue, mirroring the 24 cards in the Figma "Vehicles" frames.
+ * Only used when the CMS returns no models (e.g. DB unavailable). Counts in the
+ * sidebar/chips are always derived from whichever list is rendered.
+ * Only Caris has a cut-out in the design; the rest show the placeholder.
  */
-export const VEHICLES: Vehicle[] = Array.from({ length: 15 }, (_, i) => ({
-  id: `vehicle-${i + 1}`,
-  name: "Innoson Caris",
-  category: "SUVS",
-  image: i % 2 === 0 ? "/images/vehicle-card-suv.png" : "/images/vehicle-card-sedan.png",
-}));
+const m = (
+  name: string,
+  slug: string,
+  category: Exclude<Category, "ALL">,
+  bodyType: string,
+  image = "",
+): Vehicle => ({ id: slug, name, slug, category, bodyType, image });
+
+export const VEHICLES: Vehicle[] = [
+  m("IVM Caris", "caris", "CARS", "SEDAN", "/images/vehicle-card-sedan.png"),
+  m("IVM Fox", "fox", "CARS", "CAR"),
+  m("IVM Umu", "umu", "CARS", "CAR"),
+  m("IVM Connect", "connect", "CARS", "CAR"),
+  m("IVM G5T", "g5t", "SUVS", "CROSSOVER"),
+  m("IVM G6T", "g6t", "SUVS", "SUV"),
+  m("IVM G40", "g40", "SUVS", "OFF-ROAD SUV"),
+  m("IVM G80", "g80", "SUVS", "OFF-ROAD SUV"),
+  m("IVM Ikenga", "ikenga", "MPV", "MPV"),
+  m("IVM Capa", "capa", "MPV", "MPV"),
+  m("IVM G20 Smart", "g20-smart", "MPV", "MPV"),
+  m("IVM Granite", "granite", "PICKUP", "PICKUP"),
+  m("IVM Carrier 4WD", "carrier-4wd", "PICKUP", "PICKUP"),
+  m("IVM Uzo", "uzo", "BUSES", "MINIBUS"),
+  m("IVM Mini Bus", "mini-bus", "BUSES", "MINIBUS"),
+  m("IVM Seriki", "seriki", "BUSES", "BUS"),
+  m("IVM 6540", "6540", "BUSES", "BUS"),
+  m("IVM 6601", "6601", "BUSES", "BUS"),
+  m("IVM 6800", "6800", "BUSES", "BUS"),
+  m("IVM 6857", "6857", "BUSES", "BUS"),
+  m("IVM CNG Bus", "cng-bus", "BUSES", "CNG BUS"),
+  m("IVM Link", "link", "ELECTRIC", "ELECTRIC"),
+  m("IVM EX01", "ex01", "ELECTRIC", "ELECTRIC"),
+  m("IVM EX02", "ex02", "ELECTRIC", "ELECTRIC"),
+];

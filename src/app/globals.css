@@ -1,4 +1,16 @@
 @import "tailwindcss";
+
+/* ---------- IVM revamp design tokens (Figma "neutral/*" + "brand/blue") ----------
+   Namespaced with `ivm-` so they never shadow Tailwind's default neutral palette. */
+@theme {
+  --color-ivm-blue: #005eb8;
+  --color-ivm-n50: #f1f1f1;
+  --color-ivm-n100: #ebebeb;
+  --color-ivm-n200: #d9d9d9;
+  --color-ivm-n500: #888888;
+  --color-ivm-n600: #6c6c6c;
+  --color-ivm-n900: #171a20;
+}
 :root {
   --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
@@ -873,5 +885,81 @@
   }
   .hv-strip {
     transform: translateY(calc(var(--t, 0) * -1.2em));
+  }
+}
+
+/* ---------- Revamp page-load intro (Figma motion data, 2s timeline) ----------
+   Each element holds its start state until --ivm-delay, then eases out over
+   --ivm-dur. Ease = motion "easeOut" = cubic-bezier(0, 0, 0.58, 1).
+   --ivm-y is the starting vertical offset (16px text, 32px cards). */
+@keyframes ivm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ivm-y, 16px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes ivm-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.ivm-rise {
+  animation: ivm-rise var(--ivm-dur, 0.6s) cubic-bezier(0, 0, 0.58, 1)
+    var(--ivm-delay, 0s) both;
+}
+.ivm-fade {
+  animation: ivm-fade var(--ivm-dur, 0.6s) cubic-bezier(0, 0, 0.58, 1)
+    var(--ivm-delay, 0s) both;
+}
+
+/* Financing hero (Figma motion, 9s timeline): background fades in over 1s while
+   slowly settling from 1.12x to 1x over the full 9s. */
+@keyframes ivm-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.ivm-hero-media {
+  animation:
+    ivm-fade 1s cubic-bezier(0, 0, 0.58, 1) both,
+    ivm-zoom 9s cubic-bezier(0, 0, 0.58, 1) both;
+  transform-origin: center;
+}
+
+/* Headline word-by-word reveal: each word rises 28px from a 10px blur.
+   Words are staggered 0.1446s apart, 0.321s each. */
+@keyframes ivm-word {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.ivm-word {
+  display: inline-block;
+  animation: ivm-word 0.321s cubic-bezier(0, 0, 0.58, 1) var(--ivm-delay, 0s) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ivm-rise,
+  .ivm-fade,
+  .ivm-hero-media,
+  .ivm-word {
+    animation: none;
   }
 }

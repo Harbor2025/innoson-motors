@@ -20,6 +20,7 @@ export function modelsAsVehicleCards(
     return {
       id: m.id,
       name: m.name,
+      slug: m.slug,
       category: isValidCategory(categoryUpper) ? categoryUpper : 'SUVS',
       image,
     }
