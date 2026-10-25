@@ -263,41 +263,57 @@ export default function BookTestDriveClient({
         body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
+      const errorBody = (
+        json as { error?: { message?: unknown; fieldErrors?: unknown } } | null
+      )?.error;
+      const apiMessage =
+        typeof errorBody?.message === "string" ? errorBody.message : undefined;
 
       if (!res.ok) {
         if (res.status === 429) {
           setSub({
             status: "error",
             message:
-              (json?.message as string | undefined) ??
-              "Too many attempts. Please try again in an hour.",
+              apiMessage ??
+              "Too many attempts. Please try again in a little while.",
           });
         } else if (res.status === 422) {
           const fields: Record<string, string> = {};
-          const err = json?.errors;
+          const err = errorBody?.fieldErrors;
           if (err && typeof err === "object") {
-            for (const [key, value] of Object.entries(err as Record<string, unknown>)) {
-              if (typeof value === "string") fields[key] = value;
+            for (const [key, value] of Object.entries(
+              err as Record<string, unknown>,
+            )) {
+              if (Array.isArray(value) && typeof value[0] === "string") {
+                fields[key] = value[0];
+              } else if (typeof value === "string") {
+                fields[key] = value;
+              }
             }
           }
           setSub({
             status: "error",
             message:
-              (json?.message as string | undefined) ??
-              "Please correct the highlighted fields and try again.",
+              apiMessage && apiMessage !== "Validation failed."
+                ? apiMessage
+                : "Please correct the highlighted fields and try again.",
             fields,
           });
         } else if (res.status === 404) {
-          setSub({ status: "idle" });
+          setSub({
+            status: "error",
+            message:
+              apiMessage ??
+              "That model is no longer available. Please choose another one.",
+          });
           setSelectedId(null);
-          setShowAlert(true);
+          setShowAlert(false);
           goTo(1);
         } else {
           setSub({
             status: "error",
             message:
-              (json?.message as string | undefined) ??
-              "Something went wrong on our end. Please try again.",
+              apiMessage ?? "Something went wrong on our end. Please try again.",
           });
         }
         return;
@@ -349,7 +365,7 @@ export default function BookTestDriveClient({
 
             <div className="flex w-full flex-col gap-3 pt-2 sm:w-[412px] sm:flex-row">
               <button type="button" onClick={resetBooking} className={`${SECONDARY} flex-1`}>
-                Book another test drive
+                Book a test drive
               </button>
               <Link href="/vehicles" className={`${PRIMARY} flex-1`}>
                 Browse vehicles
@@ -454,7 +470,7 @@ export default function BookTestDriveClient({
               {showAlert ? (
                 <ErrorAlert
                   title="Please select a vehicle"
-                  body="Choose a vehicle to continue to the next step."
+                  body="Choose at least one vehicle to continue to the next step."
                 />
               ) : sub.status === "error" && sub.message ? (
                 <ErrorAlert title="We couldn't submit your booking" body={sub.message} />
@@ -493,7 +509,7 @@ export default function BookTestDriveClient({
                       onClick={() => setDealershipId(dealer.id)}
                       className={`relative flex h-[84px] items-start gap-[14px] rounded-[12px] border bg-white p-[18px] text-left transition-colors ${
                         active
-                          ? "border-2 border-ivm-blue bg-[rgba(0,94,184,0.04)]"
+                          ? "border-2 border-ivm-blue"
                           : "border-ivm-n200 hover:border-ivm-n500"
                       }`}
                     >
