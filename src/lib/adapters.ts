@@ -1,6 +1,7 @@
 import type { CategoryDTO, ModelListItemDTO, BlogListItemDTO, MediaDTO } from '@/types/dto'
 import type { Vehicle } from '@/components/vehicles/vehicles-data'
 import type { Article } from '@/components/news/news-data'
+import { normaliseNewsCategory } from '@/components/news/news-data'
 
 function mediaToUrl(m: MediaDTO | string | null | undefined, fallback: string): string {
   if (typeof m === 'string') return m
@@ -51,6 +52,7 @@ export function postsAsArticles(posts: BlogListItemDTO[]): Article[] {
     author: p.author?.name ?? 'IVM Editorial',
     date: formatNigerianDate(p.publishedAt),
     image: mediaToUrl(p.coverImage, '/images/news-car.png'),
+    category: normaliseNewsCategory(p.tags.map((tag) => tag.name)),
   }))
 }
 
@@ -60,16 +62,10 @@ function formatNigerianDate(isoOrEmpty: string | undefined | null): string {
     const d = new Date(isoOrEmpty)
     if (Number.isNaN(d.getTime())) return String(isoOrEmpty).slice(0, 10)
     const day = d.getUTCDate()
-    const month = d.toLocaleString('en-NG', { month: 'long', timeZone: 'UTC' })
+    const month = d.toLocaleString('en-NG', { month: 'short', timeZone: 'UTC' })
     const year = d.getUTCFullYear()
-    return `${day}${ordinalSuffix(day)} ${month} ${year}`
+    return `${day} ${month} ${year}`
   } catch {
     return String(isoOrEmpty).slice(0, 10)
   }
-}
-
-function ordinalSuffix(n: number): string {
-  const s = ['th', 'st', 'nd', 'rd']
-  const v = n % 100
-  return s[(v - 20) % 10] || s[v] || s[0]
 }

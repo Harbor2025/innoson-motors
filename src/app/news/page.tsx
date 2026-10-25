@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import Header from "@/components/layout/Header";
-import FooterServer from "@/components/layout/FooterServer";
+import RevampNav from "@/components/revamp/RevampNav";
+import RevampFooter from "@/components/revamp/RevampFooter";
+import RevampWhatsAppFloat from "@/components/revamp/RevampWhatsAppFloat";
 import NewsPageContent from "@/components/news/NewsPageContent";
 import { getPublishedPosts } from "@/server/blog";
 import { postsAsArticles } from "@/lib/adapters";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "News | Innoson Vehicle Manufacturing",
@@ -20,13 +22,17 @@ export default async function NewsPage() {
   } catch {
     initial = undefined;
   }
+
+  const whatsapp = await getWhatsAppUrl();
+
   return (
-    <>
-      <Header active="news" />
-      <main>
+    <div className="flex min-h-screen flex-col bg-white font-[family-name:var(--font-ivm-inter)]">
+      <RevampNav active="news" />
+      <main className="flex-1">
         <NewsPageContent initialArticles={initial} />
       </main>
-      <FooterServer />
-    </>
+      <RevampFooter />
+      {whatsapp && <RevampWhatsAppFloat href={whatsapp} />}
+    </div>
   );
 }

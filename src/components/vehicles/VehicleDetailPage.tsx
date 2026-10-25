@@ -344,7 +344,15 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         )}
       </main>
 
-      <GetQuoteModal open={quoteOpen} onClose={closeQuote} vehicleType={model.name} />
+      <GetQuoteModal
+        open={quoteOpen}
+        onClose={closeQuote}
+        vehicleType={model.name}
+        vehicleSlug={model.slug}
+        vehicleId={model.id}
+        vehicleCategory={model.category?.name}
+        vehicleImage={heroDesktop}
+      />
     </div>
   );
 }
