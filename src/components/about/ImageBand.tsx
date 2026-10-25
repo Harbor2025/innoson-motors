@@ -5,7 +5,7 @@ interface ImageBandProps {
   alt: string;
   /** Full height classes for this instance, e.g. "h-[254px] lg:h-[519px]" — passed in whole so Tailwind's static scanner can see them. */
   heightClassName: string;
-  /** Full outer gutter classes for this instance, e.g. "px-5 lg:px-0" — each band has its own mobile/desktop inset pattern in the source design. */
+  /** Full outer gutter classes for this instance, e.g. "px-5 lg:px-0" - each band has its own mobile/desktop inset pattern in the source design. */
   containerClassName?: string;
   rounded?: boolean;
   eyebrow?: string;

@@ -90,7 +90,7 @@ export default function IvmApp({
             className="hv-rise text-[14px] leading-[1.4] text-white/80 md:text-[20px]"
             style={i(2)}
           >
-            Soon you’ll be able to manage your vehicle, book a service, check your warranty and find a dealer —
+            Soon you’ll be able to manage your vehicle, book a service, check your warranty and find a dealer -
             all from your phone.
           </p>
 

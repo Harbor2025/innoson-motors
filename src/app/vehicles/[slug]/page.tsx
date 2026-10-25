@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const doc = await getModelBySlugOrNotFound(slug);
     return {
       title: `${doc.name} | Innoson Vehicle Manufacturing`,
-      description: doc.summary ?? doc.name + " — " + (doc.category?.name ?? "Nigeria-made vehicle"),
+      description: doc.summary ?? doc.name + " - " + (doc.category?.name ?? "Nigeria-made vehicle"),
       openGraph: {
         title: doc.name,
         description: doc.summary ?? doc.name,

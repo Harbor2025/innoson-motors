@@ -86,7 +86,7 @@ export default function Footer({
                 The Future of Mobility.
               </h2>
               <p className="text-[17px] font-light leading-[27px] font-[family-name:var(--font-inter)]">
-                Innoson Vehicle Manufacturing — the first privately owned indigenous automobile
+                Innoson Vehicle Manufacturing - the first privately owned indigenous automobile
                 manufacturer in Nigeria and the largest in West Africa.
               </p>
             </div>

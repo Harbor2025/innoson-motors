@@ -90,7 +90,7 @@ export default function MadeInNigeria({ image = "/images/home/v2/factory.png" }:
           className="hv-rise text-[14px] leading-[1.4] text-ivm-muted md:max-w-[600px] md:text-[20px] lg:max-w-[528px]"
           style={{ "--i": 2 } as CSSProperties}
         >
-          Designed and built at our plant in Nnewi, Anambra State — brand-new vehicles engineered for African
+          Designed and built at our plant in Nnewi, Anambra State - brand-new vehicles engineered for African
           roads, backed by local parts and service.
         </p>
 

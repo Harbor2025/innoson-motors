@@ -955,11 +955,36 @@
   animation: ivm-word 0.321s cubic-bezier(0, 0, 0.58, 1) var(--ivm-delay, 0s) both;
 }
 
+/* About stats: each digit sits in a 1.2em-tall window onto a vertical strip of
+   digits (0-9 repeated). --ivm-n is how many rows the strip travels to land on
+   the final digit. The strip rolls up from "0" with easeOut. */
+@keyframes ivm-roll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(var(--ivm-n, 0) * -1.2em));
+  }
+}
+.ivm-strip {
+  transform: translateY(0);
+}
+.ivm-strip.is-rolling {
+  animation: ivm-roll var(--ivm-dur, 1.6s) cubic-bezier(0, 0, 0.58, 1)
+    var(--ivm-delay, 0s) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ivm-rise,
   .ivm-fade,
   .ivm-hero-media,
   .ivm-word {
     animation: none;
+  }
+  /* Skip the roll and show the final number straight away */
+  .ivm-strip,
+  .ivm-strip.is-rolling {
+    animation: none;
+    transform: translateY(calc(var(--ivm-n, 0) * -1.2em));
   }
 }

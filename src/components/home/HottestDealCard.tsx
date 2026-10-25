@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * "Hottest Deal" — IVM Caris.
+ * "Hottest Deal" - IVM Caris.
  * Figma: mobile node 773:1780 (353x582). From lg up the new desktop design shows the
  * Special Offer banner instead (see SpecialOfferCard), so this card is lg:hidden.
  *
@@ -113,7 +113,7 @@ export default function HottestDealCard({
       className="group relative isolate mx-5 mt-10 min-h-[582px] overflow-hidden bg-white text-white md:min-h-[755px] lg:hidden"
       style={{ fontFamily: "Avenir, 'Avenir Next', 'Nunito Sans', sans-serif" }}
     >
-      {/* Background photo — different crop per breakpoint. Slow push-in while it "warms up". */}
+      {/* Background photo - different crop per breakpoint. Slow push-in while it "warms up". */}
       <Image
         src="/hottest-deal/caris-bg.png"
         alt=""
@@ -206,7 +206,7 @@ export default function HottestDealCard({
           </Link>
         </div>
 
-        {/* Feature strip — pinned to the bottom */}
+        {/* Feature strip - pinned to the bottom */}
         <ul className="mt-auto flex w-full items-stretch pt-10 lg:w-auto lg:self-start">
           {features.map((f, i) => (
             <li

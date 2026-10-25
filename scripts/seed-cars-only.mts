@@ -58,7 +58,7 @@ const NEW_CARS: NewCar[] = [
     tagline: 'City-ready, efficient, and bold.',
     summary: '1.6L / Automatic / 5 Seats',
     description:
-      'The IVM Fox is a compact, nimble sedan built for urban commuting — easy to park, light on fuel, and packed with standard features that make every trip feel premium.',
+      'The IVM Fox is a compact, nimble sedan built for urban commuting - easy to park, light on fuel, and packed with standard features that make every trip feel premium.',
     technology:
       'Touchscreen infotainment with CarPlay, rear parking sensors, automatic climate control, keyless entry, and ABS with EBD.',
     specs: [
@@ -158,7 +158,7 @@ const NEW_CARS: NewCar[] = [
     name: 'INNOSON G6',
     categorySlug: 'mpv',
     tagline: 'First-class on the road.',
-    summary: '2.4L / Automatic / 7 Seats — Premium',
+    summary: '2.4L / Automatic / 7 Seats - Premium',
     description:
       'Our premium MPV: the G6 pairs executive seating with long-distance comfort. Often used by corporate fleets, government convoys, and hospitality shuttle services.',
     technology:
@@ -201,7 +201,7 @@ const NEW_CARS: NewCar[] = [
     specs: [
       { label: 'Engine Capacity', value: '2.5L 4-Cylinder Turbo Diesel', group: 'performance', order: 1 },
       { label: 'Transmission', value: '5-Speed Manual', group: 'performance', order: 2 },
-      { label: 'Drive Type', value: '4x2 (RWD) — 4x4 optional', group: 'performance', order: 3 },
+      { label: 'Drive Type', value: '4x2 (RWD) - 4x4 optional', group: 'performance', order: 3 },
       { label: 'Seating', value: '5 seats', group: 'general', order: 4 },
       { label: 'Fuel Tank', value: '70L', group: 'general', order: 5 },
       { label: 'Length', value: '5,120 mm', group: 'dimensions', order: 6 },
@@ -212,7 +212,7 @@ const NEW_CARS: NewCar[] = [
     highlights: [
       { title: '1.2-tonne rated bed', description: 'Reinforced steel bed with internal tie-downs and optional load liner.', order: 1 },
       { title: 'Turbo diesel torque', description: '2.5L common-rail diesel tuned for low-end pulling power.', order: 2 },
-      { title: 'Easy-to-service parts', description: 'Common rail and manual transmission — mechanics nationwide know the layout.', order: 3 },
+      { title: 'Easy-to-service parts', description: 'Common rail and manual transmission - mechanics nationwide know the layout.', order: 3 },
       { title: 'Underbody protection', description: 'Steel sump guard and fuel-tank shield standard.', order: 4 },
     ],
     colors: [
@@ -244,7 +244,7 @@ const NEW_CARS: NewCar[] = [
       { label: 'Wheelbase', value: '3,150 mm', group: 'dimensions', order: 9 },
     ],
     highlights: [
-      { title: 'Shift-on-the-fly 4x4', description: 'Turn the dial to 4H at up to 80 km/h — no stopping required.', order: 1 },
+      { title: 'Shift-on-the-fly 4x4', description: 'Turn the dial to 4H at up to 80 km/h - no stopping required.', order: 1 },
       { title: 'Rear diff lock', description: 'Mechanical locker for muddy construction sites and rural roads.', order: 2 },
       { title: '5-seat family cabin', description: 'Rear A/C vents, armrest, and three-point belts for all passengers.', order: 3 },
       { title: 'Tow-rated 2.8T', description: 'Factory-fitted wiring and tow bar for boat or utility trailer.', order: 4 },
@@ -304,7 +304,7 @@ const NEW_CARS: NewCar[] = [
     specs: [
       { label: 'Engine Capacity', value: '1.8L 4-Cylinder Petrol', group: 'performance', order: 1 },
       { label: 'Transmission', value: 'CVT Automatic', group: 'performance', order: 2 },
-      { label: 'Drive Type', value: 'FWD — 4x4 optional', group: 'performance', order: 3 },
+      { label: 'Drive Type', value: 'FWD - 4x4 optional', group: 'performance', order: 3 },
       { label: 'Seating', value: '5 seats', group: 'general', order: 4 },
       { label: 'Fuel Tank', value: '55L', group: 'general', order: 5 },
       { label: 'Length', value: '4,440 mm', group: 'dimensions', order: 6 },
@@ -383,7 +383,7 @@ const NEW_CARS: NewCar[] = [
     highlights: [
       { title: '15 seats with seatbelts', description: 'All 15 passenger positions have 3-point belts.', order: 1 },
       { title: 'Split cargo area', description: 'Rear cargo space for luggage behind the last row.', order: 2 },
-      { title: 'Easy nationwide service', description: 'Common mechanical layout — any mechanic can service it.', order: 3 },
+      { title: 'Easy nationwide service', description: 'Common mechanical layout - any mechanic can service it.', order: 3 },
       { title: 'Tinted windows + curtains', description: 'Privacy glass and optional fabric curtains for VIP shuttle use.', order: 4 },
     ],
     colors: [
@@ -416,7 +416,7 @@ const NEW_CARS: NewCar[] = [
     ],
     highlights: [
       { title: '320 km range', description: 'Real-world range for Lagos–Ibadan or Abuja–Minna daily runs.', order: 1 },
-      { title: 'CCS DC fast charge', description: 'Supports public DC chargers — 30 minutes to 80%.', order: 2 },
+      { title: 'CCS DC fast charge', description: 'Supports public DC chargers - 30 minutes to 80%.', order: 2 },
       { title: 'Low running cost', description: 'Fraction of the per-km cost of a petrol equivalent.', order: 3 },
       { title: 'Fleet telematics', description: 'Pre-wired for battery monitoring, charging reports, and GPS.', order: 4 },
     ],
@@ -513,7 +513,7 @@ async function ensureSharedHeroImage(payload: Payload): Promise<Id | undefined> 
     return result.id
   } catch (e) {
     console.warn(
-      '[seed-cars] Warning: could not upload shared hero image, leaving heroImage blank —',
+      '[seed-cars] Warning: could not upload shared hero image, leaving heroImage blank -',
       (e as Error).message,
     )
     return undefined

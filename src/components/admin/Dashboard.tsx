@@ -102,7 +102,7 @@ export default function AdminDashboard() {
     <div className="mb-8 space-y-6 px-6 pt-6">
       <div>
         <h1 className="text-2xl font-bold text-[#1e1e1e]">
-          Innoson Motors — Admin Dashboard
+          Innoson Motors - Admin Dashboard
         </h1>
         <p className="text-sm text-[#666]">
           Welcome back. Here is the latest activity across submissions and content.
@@ -147,7 +147,7 @@ export default function AdminDashboard() {
             </h2>
             {posts.length === 0 ? (
               <p className="mt-3 text-sm text-slate-500">
-                No posts yet — create one in{' '}
+                No posts yet - create one in{' '}
                 <Link
                   href="/admin/collections/blog-posts"
                   className="text-[#005eb8] underline"

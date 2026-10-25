@@ -10,7 +10,7 @@ import { modelsAsVehicleCards } from "@/lib/adapters";
 export const metadata: Metadata = {
   title: "Vehicles | Innoson Vehicle Manufacturing",
   description:
-    "Browse all Innoson vehicles: SUVs, sedans, pickups, MPVs, buses and EVs — made in Nigeria.",
+    "Browse all Innoson vehicles: SUVs, sedans, pickups, MPVs, buses and EVs - made in Nigeria.",
 };
 
 export const revalidate = 60;

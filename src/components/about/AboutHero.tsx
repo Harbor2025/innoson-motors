@@ -1,99 +1,86 @@
-"use client";
+import ResponsiveImage from "@/components/revamp/ResponsiveImage";
+import { HERO_IMAGES } from "./about-data";
 
-import Image from "next/image";
-import { useEffect, useState, type CSSProperties } from "react";
+const HEADLINE = "The Pride of African Roads";
 
-type RevealTextProps = {
-  text: string;
-  /** Delay before the first letter starts, in ms */
-  delay?: number;
-  /** Gap between each letter, in ms */
-  stagger?: number;
-};
+const motion = (delay: number, dur: number, y: number) =>
+  ({
+    "--ivm-delay": `${delay}s`,
+    "--ivm-dur": `${dur}s`,
+    "--ivm-y": `${y}px`,
+  }) as React.CSSProperties;
 
-function RevealText({ text, delay = 0, stagger = 80 }: RevealTextProps) {
-  const words = text.split(" ");
-  let charIndex = 0;
-
-  return (
-    <>
-      <span className="sr-only">{text}</span>
-      <span
-        aria-hidden="true"
-        style={
-          {
-            "--base": `${delay}ms`,
-            "--stagger": `${stagger}ms`,
-          } as CSSProperties
-        }
-      >
-        {words.map((word, w) => (
-          <span key={w}>
-            <span className="inline-block whitespace-nowrap">
-              {word.split("").map((char) => {
-                const i = charIndex++;
-                return (
-                  <span key={i} className="reveal-mask">
-                    <span
-                      className="reveal-char"
-                      style={{ "--i": i } as CSSProperties}
-                    >
-                      {char}
-                    </span>
-                  </span>
-                );
-              })}
-            </span>
-            {w < words.length - 1 ? " " : null}
-          </span>
-        ))}
-      </span>
-    </>
-  );
-}
-
-// Figma: node 773:1352 (1440x1024) + title block 773:1472. The header floats over the top 80px.
+/**
+ * Figma: "Hero" (720 / 680 / 600 tall). Plays the 9s motion timeline once on
+ * load: photo fade + slow settle, eyebrow, word-by-word headline, subtitle.
+ *
+ * `id="home-hero"` is what the site Header watches to turn from transparent
+ * to solid once the hero scrolls out of view.
+ */
 export default function AboutHero() {
-  const [ready, setReady] = useState(false);
-
-  // Start the animation only once the page is mounted and painted,
-  // so the user actually sees it instead of it running during load.
-  useEffect(() => {
-    const t = setTimeout(() => setReady(true), 250);
-    return () => clearTimeout(t);
-  }, []);
+  const words = HEADLINE.split(" ");
 
   return (
     <section
-      className={`hero relative h-[530px] w-full overflow-hidden md:h-[720px] lg:h-[1024px] ${
-        ready ? "is-ready" : ""
-      }`}
+      id="home-hero"
+      className="relative flex h-[600px] flex-col items-start justify-end gap-[10px] overflow-clip bg-[#0a0d12] px-6 pb-8 md:h-[680px] md:pb-14 xl:h-[720px] xl:gap-3 xl:pb-20 xl:pl-24 xl:pr-0"
     >
-      <Image
-        src="/images/about/hero.png"
-        alt="IVM sedan"
-        fill
-        priority
-        sizes="100vw"
-        className="hero-image object-cover object-[50%_75%]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="hero-overlay pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent"
-      />
-
-      <div className="absolute inset-x-0 top-[150px] flex flex-col items-center gap-4 px-5 text-center text-white md:top-[200px] lg:top-[227px]">
-        <h1 className="hero-title text-[44px] font-bold capitalize leading-[normal] md:text-[60px] lg:text-[80px] font-[family-name:var(--font-inter)]">
-          <RevealText text="About IVM" delay={400} stagger={80} />
-        </h1>
-
-   
-
-        <p className="text-[15px] font-medium leading-[normal] md:text-[18px] lg:text-[22px] font-[family-name:var(--font-inter)]">
-          <RevealText text="The pride of Africa" delay={1900} stagger={30} />
-        </p>
+      <div className="ivm-hero-media absolute inset-0" aria-hidden="true">
+        <ResponsiveImage srcs={HERO_IMAGES} priority />
       </div>
+
+      {/* Overlay: bottom-weighted on tablet/mobile, starts a quarter of the way down on desktop */}
+      <div
+        className="absolute inset-0 xl:hidden"
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 hidden xl:block"
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, rgba(0,0,0,0) 25%, rgba(0,0,0,0.8) 100%)",
+        }}
+      />
+      {/* Nav scrim keeps the transparent header legible over bright photos */}
+      <div
+        className="absolute inset-x-0 top-0 h-[160px]"
+        style={{ backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0))" }}
+      />
+
+      <p
+        className="ivm-rise relative text-[12px] font-semibold uppercase leading-[normal] tracking-[1.44px] text-white"
+        style={motion(0.45, 0.7, 16)}
+      >
+        About IVM
+      </p>
+
+      <h1
+        aria-label={HEADLINE}
+        className="relative text-[28px] font-semibold leading-[1.2] text-white md:text-[40px] xl:whitespace-nowrap xl:text-[56px] xl:leading-[1.1]"
+      >
+        {words.map((word, i) => (
+          <span key={i} aria-hidden="true">
+            <span
+              className="ivm-word"
+              style={{ "--ivm-delay": `${(i * 0.1446).toFixed(4)}s` } as React.CSSProperties}
+            >
+              {word}
+            </span>
+            {i < words.length - 1 ? " " : null}
+          </span>
+        ))}
+      </h1>
+
+      <p
+        className="ivm-rise relative text-[14px] font-normal leading-[1.4] text-white md:text-[20px] xl:w-[560px]"
+        style={motion(1.18, 0.7, 16)}
+      >
+        Nigeria’s first indigenous automobile manufacturer, building brand-new vehicles in Nnewi
+        since 2007.
+      </p>
     </section>
   );
 }

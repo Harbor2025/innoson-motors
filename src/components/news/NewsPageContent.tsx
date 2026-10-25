@@ -6,7 +6,7 @@ import BlogCard from "./BlogCard";
 import { ARTICLES } from "./news-data";
 import type { Article } from "./news-data";
 
-// Figma: node 772:1127 — "News Blog" title, 3-column grid of cards, prev/next arrows (772:1128).
+// Figma: node 772:1127 - "News Blog" title, 3-column grid of cards, prev/next arrows (772:1128).
 // The design has no search, featured card or excerpts, so those are gone.
 // This section carries its own top padding (fixed header height + 40px); remove any
 // padding-top your route page adds to <main>.

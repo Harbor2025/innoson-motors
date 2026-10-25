@@ -109,7 +109,7 @@ export default function GetQuoteModal({
       setSub({
         status: "success",
         message:
-          "Thanks — your quote request has been received. Our sales team will reach out within one business day.",
+          "Thanks - your quote request has been received. Our sales team will reach out within one business day.",
       });
       setTimeout(() => {
         handleClose();

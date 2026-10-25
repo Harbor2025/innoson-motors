@@ -1,8 +1,16 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { ChevronDown } from "lucide-react";
 import { VEHICLE_BRANDS } from "./contact-data";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
+
+const ENQUIRY_TYPES = [
+  "Buying a vehicle",
+  "Fleet or government order",
+  "Service & parts",
+  "Something else",
+] as const;
 
 type SubState =
   | { status: "idle" }
@@ -10,29 +18,31 @@ type SubState =
   | { status: "success"; message: string }
   | { status: "error"; message: string; fields?: Record<string, string> };
 
-export default function ContactForm({ className = "" }: { className?: string }) {
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [sub, setSub] = useState<SubState>({ status: "idle" });
+const INPUT =
+  "h-12 w-full rounded-[8px] border border-ivm-n200 bg-white px-4 text-[16px] leading-[1.4] text-ivm-n900 outline-none transition-colors placeholder:text-ivm-n500 focus:border-ivm-blue focus:ring-1 focus:ring-ivm-blue";
 
-  function toggleBrand(brand: string) {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
-    );
-  }
+/**
+ * Figma: "Enquiry form" (620 × 817). Full name + email share a row, then phone,
+ * enquiry-type chips, vehicle select, message, submit and the consent caption.
+ */
+export default function ContactForm({ className = "" }: { className?: string }) {
+  const [enquiryType, setEnquiryType] = useState<string>(ENQUIRY_TYPES[0]);
+  const [vehicle, setVehicle] = useState("");
+  const [sub, setSub] = useState<SubState>({ status: "idle" });
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSub({ status: "loading" });
     const form = e.currentTarget;
     const fd = new FormData(form);
+    const subject = `${enquiryType}${vehicle ? ` — ${vehicle}` : ""}`.slice(0, 150);
     const payload = {
       [HONEYPOT_FIELD]: (fd.get(HONEYPOT_FIELD) as string | null) ?? "",
       name: String(fd.get("name") ?? ""),
-      phone: String(fd.get("phone") ?? ""),
       email: String(fd.get("email") ?? ""),
-      subject: String(fd.get("subject") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      subject,
       message: String(fd.get("message") ?? ""),
-      interestedBrands: selectedBrands,
     };
     try {
       const res = await fetch("/api/contact", {
@@ -76,10 +86,10 @@ export default function ContactForm({ className = "" }: { className?: string }) 
       }
       setSub({
         status: "success",
-        message:
-          "Thanks — we've received your message and will get back to you soon.",
+        message: "Thanks - we've received your message and will get back to you soon.",
       });
-      setSelectedBrands([]);
+      setEnquiryType(ENQUIRY_TYPES[0]);
+      setVehicle("");
       form.reset();
     } catch {
       setSub({
@@ -90,18 +100,22 @@ export default function ContactForm({ className = "" }: { className?: string }) 
     }
   }
 
-  const inputClasses =
-    "h-[48px] w-full rounded-[4px] border-[0.5px] border-[#cfcfcf] px-3 text-[16px] text-black outline-none placeholder:text-[#888888]";
+  const fieldError = (key: string) =>
+    sub.status === "error" ? sub.fields?.[key] : undefined;
 
   return (
     <div
-      className={`font-[family-name:var(--font-google-sans)] w-full rounded-[9px] border-[0.5px] border-[#e6e6e6] bg-white p-3 lg:w-[684px] lg:p-[30px] ${className}`}
+      className={`w-full rounded-[16px] border border-ivm-n200 bg-white p-6 shadow-[0_8px_24px_rgba(0,0,0,0.06)] md:p-8 xl:w-[620px] xl:shrink-0 xl:p-10 ${className}`}
     >
-      <h2 className="text-[20px] font-extrabold text-[#333333] lg:text-[40px] lg:leading-[62px]">
-        Send a Message
+      <h2 className="text-[24px] font-semibold leading-[1.2] text-ivm-n900 md:text-[28px] xl:text-[32px]">
+        Send us a message
       </h2>
 
-      <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4 lg:mt-10 lg:gap-6" noValidate>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-5 flex flex-col gap-5"
+        noValidate
+      >
         <input
           type="text"
           name={HONEYPOT_FIELD}
@@ -112,66 +126,133 @@ export default function ContactForm({ className = "" }: { className?: string }) 
         />
 
         {sub.status === "error" && sub.message ? (
-          <div role="alert" className="rounded-[4px] border border-[#f3b6b6] bg-[#fdecec] p-3 text-[14px] font-semibold text-[#9a2a2a]">
+          <div
+            role="alert"
+            className="rounded-[8px] border border-[#f3b6b6] bg-[#fdecec] p-3 text-[14px] font-semibold text-[#9a2a2a]"
+          >
             {sub.message}
           </div>
         ) : null}
 
         {sub.status === "success" ? (
-          <div role="status" className="rounded-[4px] border border-[#7ec18e] bg-[#e9f8ee] p-3 text-[14px] font-semibold text-[#225b3a]">
+          <div
+            role="status"
+            className="rounded-[8px] border border-[#7ec18e] bg-[#e9f8ee] p-4 text-[14px] font-semibold leading-[1.4] text-[#225b3a]"
+          >
             {sub.message}
           </div>
         ) : (
           <>
-            <Field error={sub.status === "error" ? sub.fields?.name : undefined}>
-              <input type="text" name="name" placeholder="Name" required className={inputClasses} />
-            </Field>
-            <Field error={sub.status === "error" ? sub.fields?.phone : undefined}>
-              <input type="tel" name="phone" placeholder="Phone Number" required className={inputClasses} />
-            </Field>
-
-            <div className="flex flex-col gap-4">
-              <p className="text-[14px] font-extrabold uppercase text-[#1e1e1e] lg:text-[16px]">
-                Choose your interested vehicle brand
-              </p>
-              <div className="flex flex-col gap-3">
-                {VEHICLE_BRANDS.map((brand: string) => (
-                  <label key={brand} className="flex items-center gap-2 text-[14px] uppercase text-black">
-                    <input
-                      type="checkbox"
-                      checked={selectedBrands.includes(brand)}
-                      onChange={() => toggleBrand(brand)}
-                      className="size-6 shrink-0 rounded-[6px] border-[1.15px] border-[#d5d7da] accent-[#005eb8]"
-                    />
-                    {brand}
-                  </label>
-                ))}
-              </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field id="contact-name" label="Full name" error={fieldError("name")}>
+                <input
+                  id="contact-name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  autoComplete="name"
+                  required
+                  className={INPUT}
+                />
+              </Field>
+              <Field id="contact-email" label="Email address" error={fieldError("email")}>
+                <input
+                  id="contact-email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  autoComplete="email"
+                  required
+                  className={INPUT}
+                />
+              </Field>
             </div>
 
-            <Field error={sub.status === "error" ? sub.fields?.email : undefined}>
-              <input type="email" name="email" placeholder="Email Address" required className={inputClasses} />
+            <Field id="contact-phone" label="Phone number" error={fieldError("phone")}>
+              <input
+                id="contact-phone"
+                type="tel"
+                name="phone"
+                placeholder="Enter your phone number"
+                autoComplete="tel"
+                required
+                className={INPUT}
+              />
             </Field>
-            <Field error={sub.status === "error" ? sub.fields?.subject : undefined}>
-              <input type="text" name="subject" placeholder="Subject" required className={inputClasses} />
+
+            <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
+              <legend className="p-0 text-[14px] font-semibold leading-[1.4] text-ivm-n900 mb-2">
+                What can we help with?
+              </legend>
+              <div className="flex flex-wrap gap-2">
+                {ENQUIRY_TYPES.map((type) => {
+                  const selected = enquiryType === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => setEnquiryType(type)}
+                      className={`rounded-full border px-[14px] py-2 text-[14px] font-semibold leading-[1.4] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ivm-blue ${
+                        selected
+                          ? "border-ivm-blue bg-[rgba(0,94,184,0.08)] text-ivm-blue"
+                          : "border-ivm-n200 bg-white text-ivm-n900 hover:border-ivm-n500"
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+
+            <Field id="contact-vehicle" label="Vehicle of interest">
+              <div className="relative">
+                <select
+                  id="contact-vehicle"
+                  name="vehicle"
+                  value={vehicle}
+                  onChange={(e) => setVehicle(e.target.value)}
+                  className={`${INPUT} appearance-none pr-10 ${vehicle ? "" : "text-ivm-n500"}`}
+                >
+                  <option value="">Choose a vehicle</option>
+                  {VEHICLE_BRANDS.map((brand) => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={18}
+                  strokeWidth={1.35}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#757575]"
+                />
+              </div>
             </Field>
-            <Field error={sub.status === "error" ? sub.fields?.message : undefined}>
+
+            <Field id="contact-message" label="Message" error={fieldError("message")}>
               <textarea
+                id="contact-message"
                 name="message"
-                placeholder="Write a message"
+                placeholder="How can we help?"
                 required
                 rows={4}
-                className="w-full resize-none rounded-[4px] border-[0.5px] border-[#cfcfcf] px-3 py-3 text-[16px] text-black outline-none placeholder:text-[#888888]"
+                className="h-[132px] w-full resize-none rounded-[8px] border border-ivm-n200 bg-white px-4 py-[14px] text-[16px] leading-[1.4] text-ivm-n900 outline-none transition-colors placeholder:text-ivm-n500 focus:border-ivm-blue focus:ring-1 focus:ring-ivm-blue"
               />
             </Field>
 
             <button
               type="submit"
               disabled={sub.status === "loading"}
-              className="flex h-[48px] w-full items-center justify-center rounded-[4px] bg-[#005eb8] text-[14px] font-extrabold text-white disabled:opacity-60"
+              className="flex h-12 w-full items-center justify-center rounded-[4px] bg-ivm-blue text-[14px] font-semibold leading-[1.4] text-white transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {sub.status === "loading" ? "Sending…" : "Submit"}
+              {sub.status === "loading" ? "Sending…" : "Send message"}
             </button>
+
+            <p className="text-center text-[12px] leading-[1.4] text-ivm-n500">
+              By sending this form you agree to be contacted by IVM about your enquiry.
+            </p>
           </>
         )}
       </form>
@@ -180,17 +261,24 @@ export default function ContactForm({ className = "" }: { className?: string }) 
 }
 
 function Field({
+  id,
+  label,
   error,
   children,
 }: {
+  id: string;
+  label: string;
   error?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-[6px]">
+      <label htmlFor={id} className="text-[14px] font-semibold leading-[1.4] text-ivm-n900">
+        {label}
+      </label>
       {children}
       {error ? (
-        <p role="alert" className="text-[12px] font-semibold text-[#9a2a2a]">
+        <p role="alert" className="text-[12px] font-semibold leading-[1.4] text-[#9a2a2a]">
           {error}
         </p>
       ) : null}

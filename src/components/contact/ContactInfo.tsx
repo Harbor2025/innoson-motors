@@ -1,11 +1,20 @@
+import { Fragment } from "react";
 import { MailIcon, PhoneIcon, LocationIcon } from "./ContactIcons";
 import {
   EMAIL as EMAIL_FB,
   FACTORY_ADDRESS as ADDR_FB,
   PHONE_NUMBERS as PHONES_FB,
-  SHOWROOMS as SR_FB,
 } from "./contact-data";
-import type { ContactInfoDTO, DealershipDTO } from "@/types/dto";
+import type { ContactInfoDTO } from "@/types/dto";
+
+/** 08037222939 -> 0803 722 2939 */
+function formatPhone(number: string) {
+  const digits = number.replace(/\D/g, "");
+  if (digits.length === 11) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+  }
+  return number;
+}
 
 function InfoRow({
   icon,
@@ -17,15 +26,13 @@ function InfoRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start gap-4 lg:gap-4">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#005eb8] lg:size-10">
-        <span className="size-6 lg:size-[30px]">{icon}</span>
+    <div className="flex items-start gap-4">
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[rgba(0,94,184,0.08)] text-ivm-blue">
+        <span className="size-5">{icon}</span>
       </span>
-      <div className="flex flex-col gap-2">
-        <p className="text-[16px] font-extrabold tracking-[0.005em] text-black lg:text-[24px]">{label}</p>
-        <div className="text-[14px] leading-[22px] tracking-[0.005em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px]">
-          {children}
-        </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <p className="text-[16px] font-bold leading-[1.4] text-ivm-n900">{label}</p>
+        <div className="text-[16px] leading-[1.4] text-ivm-n600">{children}</div>
       </div>
     </div>
   );
@@ -34,78 +41,72 @@ function InfoRow({
 type Props = {
   className?: string;
   contactInfo?: ContactInfoDTO;
-  dealerships?: DealershipDTO[];
 };
 
-export default function ContactInfo({ className = "", contactInfo, dealerships }: Props) {
+/**
+ * Figma: "Contact details" column of "Section – Get in Touch". Sales lines are
+ * shown two numbers per line, like the design.
+ */
+export default function ContactInfo({ className = "", contactInfo }: Props) {
   const email = contactInfo?.emails[0] ?? EMAIL_FB;
-  const phones = contactInfo?.phones.map((p) => p.number) ?? PHONES_FB;
+  const phones =
+    contactInfo?.phones && contactInfo.phones.length > 0
+      ? contactInfo.phones.map((p) => p.number)
+      : PHONES_FB;
   const address = contactInfo?.address ?? ADDR_FB;
-  const showrooms =
-    dealerships && dealerships.length > 0
-      ? dealerships.map((d) => ({
-          city: d.city,
-          address: [d.address, d.state].filter(Boolean).join(", "),
-          phone: d.phone,
-        }))
-      : SR_FB.map((s) => ({
-          city: s.city,
-          address:
-            s.subLocations?.map((l) => `${l.label} – ${l.address}`).join("\n") ??
-            s.address,
-        }));
+
+  const phoneRows: string[][] = [];
+  for (let i = 0; i < phones.length; i += 2) {
+    phoneRows.push(phones.slice(i, i + 2));
+  }
 
   return (
-    <div className={`font-[family-name:var(--font-google-sans)] flex w-full flex-col gap-6 lg:w-[522px] lg:gap-10 ${className}`}>
-      <div className="flex flex-col gap-3">
-        <h2 className="text-[20px] font-extrabold text-[#333333] lg:text-[40px] lg:leading-[62px]">
-          Get In Touch with us
+    <div className={`flex w-full min-w-0 flex-col gap-8 ${className}`}>
+      <div className="flex flex-col gap-[10px]">
+        <h2
+          id="get-in-touch-title"
+          className="text-[32px] font-semibold leading-[1.2] text-ivm-n900 md:text-[40px] xl:text-[48px]"
+        >
+          Get in touch
         </h2>
-        <p className="text-[14px] leading-[22px] tracking-[0.02em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px] font-[family-name:var(--font-inter)] ">
-          Reach out to our sales, service and finance teams — we respond within one business day.
+        <p className="text-[16px] leading-[1.4] text-ivm-n600 md:text-[20px]">
+          Call, email or send us a message. For showroom visits, see the locations below.
         </p>
       </div>
 
-      <div className="flex flex-col gap-6 lg:gap-10">
-        <InfoRow icon={<MailIcon className="size-full" />} label="E-Mail">
-          <a className="font-[family-name:var(--font-inter)]" href={`mailto:${email}`}>{email}</a>
-        </InfoRow>
-
-        <InfoRow icon={<PhoneIcon className="size-full" />} label="Phone Numbers">
-          <div className="flex flex-col font-[family-name:var(--font-inter)]">
-            {phones.map((number) => (
-              <a key={number} href={`tel:${number.replace(/\s/g, "")}`}>
-                {number}
-              </a>
+      <div className="flex flex-col gap-8">
+        <InfoRow icon={<PhoneIcon className="size-full" />} label="Sales lines">
+          <div className="flex flex-col gap-1">
+            {phoneRows.map((row, rowIndex) => (
+              <p key={rowIndex}>
+                {row.map((number, index) => (
+                  <Fragment key={number}>
+                    <a
+                      href={`tel:${number.replace(/\s/g, "")}`}
+                      className="transition-colors hover:text-ivm-blue"
+                    >
+                      {formatPhone(number)}
+                    </a>
+                    {index < row.length - 1 ? " · " : null}
+                  </Fragment>
+                ))}
+              </p>
             ))}
           </div>
         </InfoRow>
 
-        <InfoRow icon={<LocationIcon className="size-full" />} label="Factory Address">
-          <p className="font-[family-name:var(--font-inter)]">{address}</p>
+        <InfoRow icon={<MailIcon className="size-full" />} label="Email">
+          <a
+            href={`mailto:${email}`}
+            className="break-words transition-colors hover:text-ivm-blue"
+          >
+            {email}
+          </a>
         </InfoRow>
-      </div>
 
-      <div id="showrooms" className="flex flex-col gap-3 lg:gap-3">
-        <h3 className="text-[16px] font-extrabold capitalize text-black lg:text-[24px]">Showroom Addresses</h3>
-
-        <div className="flex flex-col gap-6 lg:gap-8">
-          {showrooms.map((showroom) => (
-            <div key={showroom.city} className="flex flex-col gap-3">
-              <p className="text-[14px] font-extrabold uppercase tracking-[0.005em] text-[#1e1e1e] lg:text-[20px] font-[family-name:var(--font-inter)]">
-                {showroom.city}
-              </p>
-              <p className="text-[14px] leading-[22px] tracking-[0.005em] text-[#8a8a8a] lg:text-[20px] lg:leading-[31px] whitespace-pre-line font-[family-name:var(--font-inter)]">
-                {showroom.address}
-              </p>
-              {"phone" in showroom && showroom.phone ? (
-                <p className="text-[14px] font-semibold tracking-[0.005em] text-[#1e1e1e] lg:text-[16px] font-[family-name:var(--font-inter)]">
-                  {showroom.phone}
-                </p>
-              ) : null}
-            </div>
-          ))}
-        </div>
+        <InfoRow icon={<LocationIcon className="size-full" />} label="Factory & head office">
+          <p>{address}</p>
+        </InfoRow>
       </div>
     </div>
   );

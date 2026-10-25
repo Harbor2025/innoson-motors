@@ -7,7 +7,7 @@ import { modelsAsVehicleCards } from "@/lib/adapters";
 export const metadata: Metadata = {
   title: "Book a Test Drive | Innoson Vehicle Manufacturing",
   description:
-    "Book a test drive at your nearest IVM showroom — choose any Innoson model.",
+    "Book a test drive at your nearest IVM showroom - choose any Innoson model.",
 };
 
 export const revalidate = 60;

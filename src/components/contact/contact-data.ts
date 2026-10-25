@@ -15,33 +15,62 @@ export const VEHICLE_BRANDS = [
   "Seriki",
 ] as const;
 
+export const FACTORY_ADDRESS =
+  "No 2 Innoson Industrial Estate, Akwa-Uru, Uru Umudim, Nnewi, Anambra State";
+
 export interface Showroom {
+  id: string;
+  /** Eyebrow above the city, e.g. "Factory & head office" or "Service centre". */
+  kind: string;
   city: string;
   address: string;
-  /** Lagos has two sub-locations instead of one plain address paragraph. */
-  subLocations?: { label: string; address: string }[];
+  phone?: string;
+  state?: string;
 }
 
+/** Figma fallback set, used when the CMS dealerships are unavailable. */
 export const SHOWROOMS: Showroom[] = [
   {
-    city: "ABUJA",
-    address: "Edwin Medani Crescent, By St Martins Catholic Church, Back of VIO Office, Mabuchi Abuja",
+    id: "nnewi",
+    kind: "Factory & head office",
+    city: "Nnewi",
+    address: FACTORY_ADDRESS,
+    phone: "0805 445 9560",
+    state: "Anambra",
   },
   {
-    city: "LAGOS",
-    address: "",
-    subLocations: [
-      { label: "MainLand", address: "IVM Service Center, 39 Alh Tokan Street, Alaka Estate" },
-      { label: "Island", address: "IVM Service Center, Lekki/ Ajah express Way, After Cosharis Ibeju Lekki" },
-    ],
+    id: "abuja",
+    kind: "Showroom",
+    city: "Abuja",
+    address:
+      "Edwin Medani Crescent, by St Martins Catholic Church, behind VIO Office, Mabuchi, Abuja",
+    phone: "0902 098 4374",
+    state: "FCT",
   },
   {
-    city: "ENUGU",
-    address: "IVM Service Center, Enugu Abakaliki Express Way, After Mobil Filling Station, Emene, Enugu State",
+    id: "lagos-mainland",
+    kind: "Service centre",
+    city: "Lagos Mainland",
+    address: "39 Alh. Tokan Street, Alaka Estate, Lagos",
+    state: "Lagos",
+  },
+  {
+    id: "lagos-island",
+    kind: "Service centre",
+    city: "Lagos Island",
+    address: "Lekki–Ajah Expressway, after Cosharis, Ibeju-Lekki, Lagos",
+    state: "Lagos",
+  },
+  {
+    id: "enugu",
+    kind: "Service centre",
+    city: "Enugu",
+    address:
+      "Enugu–Abakaliki Expressway, after Mobil Filling Station, Emene, Enugu State",
+    phone: "0812 220 2053",
+    state: "Enugu",
   },
 ];
-
-export const FACTORY_ADDRESS = "No 2 Innoson Industrial Estate, Akwa-Uru, Uru Umudim, Nnewi, Anambra State";
 
 export const PHONE_NUMBERS = [
   "07049087160",

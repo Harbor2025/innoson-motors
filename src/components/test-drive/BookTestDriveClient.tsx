@@ -114,7 +114,7 @@ export default function BookTestDriveClient({
       setSub({
         status: "success",
         message:
-          "Thanks — we've received your booking and a sales representative will call you within one business day to confirm.",
+          "Thanks - we've received your booking and a sales representative will call you within one business day to confirm.",
       });
       form.reset();
       setMarketing(false);

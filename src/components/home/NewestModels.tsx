@@ -28,7 +28,7 @@ const FALLBACK: NewestModelItem[] = [
   {
     id: "n1",
     title: "Newest Car Model",
-    description: "Comfort, technology and space — built in Nnewi.",
+    description: "Comfort, technology and space - built in Nnewi.",
     shortDescription: "Comfort and space, built in Nnewi.",
     image: "/images/home/v2/promo-1.png",
     href: "/vehicles",

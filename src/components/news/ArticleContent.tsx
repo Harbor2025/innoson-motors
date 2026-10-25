@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Article } from "./news-data";
 
-// Figma: node 772:954 — Back link, title, date, 1040x586 image, one long body of text.
+// Figma: node 772:954 - Back link, title, date, 1040x586 image, one long body of text.
 // The design drops author, share icons, sub-headings and "other stories", so they're gone.
 // Pass real copy through `article.body` (one string per paragraph).
 const PLACEHOLDER =

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lato, Roboto, Playfair_Display } from "next/font/google";
+import { Lato, Roboto, Playfair_Display, Inter } from "next/font/google";
 import Preloader from "@/components/layout/Preloader";
 import "./globals.css";
 
@@ -11,7 +11,7 @@ const googleSans = Playfair_Display({
   fallback: ["sans-serif"],
 });
 
-const inter = Roboto({
+const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   fallback: ["sans-serif"],
