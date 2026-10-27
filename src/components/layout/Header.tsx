@@ -23,7 +23,6 @@ const MENU_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "News", href: "/news" },
   { label: "Contact us", href: "/contact" },
-  { label: "Book a Test drive", href: "/book-a-test-drive" },
 ];
 
 
@@ -195,6 +194,23 @@ export default function Header({ active, overlay = false }: HeaderProps) {
               <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
             </button>
           </nav>
+
+          <div className="flex flex-col gap-[10px] p-6 font-[family-name:var(--font-inter)]">
+            <Link
+              href="/contact"
+              onClick={() => setMenuOpen(false)}
+              className="flex h-12 w-full items-center justify-center rounded-[4px] bg-[#005eb8] text-[14px] font-semibold leading-[20px] text-white"
+            >
+              Get a Quote
+            </Link>
+            <Link
+              href="/book-a-test-drive"
+              onClick={() => setMenuOpen(false)}
+              className="flex h-12 w-full items-center justify-center rounded-[4px] border border-[#d9d9d9] bg-white text-[14px] font-semibold leading-[20px] text-[#171a20]"
+            >
+              Book a Test Drive
+            </Link>
+          </div>
 
           <p className="mx-auto mt-auto w-[308px] pb-[42px] pt-10 text-center text-[14px] leading-[20px] text-[#272727] font-[family-name:var(--font-inter)]">
             ©Copyright 2025. All rights reserved (Innoson Manufacturing Vehicles, LTD)

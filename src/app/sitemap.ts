@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/about`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${base}/contact`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/book-a-test-drive`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/privacy-policy`, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
   const models = await safeAsync(async (): Promise<SitemapEntry[]> => {
