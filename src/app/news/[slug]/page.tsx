@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import RevampNav from "@/components/revamp/RevampNav";
 import RevampFooter from "@/components/revamp/RevampFooter";
-import RevampWhatsAppFloat from "@/components/revamp/RevampWhatsAppFloat";
 import ArticleContent from "@/components/news/ArticleContent";
 import MoreStories from "@/components/news/MoreStories";
 import { getPostBySlug, getPublishedPosts } from "@/server/blog";
 import { postsAsArticles } from "@/lib/adapters";
 import { getArticleBySlug, getRelatedArticles } from "@/components/news/news-data";
 import type { Article } from "@/components/news/news-data";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -89,8 +87,6 @@ export default async function ArticlePage({ params }: PageProps) {
     related = getRelatedArticles(slug, 3);
   }
 
-  const whatsapp = await getWhatsAppUrl();
-
   return (
     <div className="flex min-h-screen flex-col bg-white font-[family-name:var(--font-ivm-inter)]">
       <RevampNav active="news" />
@@ -99,7 +95,6 @@ export default async function ArticlePage({ params }: PageProps) {
         <MoreStories articles={related} />
       </main>
       <RevampFooter />
-      {whatsapp && <RevampWhatsAppFloat href={whatsapp} />}
     </div>
   );
 }

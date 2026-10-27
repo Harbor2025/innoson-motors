@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import RevampNav from "@/components/revamp/RevampNav";
 import RevampFooter from "@/components/revamp/RevampFooter";
-import RevampWhatsAppFloat from "@/components/revamp/RevampWhatsAppFloat";
 import ContactHero from "@/components/contact/ContactHero";
 import ContactInfo from "@/components/contact/ContactInfo";
 import ContactForm from "@/components/contact/ContactForm";
@@ -28,10 +27,6 @@ export default async function ContactPage() {
     dealerships = [];
   }
 
-  const whatsapp = info?.socialLinks.find(
-    (s) => s.platform.toLowerCase() === "whatsapp",
-  )?.url;
-
   return (
     <div className="flex min-h-screen flex-col bg-white font-[family-name:var(--font-ivm-inter)]">
       <RevampNav active="contact" />
@@ -52,7 +47,6 @@ export default async function ContactPage() {
         <SocialRow socialLinks={info?.socialLinks} />
       </main>
       <RevampFooter />
-      {whatsapp && <RevampWhatsAppFloat href={whatsapp} />}
     </div>
   );
 }

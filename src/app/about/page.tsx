@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import SimpleFooter from "@/components/layout/SimpleFooter";
-import RevampWhatsAppFloat from "@/components/revamp/RevampWhatsAppFloat";
 import AboutHero from "@/components/about/AboutHero";
 import AboutStats from "@/components/about/AboutStats";
 import ChairmanSection from "@/components/about/ChairmanSection";
@@ -12,7 +11,6 @@ import {
   Pillars,
   WhyWeExist,
 } from "@/components/about/AboutSections";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "About Us | Innoson Vehicle Manufacturing",
@@ -22,9 +20,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default async function AboutPage() {
-  const whatsapp = await getWhatsAppUrl();
-
+export default function AboutPage() {
   return (
     <>
       {/* Header floats over the hero and turns solid once the hero scrolls away */}
@@ -40,7 +36,6 @@ export default async function AboutPage() {
         <AboutCta />
       </main>
       <SimpleFooter />
-      {whatsapp && <RevampWhatsAppFloat href={whatsapp} />}
     </>
   );
 }
