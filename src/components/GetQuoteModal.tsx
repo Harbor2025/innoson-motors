@@ -224,7 +224,7 @@ export default function GetQuoteModal({
       ) : (
         <div className="relative flex max-h-[calc(100dvh-16px)] w-full max-w-[393px] flex-col overflow-hidden rounded-[16px] bg-white shadow-[0px_24px_64px_rgba(0,0,0,0.25)] lg:mt-0 lg:max-h-[calc(100dvh-32px)] lg:h-[889px] lg:max-w-[960px] lg:flex-row">
           {/* Vehicle panel */}
-          <div className="relative h-[280px] w-full shrink-0 overflow-hidden bg-[#ebebeb] lg:h-full lg:w-[400px]">
+          <div className="relative h-[280px] hidden md:block w-full shrink-0 overflow-hidden bg-[#ebebeb] lg:h-full lg:w-[400px]">
             <Image
               src={vehicleImage}
               alt={vehicleType}

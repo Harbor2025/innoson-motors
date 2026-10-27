@@ -212,7 +212,7 @@ export default function CarModelShowcase({ initialVehicles }: { initialVehicles?
             <Chevron dir="left" className="size-4" />
           </button>
           <div className="h-[3px] min-w-px flex-1 bg-ivm-line">
-            <div className="h-full bg-ivm-ink transition-[width] duration-500 ease-out" style={{ width: progress }} />
+            <div className="h-full bg-[#838181] transition-[width] duration-500 ease-out" style={{ width: progress }} />
           </div>
           <button
             type="button"

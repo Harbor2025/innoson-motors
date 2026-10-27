@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/layout/Logo";
+import RegionModal, { regionName, useRegion } from "@/components/layout/RegionModal";
 
 const NAV_LINKS = [
   { label: "Vehicles", href: "/vehicles", id: "vehicles" },
@@ -18,9 +19,6 @@ const MENU_LINKS = [
   ...NAV_LINKS.map(({ label, href }) => ({ label, href })),
   { label: "Book a Test Drive", href: "/book-a-test-drive" },
 ];
-
-// TODO: point this at the real region / showroom finder when it exists
-const REGION_HREF = "/contact#showrooms";
 
 /** Scroll distance (px) after which the transparent nav turns solid. */
 const SOLID_AFTER = 32;
@@ -43,6 +41,8 @@ type Props = {
  */
 export default function RevampNav({ active, variant = "solid" }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [region, setRegion] = useRegion();
   const [scrolled, setScrolled] = useState(false);
 
   const transparent = variant === "transparent";
@@ -118,8 +118,11 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
           </nav>
 
           <div className="flex h-10 w-[320px] items-center justify-end gap-3">
-            <Link
-              href={REGION_HREF}
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded={regionOpen}
+              onClick={() => setRegionOpen(true)}
               className={`flex items-center gap-[6px] rounded-[6px] px-3 py-[7px] text-[14px] font-semibold leading-[1.4] transition-colors ${pillClasses}`}
             >
               <Image
@@ -129,8 +132,8 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
                 height={16}
                 className={onPhoto ? "invert" : ""}
               />
-              Nigeria
-            </Link>
+              {regionName(region)}
+            </button>
             <Link
               href="/book-a-test-drive"
               className="flex h-[34px] w-[150px] items-center justify-center rounded-[4px] bg-ivm-blue text-[14px] font-semibold leading-[1.4] text-white"
@@ -198,6 +201,24 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
                 <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
               </Link>
             ))}
+
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setMenuOpen(false);
+                setRegionOpen(true);
+              }}
+              className="flex items-center justify-between border-b border-ivm-n100 py-4 text-left text-ivm-n900"
+            >
+              <span className="flex flex-col gap-1">
+                <span className="text-[20px] font-medium leading-[1.4]">Search by Region</span>
+                <span className="text-[14px] leading-[1.4] text-ivm-n600">
+                  {regionName(region)}
+                </span>
+              </span>
+              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
+            </button>
           </nav>
 
           <p className="mt-auto px-5 pb-10 pt-10 text-center text-[14px] leading-[1.4] text-ivm-n600">
@@ -205,6 +226,13 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
           </p>
         </div>
       )}
+
+      <RegionModal
+        open={regionOpen}
+        onClose={() => setRegionOpen(false)}
+        value={region}
+        onChange={setRegion}
+      />
     </>
   );
 }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
 import Logo from "./Logo";
+import RegionModal, { regionName, useRegion } from "./RegionModal";
 
 const NAV_LINKS = [
   { label: "Vehicles", href: "/vehicles", id: "vehicles" },
@@ -25,8 +26,7 @@ const MENU_LINKS = [
   { label: "Book a Test drive", href: "/book-a-test-drive" },
 ];
 
-// TODO: point this at the real region / showroom finder when it exists
-const REGION_HREF = "/contact#showrooms";
+
 
 interface HeaderProps {
   active?: "vehicles" | "about" | "news" | "contact" | string;
@@ -40,6 +40,8 @@ interface HeaderProps {
 
 export default function Header({ active, overlay = false }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [region, setRegion] = useRegion();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -110,14 +112,16 @@ export default function Header({ active, overlay = false }: HeaderProps) {
 
           {/* Desktop: region + CTA */}
           <div className="hidden items-center gap-4 lg:ml-10 lg:flex xl:ml-0">
-            <Link
-              href={REGION_HREF}
-              className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black font-[family-name:var(--font-inter)]"
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded={regionOpen}
+              onClick={() => setRegionOpen(true)}
+              className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black transition-colors hover:bg-[#e3e3e3] font-[family-name:var(--font-inter)]"
             >
               <Image src="/icons/globe.svg" alt="" width={20} height={20} />
-              <span className="whitespace-nowrap">Nigeria</span>
-              
-            </Link>
+              <span className="whitespace-nowrap">{regionName(region)}</span>
+            </button>
             <Link
               href="/book-a-test-drive"
               className="flex h-[38px] w-[143px] items-center justify-center rounded-[4px] bg-[#005eb8] px-1.5 py-1 text-center text-[12px] font-extrabold leading-[20px] text-white font-[family-name:var(--font-inter)]"
@@ -133,7 +137,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen(true)}
-            className={`flex items-center justify-center rounded-[45px] p-[10px] text-[14px] font-semibold uppercase leading-[normal] transition-colors lg:hidden font-[family-name:var(--font-inter)] ${
+            className={`flex items-center justify-center rounded-[6px] p-[10px] text-[14px] font-semibold leading-[normal] transition-colors lg:hidden font-[family-name:var(--font-inter)] ${
               transparent ? "bg-white/[0.26] text-white" : "bg-[#ebebeb] text-black"
             }`}
           >
@@ -173,17 +177,23 @@ export default function Header({ active, overlay = false }: HeaderProps) {
               </Link>
             ))}
 
-            <Link
-              href={REGION_HREF}
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-between px-5 py-3 text-black"
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setMenuOpen(false);
+                setRegionOpen(true);
+              }}
+              className="flex items-center justify-between px-5 py-3 text-left text-black"
             >
               <span className="flex flex-col gap-3">
                 <span className="text-[20px] font-medium leading-[20px]">Search by Region</span>
-                <span className="text-[14px] font-light leading-[20px]">NG</span>
+                <span className="text-[14px] font-light leading-[20px]">
+                  {regionName(region)}
+                </span>
               </span>
               <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
-            </Link>
+            </button>
           </nav>
 
           <p className="mx-auto mt-auto w-[308px] pb-[42px] pt-10 text-center text-[14px] leading-[20px] text-[#272727] font-[family-name:var(--font-inter)]">
@@ -191,6 +201,13 @@ export default function Header({ active, overlay = false }: HeaderProps) {
           </p>
         </div>
       )}
+
+      <RegionModal
+        open={regionOpen}
+        onClose={() => setRegionOpen(false)}
+        value={region}
+        onChange={setRegion}
+      />
     </>
   );
 }
