@@ -5,7 +5,7 @@ import {
   useEffect,
   useId,
   useRef,
-  useState,
+  useSyncExternalStore,
 } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,19 +30,19 @@ export const REGIONS: ReadonlyArray<{
   {
     id: "nigeria",
     name: "Nigeria",
-    detail: "Showrooms nationwide",
+    detail: "English · ₦ NGN",
     flag: "/images/nigeria.png",
   },
   {
     id: "ghana",
     name: "Ghana",
-    detail: "Accra & Kumasi",
+    detail: "English · GH₵ GHS",
     flag: "/images/ghana.png",
   },
   {
     id: "sierra-leone",
     name: "Sierra Leone",
-    detail: "Freetown",
+    detail: "English · Le SLE",
     flag: "/images/sierra.png",
   },
 ];
@@ -54,29 +54,68 @@ function isRegionId(value: string | null): value is RegionId {
   return REGIONS.some((region) => region.id === value);
 }
 
-/** Persisted selected region, e.g. `const [region, setRegion] = useRegion()`. */
+/**
+ * Persisted selected region, shared by the header pill and the dialog.
+ * Uses a module-level store so the value survives across components and the
+ * pill label hydrates from the server default without a mismatch.
+ */
+const listeners = new Set<() => void>();
+
+let cachedRaw: string | null = null;
+let cachedRegion: RegionId = DEFAULT_REGION;
+
+function toRegionId(value: string | null): RegionId {
+  return isRegionId(value) ? value : DEFAULT_REGION;
+}
+
+/** localStorage snapshot, cached so repeated reads stay referentially stable. */
+function getSnapshot(): RegionId {
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return DEFAULT_REGION;
+  }
+  if (raw !== cachedRaw) {
+    cachedRaw = raw;
+    cachedRegion = toRegionId(raw);
+  }
+  return cachedRegion;
+}
+
+function getServerSnapshot(): RegionId {
+  return DEFAULT_REGION;
+}
+
+function notifyRegionChange() {
+  for (const listener of listeners) listener();
+}
+
+function subscribe(onStoreChange: () => void) {
+  listeners.add(onStoreChange);
+  // Keep other tabs in sync when the region changes elsewhere.
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) onStoreChange();
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    listeners.delete(onStoreChange);
+    window.removeEventListener("storage", onStorage);
+  };
+}
+
+function setStoredRegion(next: RegionId) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next);
+  } catch {
+    // Ignore storage failures; the in-memory selection still applies.
+  }
+  notifyRegionChange();
+}
+
 export function useRegion() {
-  const [region, setRegionState] = useState<RegionId>(DEFAULT_REGION);
-
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (isRegionId(saved)) setRegionState(saved);
-    } catch {
-      // Private mode / storage disabled — fall back to the default.
-    }
-  }, []);
-
-  const setRegion = useCallback((next: RegionId) => {
-    setRegionState(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // Ignore storage failures; the in-memory selection still applies.
-    }
-  }, []);
-
-  return [region, setRegion] as const;
+  const region = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return [region, setStoredRegion] as const;
 }
 
 export function regionName(id: RegionId) {
