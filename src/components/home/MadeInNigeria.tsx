@@ -119,7 +119,7 @@ export default function MadeInNigeria({ image = "/images/home/v2/factory.png" }:
           </div>
         </div>
 
-        <Btn href={ROUTES.about} className="w-full md:w-[200px] lg:w-[264px]">
+        <Btn href="/about" className="w-full md:w-[200px] lg:w-[264px]">
           Our Story
         </Btn>
       </div>

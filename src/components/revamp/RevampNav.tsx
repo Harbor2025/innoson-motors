@@ -18,7 +18,7 @@ const NAV_LINKS = [
 const MENU_LINKS = [
   { label: "Home", href: "/" },
   ...NAV_LINKS.map(({ label, href }) => ({ label, href })),
-  { label: "Book a Test Drive", href: "/book-a-test-drive" },
+  
 ];
 
 /** Scroll distance (px) after which the transparent nav turns solid. */
@@ -203,7 +203,7 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
               </Link>
             ))}
 
-            <button
+            {/* <button
               type="button"
               aria-haspopup="dialog"
               onClick={() => {
@@ -211,7 +211,7 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
                 setRegionOpen(true);
               }}
               className="flex items-center justify-between border-b border-ivm-n100 py-4 text-left text-ivm-n900"
-            >
+              >
               <span className="flex flex-col gap-1">
                 <span className="text-[20px] font-medium leading-[1.4]">Search by Region</span>
                 <span className="text-[14px] leading-[1.4] text-ivm-n600">
@@ -219,9 +219,24 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
                 </span>
               </span>
               <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
-            </button>
+            </button> */}
           </nav>
-
+                    <div className="flex flex-col gap-[10px] p-6 font-[family-name:var(--font-inter)]">
+            <Link
+              href="/contact"
+              onClick={() => setMenuOpen(false)}
+              className="flex h-12 w-full items-center justify-center rounded-[4px] bg-[#005eb8] text-[14px] font-semibold leading-[20px] text-white"
+            >
+              Get a Quote
+            </Link>
+            <Link
+              href="/book-a-test-drive"
+              onClick={() => setMenuOpen(false)}
+              className="flex h-12 w-full items-center justify-center rounded-[4px] border border-[#d9d9d9] bg-white text-[14px] font-semibold leading-[20px] text-[#171a20]"
+            >
+              Book a Test Drive
+            </Link>
+          </div>
           <MobileMenuFooter
             className="mt-auto"
             region={region}

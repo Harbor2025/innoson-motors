@@ -177,7 +177,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
               </Link>
             ))}
 
-            <button
+            {/* <button
               type="button"
               aria-haspopup="dialog"
               onClick={() => {
@@ -185,7 +185,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
                 setRegionOpen(true);
               }}
               className="flex items-center justify-between px-5 py-3 text-left text-black"
-            >
+              >
               <span className="flex flex-col gap-3">
                 <span className="text-[20px] font-medium leading-[20px]">Search by Region</span>
                 <span className="text-[14px] font-light leading-[20px]">
@@ -193,7 +193,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
                 </span>
               </span>
               <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
-            </button>
+            </button> */}
           </nav>
 
           <div className="flex flex-col gap-[10px] p-6 font-[family-name:var(--font-inter)]">
