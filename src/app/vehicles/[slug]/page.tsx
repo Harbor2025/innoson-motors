@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import RevampNav from "@/components/revamp/RevampNav";
+import RevampFooter from "@/components/revamp/RevampFooter";
 import VehicleDetailPage from "@/components/vehicles/VehicleDetailPage";
-import Header from "@/components/layout/Header";
-import FooterServer from "@/components/layout/FooterServer";
 import { getModelBySlugOrNotFound, getPublishedModels } from "@/server/models";
 
 interface PageProps {
@@ -50,10 +50,12 @@ export default async function ModelDetailRoute({ params }: PageProps) {
     notFound();
   }
   return (
-    <>
-      <Header active="vehicles" />
-      <VehicleDetailPage model={model} />
-      <FooterServer />
-    </>
+    <div className="flex min-h-screen flex-col bg-white font-[family-name:var(--font-ivm-inter)]">
+      <RevampNav active="vehicles" variant="transparent" />
+      <main className="flex-1">
+        <VehicleDetailPage model={model} />
+      </main>
+      <RevampFooter />
+    </div>
   );
 }
