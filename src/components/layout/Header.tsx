@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
 import Logo from "./Logo";
+import MobileMenuFooter from "./MobileMenuFooter";
 import RegionModal, { regionName, useRegion } from "./RegionModal";
 
 const NAV_LINKS = [
@@ -212,9 +213,14 @@ export default function Header({ active, overlay = false }: HeaderProps) {
             </Link>
           </div>
 
-          <p className="mx-auto mt-auto w-[308px] pb-[42px] pt-10 text-center text-[14px] leading-[20px] text-[#272727] font-[family-name:var(--font-inter)]">
-            ©Copyright 2025. All rights reserved (Innoson Manufacturing Vehicles, LTD)
-          </p>
+          <MobileMenuFooter
+            className="mt-auto"
+            region={region}
+            onOpenRegion={() => {
+              setMenuOpen(false);
+              setRegionOpen(true);
+            }}
+          />
         </div>
       )}
 

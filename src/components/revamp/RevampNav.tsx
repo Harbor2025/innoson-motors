@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/layout/Logo";
+import MobileMenuFooter from "@/components/layout/MobileMenuFooter";
 import RegionModal, { regionName, useRegion } from "@/components/layout/RegionModal";
 
 const NAV_LINKS = [
@@ -221,9 +222,14 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
             </button>
           </nav>
 
-          <p className="mt-auto px-5 pb-10 pt-10 text-center text-[14px] leading-[1.4] text-ivm-n600">
-            IVM © 2026
-          </p>
+          <MobileMenuFooter
+            className="mt-auto"
+            region={region}
+            onOpenRegion={() => {
+              setMenuOpen(false);
+              setRegionOpen(true);
+            }}
+          />
         </div>
       )}
 

@@ -37,7 +37,7 @@ const BULLETS = [
   "Maecenas faucibus mollis interdum.",
 ];
 
-export const LAST_UPDATED = "27 October 2026";
+export const LAST_UPDATED = "28 October 2026";
 
 export const LEGAL_EMAIL = "Enquiries@innosonmotors.com";
 
