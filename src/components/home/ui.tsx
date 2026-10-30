@@ -33,6 +33,20 @@ const VARIANT: Record<Variant, string> = {
  * Figma Revamp/Button/Primary + Secondary. 44px tall on mobile, 40px from md up
  * (`compact` keeps 40px everywhere, used on promo tiles). Pass the width via className.
  */
+export function btnClass({
+  variant = "primary",
+  compact = false,
+  className = "",
+}: {
+  variant?: Variant;
+  compact?: boolean;
+  className?: string;
+} = {}) {
+  return `flex items-center justify-center whitespace-nowrap rounded-[4px] text-[14px] font-semibold leading-[1.4] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ivm-blue ${
+    compact ? "h-10" : "h-11 md:h-10"
+  } ${VARIANT[variant]} ${className}`;
+}
+
 export function Btn({
   href,
   variant = "primary",
@@ -47,12 +61,7 @@ export function Btn({
   children: ReactNode;
 }) {
   return (
-    <Link
-      href={href}
-      className={`flex items-center justify-center whitespace-nowrap rounded-[4px] text-[14px] font-semibold leading-[1.4] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ivm-blue ${
-        compact ? "h-10" : "h-11 md:h-10"
-      } ${VARIANT[variant]} ${className}`}
-    >
+    <Link href={href} className={btnClass({ variant, compact, className })}>
       {children}
     </Link>
   );

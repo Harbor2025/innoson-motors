@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Btn, Chevron } from "./ui";
+import Link from "next/link";
+import { btnClass, Chevron } from "./ui";
 import { useInView } from "./useInView";
 
 /**
@@ -123,7 +124,7 @@ export default function NewestModels({ items = FALLBACK }: { items?: NewestModel
           <article
             key={item.id}
             aria-label={item.title}
-            className="hv-rise relative flex h-[400px] w-[300px] shrink-0 snap-start flex-col items-start justify-end gap-2 overflow-hidden rounded-lg px-5 pb-5 text-white md:h-[420px] md:px-6 md:pb-6 lg:h-[520px] lg:w-[560px] lg:px-10 lg:pb-10"
+            className="group hv-rise relative flex h-[400px] w-[300px] shrink-0 snap-start flex-col items-start justify-end gap-2 overflow-hidden rounded-lg px-5 pb-5 text-white md:h-[420px] md:px-6 md:pb-6 lg:h-[520px] lg:w-[560px] lg:px-10 lg:pb-10"
             style={{ "--i": Math.min(i, 3) } as React.CSSProperties}
           >
             <Image
@@ -149,17 +150,29 @@ export default function NewestModels({ items = FALLBACK }: { items?: NewestModel
               )}
             </p>
             <div className="h-4" aria-hidden />
-            {/* The whole tile is clickable: the link's ::after stretches over the (relative) article */}
-            <div className="w-full max-w-[264px]">
-              <Btn
-                href={item.href}
-                variant="secondary"
-                compact
-                className="w-full after:absolute after:inset-0 after:content-['']"
+            {/*
+              The photo and the gradient are absolutely positioned, so they paint above
+              in-flow content: the CTA needs `relative` to stay visible. The tile stays
+              fully clickable through the stretched overlay link (last child, z-10).
+            */}
+            <div className="relative w-full max-w-[264px]">
+              <span
+                aria-hidden
+                className={btnClass({
+                  variant: "secondary",
+                  compact: true,
+                  className: "w-full group-hover:bg-white/85 group-focus-within:bg-white/85",
+                })}
               >
                 Read More
-              </Btn>
+              </span>
             </div>
+            <Link
+              href={item.href}
+              className="absolute inset-0 z-10 rounded-lg focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+            >
+              <span className="sr-only">Read more about {item.title}</span>
+            </Link>
           </article>
         ))}
       </div>
