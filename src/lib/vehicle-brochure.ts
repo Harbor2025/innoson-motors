@@ -181,9 +181,9 @@ async function embedFonts(doc: PDFDocument): Promise<Fonts> {
   try {
     const bytes = await loadFontBytes();
     const [regular, semibold, bold] = await Promise.all([
-      doc.embedFont(bytes.regular, { subset: true }),
-      doc.embedFont(bytes.semibold, { subset: true }),
-      doc.embedFont(bytes.bold, { subset: true }),
+      doc.embedFont(bytes.regular, { subset: false }),
+      doc.embedFont(bytes.semibold, { subset: false }),
+      doc.embedFont(bytes.bold, { subset: false }),
     ]);
     return { regular, semibold, bold };
   } catch {
