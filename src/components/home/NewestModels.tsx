@@ -124,7 +124,7 @@ export default function NewestModels({ items = FALLBACK }: { items?: NewestModel
           <article
             key={item.id}
             aria-label={item.title}
-            className="group hv-rise relative flex h-[400px] w-[300px] shrink-0 snap-start flex-col items-start justify-end gap-2 overflow-hidden rounded-lg px-5 pb-5 text-white md:h-[420px] md:px-6 md:pb-6 lg:h-[520px] lg:w-[560px] lg:px-10 lg:pb-10"
+            className="group hv-rise relative flex h-[450px] w-[90%] shrink-0 snap-start flex-col items-start justify-end gap-2 overflow-hidden rounded-lg px-5 pb-5 text-white md:h-[420px] md:px-6 md:pb-6 lg:h-[520px] lg:w-[560px] lg:px-10 lg:pb-10"
             style={{ "--i": Math.min(i, 3) } as React.CSSProperties}
           >
             <Image
