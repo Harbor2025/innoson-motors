@@ -10,6 +10,7 @@ import {
   type DetailFeature,
   type DetailGallery,
   type DetailSpec,
+  type VehicleDetailContent,
 } from "./vehicle-detail-content";
 
 const SECTIONS = [
@@ -366,7 +367,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
               ))}
             </div>
 
-            <BrochureButton href={content.brochureUrl} onRequest={openQuote} />
+            <BrochureButton content={content} />
           </div>
         </section>
 
@@ -708,49 +709,83 @@ function DrivingVideo({
   );
 }
 
-function BrochureButton({
-  href,
-  onRequest,
-}: {
-  href: string | null;
-  onRequest: () => void;
-}) {
-  const className =
-    "flex h-11 w-full items-center justify-center gap-[10px] rounded-[4px] border border-ivm-n200 bg-white px-4 text-[14px] font-semibold leading-[1.4] text-ivm-n900 transition-colors hover:border-ivm-blue hover:text-ivm-blue lg:w-auto";
-  const icon = (
-    <Image
-      src="/icons/icon-pdf.svg"
-      alt=""
-      width={22}
-      height={22}
-      className="size-[22px] shrink-0"
-    />
-  );
+function BrochureButton({ content }: { content: VehicleDetailContent }) {
+  const [status, setStatus] = useState<"idle" | "working" | "error">("idle");
 
-  if (href) {
-    return (
-      <a
-        href={href}
-        download
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
-      >
-        {icon}
-        Download Brochure (PDF)
-      </a>
-    );
-  }
+  const fileName = `${content.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")}-brochure.pdf`;
+
+  const download = async () => {
+    if (status === "working") return;
+    setStatus("working");
+
+    try {
+      // Loaded on demand — the PDF tooling is heavy and rarely needed.
+      const { buildVehicleBrochurePdf } = await import("@/lib/vehicle-brochure");
+      const pdf = await buildVehicleBrochurePdf(content);
+
+      const url = URL.createObjectURL(pdf);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+
+      setStatus("idle");
+    } catch (error) {
+      console.error("Could not build the brochure PDF:", error);
+      setStatus("error");
+    }
+  };
+
+  const working = status === "working";
 
   return (
-    <button
-      type="button"
-      onClick={onRequest}
-      title="Request the brochure"
-      className={className}
-    >
-      {icon}
-      Download Brochure (PDF)
-    </button>
+    <div className="flex w-full flex-col items-start gap-2 lg:w-auto">
+      <button
+        type="button"
+        onClick={download}
+        disabled={working}
+        aria-busy={working}
+        title={`Download the ${content.name} brochure`}
+        className="flex h-11 w-full items-center justify-center gap-[10px] rounded-[4px] border border-ivm-n200 bg-white px-4 text-[14px] font-semibold leading-[1.4] text-ivm-n900 transition-colors hover:border-ivm-blue hover:text-ivm-blue disabled:cursor-progress disabled:opacity-70 lg:w-auto"
+      >
+        {working ? (
+          <svg
+            viewBox="0 0 24 24"
+            className="size-[22px] shrink-0 animate-spin"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" stroke="#D9D9D9" strokeWidth="2.5" />
+            <path
+              d="M21 12a9 9 0 0 0-9-9"
+              stroke="#005EB8"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        ) : (
+          <Image
+            src="/icons/icon-pdf.svg"
+            alt=""
+            width={22}
+            height={22}
+            className="size-[22px] shrink-0"
+          />
+        )}
+        {working ? "Preparing brochure…" : "Download Brochure (PDF)"}
+      </button>
+
+      {status === "error" && (
+        <p role="status" className="text-[12px] leading-[1.4] text-[#B81A1F]">
+          Sorry, we couldn&apos;t create the PDF. Please try again.
+        </p>
+      )}
+    </div>
   );
 }

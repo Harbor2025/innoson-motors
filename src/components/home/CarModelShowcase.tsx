@@ -191,9 +191,7 @@ export default function CarModelShowcase({ initialVehicles }: { initialVehicles?
           <Link href={detailHref} className="inline-flex items-center gap-1 hover:underline">
             Discover More <FaArrowRight aria-hidden="true" className="size-3.5" />
           </Link>
-          <Link href={ROUTES.quote} className="inline-flex items-center gap-1 hover:underline">
-            Get a Quote <FaArrowRight aria-hidden="true" className="size-3.5" />
-          </Link>
+          
         </div>
 
         {/* Tablet / desktop: full-width progress */}
