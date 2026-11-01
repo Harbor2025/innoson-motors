@@ -109,12 +109,12 @@ export async function buildVehicleBrochurePdf(
       loadImage(ctx, {
         url: content.exterior.photos[0]?.image ?? content.exterior.featuredImage,
         width: (CONTENT_WIDTH - 18) / 2,
-        height: 152,
+        height: 172,
       }),
       loadImage(ctx, {
         url: content.exterior.photos[1]?.image ?? content.exterior.featuredImage,
         width: (CONTENT_WIDTH - 18) / 2,
-        height: 152,
+        height: 172,
       }),
       loadImage(ctx, {
         url: content.interior.featuredImage,
@@ -125,12 +125,12 @@ export async function buildVehicleBrochurePdf(
       loadImage(ctx, {
         url: content.interior.photos[0]?.image ?? content.interior.featuredImage,
         width: (CONTENT_WIDTH - 18) / 2,
-        height: 152,
+        height: 172,
       }),
       loadImage(ctx, {
         url: content.interior.photos[1]?.image ?? content.interior.featuredImage,
         width: (CONTENT_WIDTH - 18) / 2,
-        height: 152,
+        height: 172,
       }),
       loadImage(ctx, {
         url: content.technology.image,
@@ -998,8 +998,8 @@ function drawGalleryPage(
   drawSectionLabel(ctx, gallery.eyebrow);
   drawHeading(ctx, gallery.heading, { size: 21, gap: 14 });
 
-  const featuredHeight = 268;
-  ensureSpace(ctx, featuredHeight + 210);
+  const featuredHeight = 300;
+  ensureSpace(ctx, featuredHeight + 230);
   drawImageBox(ctx, featured, {
     x: MARGIN,
     y: ctx.y - featuredHeight,
@@ -1010,7 +1010,7 @@ function drawGalleryPage(
 
   const gap = 18;
   const photoWidth = (CONTENT_WIDTH - gap) / 2;
-  const photoHeight = 152;
+  const photoHeight = 172;
 
   gallery.photos.slice(0, 2).forEach((photo, index) => {
     const x = MARGIN + index * (photoWidth + gap);
