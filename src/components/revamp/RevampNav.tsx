@@ -91,7 +91,7 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
         <div className="hidden h-14 items-center justify-between px-12 lg:flex">
           <div className="flex h-10 w-[320px] items-center">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="block">
-              <Logo className="h-8 w-[54px]" />
+              <Logo className="h-[35px] w-[59px] lg:h-[54px] lg:w-[90px]" />
             </Link>
           </div>
 

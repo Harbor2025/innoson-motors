@@ -37,7 +37,7 @@ const SLIDES = [
 ];
 
 // The Figma motion timeline is 12 s long; one slide = one full loop.
-const AUTOPLAY_DELAY = 12000;
+const AUTOPLAY_DELAY = 5000;
 
 export default function Hero() {
   const [activeSlide, setActiveSlide] = useState(0);
