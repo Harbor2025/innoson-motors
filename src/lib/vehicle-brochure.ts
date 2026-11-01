@@ -7,8 +7,8 @@
  * closing call to action) — so the download never drifts from the page.
  *
  * Runs entirely in the browser: images are rasterised through a canvas and
- * embedded as JPEGs, Inter (bundled in `public/fonts`) is embedded and
- * subsetted, and the finished document is returned as a Blob.
+ * embedded as JPEGs, Inter (bundled in `public/fonts`) is embedded, and the
+ * finished document is returned as a Blob.
  *
  * `pdf-lib` and the fonts are only fetched when the visitor actually asks for
  * the brochure (the caller imports this module dynamically).
