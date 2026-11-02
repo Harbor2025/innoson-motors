@@ -27,9 +27,10 @@ export default async function HomePage() {
       <Header overlay />
       <main className="font-[family-name:var(--font-inter)]">
         <Hero />
+        <VideoBanner />
         <SpecialOfferCard />
         <CarModelShowcase initialVehicles={featured} />
-        <VideoBanner />
+
         <MadeInNigeria />
         <NewestModels />
         <PaymentBanner />
