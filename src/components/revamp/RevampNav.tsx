@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Container from "@/components/layout/Container";
 import Logo from "@/components/layout/Logo";
 import MobileMenuFooter from "@/components/layout/MobileMenuFooter";
 import RegionModal, { regionName, useRegion } from "@/components/layout/RegionModal";
@@ -88,7 +89,7 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
         style={headerMotion}
       >
         {/* Desktop */}
-        <div className="hidden h-14 items-center justify-between px-12 lg:flex">
+        <Container className="hidden h-14 items-center justify-between lg:flex">
           <div className="flex h-10 w-[320px] items-center">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="block">
               <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[70px] mt-2" />
@@ -142,7 +143,7 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
               Book a Test Drive
             </Link>
           </div>
-        </div>
+        </Container>
 
         {/* Mobile + tablet */}
         <div className="flex h-14 items-center justify-between px-5 md:h-16 md:px-6 lg:hidden">
