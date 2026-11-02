@@ -9,9 +9,9 @@ export default function Logo({ className = "" }: { className?: string }) {
     <span className={`relative block  shrink-0 overflow-hidden ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/home/logo.png"
+        src="/images/logo-header.png"
         alt=""
-        className="pointer-events-none absolute left-0 top-[-0.81%] h-[95%] w-[260.54%] max-w-none"
+        className="pointer-events-none absolute left-0 top-[-0.81%] h-[32px] w-[54px] max-w-none"
       />
     </span>
   );
