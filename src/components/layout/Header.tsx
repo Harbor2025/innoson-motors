@@ -85,7 +85,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
           {/* Left group: logo + primary nav (880px wide on desktop) */}
           <div className="flex items-center lg:flex-1 lg:justify-between xl:w-[880px] xl:flex-none">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="shrink-0">
-              <Logo className="h-[35px] w-[59px] lg:h-[44px] lg:w-[74px]" />
+              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[70px]" />
             </Link>
 
             <nav className="hidden items-center gap-8 text-[14px] font-semibold text-black lg:ml-10 lg:flex xl:ml-0 xl:gap-[66px]">
@@ -117,7 +117,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
               aria-haspopup="dialog"
               aria-expanded={regionOpen}
               onClick={() => setRegionOpen(true)}
-              className="flex h-[39px] items-center gap-3 rounded-[4px] bg-[#ebebeb] p-2 text-[12px] leading-[20px] text-black transition-colors hover:bg-[#e3e3e3] font-[family-name:var(--font-inter)]"
+              className="flex h-[39px] w-[100px] items-center justify-center gap-1 rounded-[4px] border-1 border-white/[0.6] bg-white/[0.6] p-2 text-[12px] leading-[20px] text-black transition-colors hover:bg-[#e3e3e3] font-[family-name:var(--font-inter)]"
             >
               <Image src="/icons/globe.svg" alt="" width={20} height={20} />
               <span className="whitespace-nowrap">{regionName(region)}</span>

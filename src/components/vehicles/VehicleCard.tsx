@@ -64,7 +64,7 @@ export default function VehicleCard({ vehicle, index, introPlayed }: Props) {
       <p className="text-[12px] font-semibold uppercase leading-[normal] tracking-[1.44px] text-ivm-n500">
         {eyebrow}
       </p>
-      <p className="w-full text-[18px] font-semibold leading-[1.2] text-ivm-n900 md:text-[24px]">
+      <p className="w-full text-[18px] font-semibold leading-[1.2] text-ivm-n900 max-[414.99px]:text-[15px] md:text-[24px]">
         {vehicle.name}
       </p>
       <span className="inline-flex items-center gap-1 whitespace-nowrap text-[14px] font-medium leading-[1.4] text-ivm-blue md:text-[16px]">
