@@ -1,16 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { EYEBROW, PauseIcon, PlayIcon } from "./ui";
+import { PlayIcon } from "./ui";
 
 /**
- * "Watch the film": poster + big play button, plays in place.
- * Figma: desktop 946:462 (720 tall) / tablet 958:561 (480) / mobile 957:524 (440).
+ * Full-screen film: muted, looping, autoplays while the section is in view.
+ * Figma: desktop 1440x860 / tablet 768x900 / mobile 390x720, all on #171A20.
  *
- * Idle: poster, dark overlay, copy and a play button (as in the design).
- * Playing: the copy fades out and a small pause/play control stays in the corner.
- * When the film ends it returns to the idle poster.
+ * The corner control mirrors the design (40px circle, translucent black,
+ * 1px white/50 border, two 4x14 bars) and doubles as a play/pause toggle.
  * Put the film at /public/videos/home-showcase.mp4 (or pass `videoSrc`).
  */
 export default function VideoBanner({
@@ -20,85 +19,85 @@ export default function VideoBanner({
   videoSrc?: string;
   poster?: string;
 }) {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [status, setStatus] = useState<"idle" | "playing" | "paused">("idle");
+  const [playing, setPlaying] = useState(false);
 
-  const play = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.play().catch(() => setStatus("idle"));
-  };
+  // Autoplay on scroll: start when the section is mostly visible, stop when it
+  // leaves the viewport (keeps the page light and matches the design intent).
+  useEffect(() => {
+    const section = sectionRef.current;
+    const video = videoRef.current;
+    if (!section || !video) return;
+
+    video.muted = true;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   const toggle = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (v.paused) play();
-    else v.pause();
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) video.play().catch(() => {});
+    else video.pause();
   };
-
-  const idle = status === "idle";
 
   return (
-    <section className="mx-auto w-full max-w-[1440px] px-4 pt-[72px] md:px-6 md:pt-24 lg:px-8 lg:pt-28">
-      <div className="relative flex h-[440px] flex-col items-center justify-center overflow-hidden bg-ivm-ink md:h-[480px] lg:h-[720px]">
-        <Image src={poster} alt="" fill sizes="(min-width: 1440px) 1376px, 100vw" className="object-cover" />
+    <section
+      ref={sectionRef}
+      aria-label="IVM brand film"
+      className="relative h-[720px] w-full overflow-hidden bg-ivm-ink md:h-[900px] lg:h-[860px]"
+    >
+      <Image
+        src={poster}
+        alt=""
+        fill
+        sizes="100vw"
+        className={`object-cover transition-opacity duration-700 ${
+          playing ? "opacity-0" : "opacity-100"
+        }`}
+      />
 
-        <video
-          ref={videoRef}
-          className={`absolute inset-0 size-full object-cover transition-opacity duration-700 ${
-            idle ? "opacity-0" : "opacity-100"
-          }`}
-          playsInline
-          preload="none"
-          onPlay={() => setStatus("playing")}
-          onPause={(e) => {
-            if (!e.currentTarget.ended) setStatus("paused");
-          }}
-          onEnded={(e) => {
-            e.currentTarget.currentTime = 0;
-            setStatus("idle");
-          }}
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
+      <video
+        ref={videoRef}
+        className="absolute inset-0 size-full object-cover"
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+        tabIndex={-1}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+      >
+        <source src={videoSrc} type="video/mp4" />
+      </video>
 
-        {/* Idle layer: overlay + copy + play button */}
-        <div
-          className={`hv-fade-out absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/50 px-6 text-center text-white md:gap-[14px] md:bg-black/[0.48] md:px-0 lg:gap-5 lg:bg-black/45 ${
-            idle ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
-          aria-hidden={!idle}
-        >
-          <p className={EYEBROW}>Watch the film</p>
-          <h2 className="max-w-[310px] text-[24px] font-semibold leading-[1.2] md:max-w-none md:text-[32px] lg:text-[48px]">
-            Inside the Nnewi Plant
-          </h2>
-          <p className="max-w-[280px] text-[14px] leading-[1.4] md:max-w-none md:text-[16px] lg:text-[20px]">
-            See how IVM builds brand-new vehicles for African roads.
-          </p>
-          <div className="h-2 lg:h-3" aria-hidden />
-          <button
-            type="button"
-            onClick={play}
-            aria-label="Play the film: Inside the Nnewi Plant"
-            tabIndex={idle ? 0 : -1}
-            className="flex size-16 items-center justify-center rounded-full bg-white text-ivm-ink transition-transform duration-300 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white md:size-[76px] lg:size-[88px]"
-          >
-            <PlayIcon className="size-[22px] md:size-6 lg:size-7" />
-          </button>
-        </div>
-
-        {/* Corner control once the film has started */}
-        {!idle && (
-          <button
-            type="button"
-            onClick={toggle}
-            aria-label={status === "playing" ? "Pause film" : "Resume film"}
-            className="absolute bottom-5 right-5 z-10 flex size-10 items-center justify-center rounded-full bg-white/90 text-ivm-ink transition-transform hover:scale-110 lg:bottom-6 lg:left-6 lg:right-auto"
-          >
-            {status === "playing" ? <PauseIcon className="size-5" /> : <PlayIcon className="size-6" />}
-          </button>
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={playing ? "Pause the brand film" : "Play the brand film"}
+        className="absolute bottom-4 right-4 z-10 flex size-10 items-center justify-center rounded-full border border-white/50 bg-black/35 text-white transition-colors hover:bg-black/55 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:bottom-6 md:right-6 lg:bottom-8 lg:right-8"
+      >
+        {playing ? (
+          <svg viewBox="0 0 40 40" className="size-10" aria-hidden="true">
+            <rect x="14" y="13" width="4" height="14" rx="1" fill="#FFFFFF" />
+            <rect x="22" y="13" width="4" height="14" rx="1" fill="#FFFFFF" />
+          </svg>
+        ) : (
+          <PlayIcon className="ml-0.5 size-5" />
         )}
-      </div>
+      </button>
     </section>
   );
 }
