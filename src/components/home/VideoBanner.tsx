@@ -14,7 +14,7 @@ import { PlayIcon } from "./ui";
  */
 export default function VideoBanner({
   videoSrc = "/videos/home-showcase.mp4",
-  poster = "/images/home/v2/video-poster.png",
+  poster = "/images/home/v2/hero.png",
 }: {
   videoSrc?: string;
   poster?: string;
