@@ -11,7 +11,7 @@ export default function Logo({ className = "" }: { className?: string }) {
       <img
         src="/images/home/logo.png"
         alt=""
-        className="pointer-events-none absolute left-0 top-[-0.81%] h-[95%] w-[260.54%] max-w-none"
+        className="pointer-events-none absolute left-0 top-[-0.81%] h-[95%] w-[210.54%] max-w-none"
       />
     </span>
   );
