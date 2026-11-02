@@ -85,7 +85,7 @@ export default function Header({ active, overlay = false }: HeaderProps) {
           {/* Left group: logo + primary nav (880px wide on desktop) */}
           <div className="flex items-center lg:flex-1 lg:justify-between xl:w-[880px] xl:flex-none">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="shrink-0">
-              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[70px]" />
+              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[65px]" />
             </Link>
 
             <nav className="hidden items-center gap-8 text-[14px] font-semibold text-black lg:ml-10 lg:flex xl:ml-0 xl:gap-[66px]">
