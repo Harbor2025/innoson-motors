@@ -190,7 +190,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         </section>
 
         {/* ------------------------------------------------------- Section nav */}
-        <div className="sticky top-14 z-40 h-[52px] w-full border-b border-ivm-n100 bg-white md:top-16 lg:top-20 lg:h-[60px]">
+        <div className="sticky top-14 z-40 h-[52px] w-full border-b border-ivm-n100 bg-white md:top-16 lg:top-14 lg:h-[60px]">
           <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between px-4 lg:px-12">
             <p className="hidden w-[200px] shrink-0 text-[16px] font-bold leading-[1.4] text-ivm-n900 lg:block">
               {content.name}
@@ -239,7 +239,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         {/* ----------------------------------------------------------- Colours */}
         <section
           id="colours"
-          className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] lg:scroll-mt-[140px] flex-col gap-4 px-4 pt-16 lg:flex-row lg:items-center lg:gap-20 lg:px-8 lg:pt-28"
+          className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] flex-col gap-4 px-4 pt-16 lg:flex-row lg:items-center lg:gap-20 lg:px-8 lg:pt-28"
         >
           <div className="relative h-[220px] w-full shrink-0 overflow-hidden rounded-xl bg-white lg:h-[480px] lg:w-[860px]">
             <Image
@@ -305,7 +305,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         {/* ---------------------------------------------------------- Overview */}
         <section
           id="overview"
-          className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] lg:scroll-mt-[140px] flex-col items-start gap-4 px-4 pt-16 lg:px-8 lg:pt-24"
+          className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] flex-col items-start gap-4 px-4 pt-16 lg:px-8 lg:pt-24"
         >
           <p className="text-[12px] font-semibold uppercase leading-[15px] tracking-[0.12em] text-ivm-blue">
             Overview
@@ -380,7 +380,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         {/* ------------------------------------------------------------- Video */}
         <section
           id="video"
-          className="mx-auto w-full max-w-[1440px] scroll-mt-[116px] lg:scroll-mt-[140px] px-4 pt-16 lg:px-8 lg:pt-28"
+          className="mx-auto w-full max-w-[1440px] scroll-mt-[116px] px-4 pt-16 lg:px-8 lg:pt-28"
         >
           <DrivingVideo
             poster={content.video.poster}
@@ -393,7 +393,7 @@ export default function VehicleDetailPage({ model }: { model: ModelDetailDTO }) 
         {/* -------------------------------------------------------- Technology */}
         <section
           id="technology"
-          className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] lg:scroll-mt-[140px] flex-col gap-4 px-4 pt-16 lg:flex-row lg:items-center lg:gap-20 lg:px-8 lg:pt-28"
+          className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] flex-col gap-4 px-4 pt-16 lg:flex-row lg:items-center lg:gap-20 lg:px-8 lg:pt-28"
         >
           <div className="relative h-[240px] w-full shrink-0 overflow-hidden rounded-xl bg-ivm-n50 lg:h-[460px] lg:w-[680px]">
             <Image
@@ -542,7 +542,7 @@ function GallerySection({ id, gallery }: { id: SectionId; gallery: DetailGallery
   return (
     <section
       id={id}
-      className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] lg:scroll-mt-[140px] flex-col gap-4 px-4 pt-16 lg:gap-6 lg:px-8 lg:pt-28"
+      className="mx-auto flex w-full max-w-[1440px] scroll-mt-[116px] flex-col gap-4 px-4 pt-16 lg:gap-6 lg:px-8 lg:pt-28"
     >
       <div className="relative flex h-[360px] w-full flex-col justify-end overflow-hidden rounded-xl px-5 pb-6 lg:h-[680px] lg:px-16 lg:pb-16">
         <Image
