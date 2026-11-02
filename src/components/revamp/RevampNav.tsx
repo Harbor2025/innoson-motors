@@ -92,7 +92,7 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
         <Container className="hidden h-14 items-center justify-between lg:flex">
           <div className="flex h-10 w-[320px] items-center">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="block">
-              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[70px] mt-2" />
+              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[65px] mt-2" />
             </Link>
           </div>
 
