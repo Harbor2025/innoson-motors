@@ -81,7 +81,7 @@ export default function ContactShowrooms({ contactInfo, dealerships }: Props) {
     <section
       id="showrooms"
       aria-labelledby="showrooms-title"
-      className="flex scroll-mt-16 flex-col gap-6 px-4 pb-16 pt-14 md:gap-8 md:px-6 md:pt-20 xl:px-8 xl:pb-24 xl:pt-28"
+      className="flex scroll-mt-16 flex-col gap-6 px-4 pb-16 pt-14 md:gap-8 md:px-6 md:pt-20 lg:scroll-mt-20 xl:px-8 xl:pb-24 xl:pt-28"
     >
       <div className="flex flex-col gap-[10px] xl:pl-16">
         <p className="text-[12px] font-semibold uppercase leading-[15px] tracking-[1.44px] text-ivm-blue">

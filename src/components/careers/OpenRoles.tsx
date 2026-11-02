@@ -36,7 +36,7 @@ export default function OpenRoles() {
     <section
       id="open-roles"
       aria-labelledby="open-roles-title"
-      className="flex scroll-mt-14 flex-col gap-5 px-4 pt-16 md:px-6 xl:gap-7 xl:px-24 xl:pt-28"
+      className="flex scroll-mt-14 flex-col gap-5 px-4 pt-16 md:px-6 lg:scroll-mt-20 xl:gap-7 xl:px-24 xl:pt-28"
     >
       <div className="flex flex-col gap-[10px] xl:flex-row xl:items-end xl:justify-between xl:gap-0">
         <div className="flex flex-col gap-[10px]">

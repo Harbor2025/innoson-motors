@@ -35,8 +35,11 @@ type Props = {
 };
 
 /**
- * Figma: "Revamp/Nav/Desktop v2" (>= lg, 56px) and "Revamp/Nav/Mobile"
+ * Figma: "Revamp/Nav/Desktop v2" (56px) and "Revamp/Nav/Mobile"
  * (< lg, 56px mobile / 64px tablet).
+ * Desktop uses 80px + a 1440px/50px container to stay pixel-aligned with the
+ * legacy Header used on the home and about pages (logo must not jump).
+ *
  * Solid variant fades in over 0.5s; the transparent variant slides down 16px
  * and fades in (0.1s delay, 0.6s) to match the Financing motion timeline.
  */
@@ -87,11 +90,13 @@ export default function RevampNav({ active, variant = "solid" }: Props) {
         }`}
         style={headerMotion}
       >
-        {/* Desktop */}
-        <div className="hidden h-14 items-center justify-between px-12 lg:flex">
-          <div className="flex h-10 w-[320px] items-center">
+        {/* Desktop. The bar height, container and gutter mirror the legacy
+            Header (80px, max-w 1440, 50px gutters) so the logo keeps the same
+            viewport position when navigating between the two navs. */}
+        <div className="mx-auto hidden h-20 w-full max-w-[1440px] items-center justify-between px-[50px] lg:flex">
+          <div className="flex h-[42px] w-[320px] items-center">
             <Link href="/" aria-label="Innoson Vehicle Manufacturing home" className="block">
-              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[70px] mt-2" />
+              <Logo className="h-[35px] w-[59px] lg:h-[42px] lg:w-[70px]" />
             </Link>
           </div>
 
